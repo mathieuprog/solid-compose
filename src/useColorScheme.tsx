@@ -16,13 +16,13 @@ export interface ColorSchemeStore {
 }
 
 interface Props {
-  storage?: ColorSchemeStorageStrategy;
+  storage?: ColorSchemeStorage;
 }
 
-export type ColorSchemeStorageStrategy = () => [Accessor<ColorScheme | null>, (colorScheme: ColorScheme) => void];
+export type ColorSchemeStorage = () => [Accessor<ColorScheme | null>, (colorScheme: ColorScheme) => void];
 
-type ColorSchemeStorageStrategyDict = {
-  [key: string]: ColorSchemeStorageStrategy;
+type ColorSchemeStorageDict = {
+  [key: string]: ColorSchemeStorage;
 };
 
 type ColorSchemeContext = [Accessor<ColorScheme | null>, ColorSchemeSetter];
@@ -31,7 +31,7 @@ type ColorSchemeSetter =
   ((colorScheme: ColorScheme) => void)
   & ((callback: ((prevColorScheme: ColorScheme | null) => ColorScheme)) => void);
 
-export const ColorSchemeStorageStrategy: ColorSchemeStorageStrategyDict = {
+export const ColorSchemeStorage: ColorSchemeStorageDict = {
   mediaQuery: () => {
     return [getSystemColorScheme, () => { throw new Error() }];
   },
@@ -47,7 +47,7 @@ const defaultValue: ColorSchemeContext = [() => 'light', () => { throw new Error
 const ColorSchemeContext = createContext<ColorSchemeContext>(defaultValue);
 
 export const ColorSchemeProvider: ParentComponent<Props> = (props) => {
-  const mergedProps = mergeProps({ storage: ColorSchemeStorageStrategy.mediaQuery }, props);
+  const mergedProps = mergeProps({ storage: ColorSchemeStorage.mediaQuery }, props);
 
   const [colorScheme, setColorScheme] = mergedProps.storage();
 

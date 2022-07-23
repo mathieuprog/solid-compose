@@ -1,11 +1,11 @@
 import ColorSchemeStylesheet from "./ColorSchemeStylesheet";
 import getSystemColorScheme from "./getSystemColorScheme";
-import useColorScheme, { ColorSchemeProvider, ColorSchemeStorageStrategy } from "./useColorScheme";
+import useColorScheme, { ColorSchemeProvider, ColorSchemeStorage } from "./useColorScheme";
 import useLocalStorage from "./useLocalStorage";
 
 export {
   ColorSchemeProvider,
-  ColorSchemeStorageStrategy,
+  ColorSchemeStorage,
   ColorSchemeStylesheet,
   getSystemColorScheme,
   useColorScheme,
