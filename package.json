@@ -2,7 +2,7 @@
   "name": "solid-compose",
   "version": "0.1.9",
   "description": "A set of primitives to compose reactivity",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "files": ["dist/src/**"],
   "main": "dist/src/index.js",
   "scripts": {
