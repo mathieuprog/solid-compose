@@ -1,6 +1,6 @@
 {
   "name": "solid-compose",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "A set of primitives to compose reactivity",
   "type": "module",
   "files": ["dist/**"],
