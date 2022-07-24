@@ -1,6 +1,6 @@
 {
   "name": "solid-compose",
-  "version": "0.1.18",
+  "version": "0.1.19",
   "description": "A set of primitives to compose reactivity",
   "source": "src/index.ts",
   "main": "dist/esm/index.js",
