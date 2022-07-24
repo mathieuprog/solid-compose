@@ -1,11 +1,12 @@
 {
   "name": "solid-compose",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "A set of primitives to compose reactivity",
   "type": "module",
   "files": [
     "dist/**"
   ],
+  "source": "src/index.ts",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
