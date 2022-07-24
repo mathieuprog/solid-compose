@@ -36,9 +36,22 @@ export const ColorSchemeStorage: ColorSchemeStorageDict = {
     return [getSystemColorScheme, () => { throw new Error() }];
   },
   localStorage: () => {
-    const systemColorScheme = getSystemColorScheme();
-    const [colorScheme, { set: setColorScheme }] = useLocalStorage<ColorScheme>('__color-scheme', systemColorScheme);
+    const [colorScheme, { set: setColorScheme }] = useLocalStorage<ColorScheme>('__color-scheme', getSystemColorScheme());
     return [colorScheme, setColorScheme];
+  },
+  queryString: () => {
+    const get = () => {
+      const queryString = new URLSearchParams(window.location.search);
+      return queryString.get('color-scheme') as ColorScheme || getSystemColorScheme();
+    };
+
+    const set = (colorScheme: ColorScheme) => {
+      const queryString = new URLSearchParams(window.location.search);
+      queryString.set('color-scheme', colorScheme);
+      window.location.search = queryString.toString();
+    };
+
+    return [get, set];
   }
 };
 
@@ -51,9 +64,9 @@ export const ColorSchemeProvider: ParentComponent<Props> = (props) => {
 
   const [colorScheme, setColorScheme] = mergedProps.storage();
 
-  const setColorScheme_: ColorSchemeSetter = (arg: ColorScheme | ((colorScheme: ColorScheme | null) => ColorScheme)): void => {
-    if(typeof arg === "function") {
-      setColorScheme(arg(colorScheme()))
+  const setColorScheme_: ColorSchemeSetter = (arg) => {
+    if(typeof arg === 'function') {
+      setColorScheme(arg(colorScheme()));
     } else {
       setColorScheme(arg);
     }
