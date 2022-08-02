@@ -10,8 +10,6 @@ interface Props {
 const ColorSchemeLink: VoidComponent<Props> = (props) => {
   const [colorScheme, _] = useColorScheme();
 
-  console.log('hello')
-
   return (
     <Portal mount={document.head}>
       <Show
