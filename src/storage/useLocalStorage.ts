@@ -1,5 +1,5 @@
+import type { Accessor } from 'solid-js';
 import {
-  Accessor,
   createSignal,
   onCleanup,
   onMount,

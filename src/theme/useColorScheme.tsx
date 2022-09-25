@@ -1,8 +1,7 @@
+import type { Accessor, ParentComponent } from 'solid-js';
 import {
-  Accessor,
   createContext,
   mergeProps,
-  ParentComponent,
   useContext,
 } from 'solid-js';
 import getSystemColorScheme from './getSystemColorScheme';

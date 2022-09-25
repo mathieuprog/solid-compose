@@ -1,4 +1,5 @@
-import { Show, VoidComponent } from 'solid-js';
+import type { VoidComponent } from 'solid-js';
+import { Show } from 'solid-js';
 import { Portal } from "solid-js/web";
 import useColorScheme from './useColorScheme';
 
