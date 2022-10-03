@@ -30,14 +30,12 @@ export type Transform<T> = {
   deserialize: (str: string) => T;
 };
 
-function createLocalStorageSignal<T>(key: string, defaultValue?: T, transform?: Transform<T>): Return<T> {
-  if (transform === undefined) {
-    transform = {
-      serialize: JSON.stringify,
-      deserialize: JSON.parse
-    };
-  }
+const defaultTransform = {
+  serialize: JSON.stringify,
+  deserialize: JSON.parse
+};
 
+function createLocalStorageSignal<T>(key: string, defaultValue?: T, transform: Transform<T> = defaultTransform): Return<T> {
   const initialValue = getItemOrDefault<T>(key, transform, defaultValue);
 
   const [value, setValue] = createSignal(initialValue);
@@ -45,7 +43,11 @@ function createLocalStorageSignal<T>(key: string, defaultValue?: T, transform?: 
   onMount(() => {
     const listener = (event: StorageEvent) => {
       if (event.key === key) {
-        setValue(() => (event.newValue === null) ? null : JSON.parse(event.newValue));
+        transform = {
+          serialize: JSON.stringify,
+          deserialize: JSON.parse
+        };
+        setValue(() => (event.newValue === null) ? null : transform.deserialize(event.newValue));
       }
     };
 
@@ -60,7 +62,7 @@ function createLocalStorageSignal<T>(key: string, defaultValue?: T, transform?: 
     if (value === undefined || value === null) {
       throw new Error();
     }
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(key, transform.serialize(value));
     setValue(() => value);
   };
 
