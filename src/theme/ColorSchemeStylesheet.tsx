@@ -8,7 +8,7 @@ interface Props {
   light: string;
 }
 
-const ColorSchemeLink: VoidComponent<Props> = (props) => {
+const ColorSchemeStylesheet: VoidComponent<Props> = (props) => {
   const [colorScheme, _] = useColorScheme();
 
   return (
@@ -23,4 +23,4 @@ const ColorSchemeLink: VoidComponent<Props> = (props) => {
   );
 };
 
-export default ColorSchemeLink;
+export default ColorSchemeStylesheet;
