@@ -50,6 +50,7 @@ export const ColorSchemeStorage: ColorSchemeStorageDict = {
   }
 };
 
+// provide a default value to avoid the | undefined part of the type
 const defaultValue: ColorSchemeContext = [() => 'light', () => { throw new Error() }];
 
 const ColorSchemeContext = createContext<ColorSchemeContext>(defaultValue);
@@ -69,7 +70,7 @@ export const ColorSchemeProvider: ParentComponent<Props> = (props) => {
 
   return (
     <ColorSchemeContext.Provider value={[colorScheme, setColorScheme_]}>
-      {props.children}
+      {mergedProps.children}
     </ColorSchemeContext.Provider>
   );
 }
