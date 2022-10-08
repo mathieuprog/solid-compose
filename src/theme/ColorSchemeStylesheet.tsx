@@ -12,14 +12,17 @@ const ColorSchemeStylesheet: VoidComponent<Props> = (props) => {
   const [colorScheme, _] = useColorScheme();
 
   return (
-    <Portal mount={document.head}>
-      <Show
-        when={colorScheme() === 'dark'}
-        fallback={<link rel="stylesheet" href={props.light} />}
-      >
-        <link rel="stylesheet" href={props.dark} />
-      </Show>
-    </Portal>
+    <>
+      <Portal mount={document.head}>
+        <Show
+          when={colorScheme() === 'dark'}
+          fallback={<link rel="stylesheet" href={props.light} />}
+        >
+          <link rel="stylesheet" href={props.dark} />
+        </Show>
+      </Portal>
+      <div data-testid={`stylesheet-${colorScheme()}`} />
+    </>
   );
 };
 
