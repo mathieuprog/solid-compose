@@ -43,10 +43,10 @@ export const ColorSchemeStorage: ColorSchemeStorageDict = {
   signalStorage: (defaultValue) => {
     return createSignal(defaultValue || getSystemColorScheme());
   },
-  queryString: () => {
+  queryString: (defaultScheme) => {
     const get = () => {
       const queryString = new URLSearchParams(window.location.search);
-      return queryString.get('color-scheme') as ColorScheme || getSystemColorScheme();
+      return queryString.get('color-scheme') as ColorScheme || defaultScheme || getSystemColorScheme();
     };
 
     const set = (colorScheme: ColorScheme) => {
