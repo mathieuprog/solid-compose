@@ -39,6 +39,16 @@ const [colorScheme, setColorScheme] = useColorScheme();
 * defaultScheme: the default color scheme to be used if non is found. Ignored for the mediaQuery strategy.
   If `defaultScheme` has not been specified, the default color scheme from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme) is used.
 
+### Custom storage strategy
+
+You may pass your own custom storage strategy to `ColorSchemeProvider`.
+As an example, below is the code of the `signalStorage` strategy:
+```javascript
+const signalStorage = (defaultValue) => {
+  return createSignal(defaultValue || getSystemColorScheme());
+}
+```
+
 ## `useLocalStorage`
 
 ```typescript
