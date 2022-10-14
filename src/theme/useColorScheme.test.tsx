@@ -39,10 +39,8 @@ describe("useColorScheme", () => {
   test("pick right stylesheet", () => {
     const signal = createSignal<ColorScheme>("dark");
 
-    const storageStrategy: ColorSchemeStorage = () => signal;
-
     render(() =>
-      <ColorSchemeProvider storage={storageStrategy}>
+      <ColorSchemeProvider storage={signal}>
         <ColorSchemeStylesheet
           dark="https://example.com"
           light="https://example.com"

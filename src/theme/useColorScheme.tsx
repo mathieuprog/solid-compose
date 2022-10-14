@@ -1,4 +1,4 @@
-import type { Accessor, ParentComponent } from 'solid-js';
+import type { Accessor, ParentComponent, Signal } from 'solid-js';
 import {
   createContext,
   createSignal,
@@ -16,7 +16,7 @@ export interface ColorSchemeStore {
 }
 
 interface Props {
-  storage?: ColorSchemeStorage;
+  storage?: ColorSchemeStorage | Signal<ColorScheme>;
   defaultScheme?: ColorScheme;
 }
 
@@ -67,7 +67,10 @@ const ColorSchemeContext = createContext<ColorSchemeContext>(defaultValue);
 export const ColorSchemeProvider: ParentComponent<Props> = (props) => {
   const mergedProps = mergeProps({ storage: ColorSchemeStorage.mediaQuery }, props);
 
-  const [colorScheme, setColorScheme] = mergedProps.storage(mergedProps.defaultScheme);
+  const [colorScheme, setColorScheme] =
+    (typeof mergedProps.storage === 'function')
+      ? mergedProps.storage(mergedProps.defaultScheme)
+      : mergedProps.storage;
 
   const setColorScheme_: ColorSchemeSetter = (arg) => {
     if(typeof arg === 'function') {
