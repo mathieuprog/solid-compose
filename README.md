@@ -30,13 +30,15 @@ const [colorScheme, setColorScheme] = useColorScheme();
 
 ### `ColorSchemeProvider` props
 
-* storage: data source from where the color scheme is retrieved. Built-in storages:
-  * signalStorage: retrieves the color scheme from a signal.
-  * localStorage: retrieves the color scheme from local storage.
-  * mediaQuery: retrieve the color scheme from the media query, setter throws an error.
-  * queryString: retrieves the color scheme from the URL's query parameter `color-scheme`.
+* `storage`: data source from where the color scheme is retrieved. Built-in storages:
+  * `ColorSchemeStorage.signalStorage`: retrieves the color scheme from a signal.
+  * `ColorSchemeStorage.localStorage`: retrieves the color scheme from local storage.
+  * `ColorSchemeStorage.mediaQuery`: retrieve the color scheme from the media query, setter throws an error.
+  * `ColorSchemeStorage.queryString`: retrieves the color scheme from the URL's query parameter `color-scheme`.
 
-* defaultScheme: the default color scheme to be used if non is found. Ignored for the mediaQuery strategy.
+  You may also pass a signal if you want to manage the color scheme via external state.
+
+* `defaultScheme`: the default color scheme to be used if non is found. Ignored for the mediaQuery strategy.
   If `defaultScheme` has not been specified, the default color scheme from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme) is used.
 
 ### Custom storage strategy
