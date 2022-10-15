@@ -1,5 +1,33 @@
 # `solid-compose`
 
+## `useI18n`
+
+```typescript
+addTranslations("en", "common", {
+  "hello": "hello!",
+  "world": "world!"
+});
+
+addTranslations("fr", "common", {
+  "hello": "bonjour!",
+  "world": "monde!"
+});
+```
+
+```typescript
+import { use18n } from 'solid-compose';
+
+function Hello() {
+  const [translate, locale] = use18n();
+
+  return <>
+    <div>{translate('hello')}</div>
+    <div>Current locale: {locale()}</div>
+    <div>Switch locale: {locale('fr')}</div>
+  </>;
+}
+```
+
 ## `useColorScheme`
 
 ```typescript
