@@ -6,12 +6,16 @@
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
   "types": "dist/types/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "vitest"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
     "@tsconfig/node18": "^1.0.1",
+    "@types/testing-library__jest-dom": "^5.14.5",
     "happy-dom": "^7.5.10",
     "rollup": "^3.1.0",
     "rollup-preset-solid": "^1.4.0",

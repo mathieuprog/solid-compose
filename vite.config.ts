@@ -14,6 +14,7 @@ export default defineConfig({
     transformMode: {
       web: [/\.[jt]sx?$/],
     },
+    setupFiles: './setupVitest.ts',
     // if you have few tests, try commenting one
     // or both out to improve performance:
     threads: false,
