@@ -4,8 +4,8 @@ import useLocalStorage from './useLocalStorage';
 
 // @vitest-environment happy-dom
 
-describe("useLocalStorage", () => {
-  test("initialize state with pre-existing value from localStorage", () => {
+describe('useLocalStorage', () => {
+  test('initialize state with pre-existing value from localStorage', () => {
     createRoot((dispose) => {
       localStorage.setItem('foo', JSON.stringify('hello'));
 
@@ -22,7 +22,7 @@ describe("useLocalStorage", () => {
     });
   });
 
-  test("update state and localStorage", () => {
+  test('update state and localStorage', () => {
     createRoot((dispose) => {
       expect(localStorage.getItem('foo')).toBeNull();
 

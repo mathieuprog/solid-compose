@@ -1,6 +1,6 @@
 import type { VoidComponent } from 'solid-js';
 import { Show } from 'solid-js';
-import { Portal } from "solid-js/web";
+import { Portal } from 'solid-js/web';
 import useColorScheme from './useColorScheme';
 
 interface Props {

@@ -5,10 +5,10 @@ import { ColorSchemeProvider, ColorSchemeStorage } from './useColorScheme';
 import type { ColorScheme } from './useColorScheme';
 import { createSignal } from 'solid-js';
 
-describe("useColorScheme", () => {
+describe('useColorScheme', () => {
   afterEach(cleanup);
 
-  test("default to dark", () => {
+  test('default to dark', () => {
     render(() =>
       <ColorSchemeProvider storage={ColorSchemeStorage.signalStorage} defaultScheme="dark">
         <ColorSchemeStylesheet
@@ -18,11 +18,11 @@ describe("useColorScheme", () => {
       </ColorSchemeProvider>
     );
 
-    expect(screen.queryByTestId("stylesheet-light")).toBeNull();
-    expect(screen.queryByTestId("stylesheet-dark")).toBeInstanceOf(HTMLElement);
+    expect(screen.queryByTestId('stylesheet-light')).toBeNull();
+    expect(screen.queryByTestId('stylesheet-dark')).toBeInstanceOf(HTMLElement);
   });
 
-  test("default to light", () => {
+  test('default to light', () => {
     render(() =>
       <ColorSchemeProvider storage={ColorSchemeStorage.signalStorage} defaultScheme="light">
         <ColorSchemeStylesheet
@@ -32,12 +32,12 @@ describe("useColorScheme", () => {
       </ColorSchemeProvider>
     );
 
-    expect(screen.queryByTestId("stylesheet-dark")).toBeNull();
-    expect(screen.queryByTestId("stylesheet-light")).toBeInstanceOf(HTMLElement);
+    expect(screen.queryByTestId('stylesheet-dark')).toBeNull();
+    expect(screen.queryByTestId('stylesheet-light')).toBeInstanceOf(HTMLElement);
   });
 
-  test("pick right stylesheet", () => {
-    const signal = createSignal<ColorScheme>("dark");
+  test('pick right stylesheet', () => {
+    const signal = createSignal<ColorScheme>('dark');
 
     render(() =>
       <ColorSchemeProvider storage={signal}>
@@ -48,8 +48,8 @@ describe("useColorScheme", () => {
       </ColorSchemeProvider>
     );
 
-    expect(screen.queryByTestId("stylesheet-light")).toBeNull();
-    expect(screen.queryByTestId("stylesheet-dark")).toBeInstanceOf(HTMLElement);
+    expect(screen.queryByTestId('stylesheet-light')).toBeNull();
+    expect(screen.queryByTestId('stylesheet-dark')).toBeInstanceOf(HTMLElement);
 
     const [colorScheme, setColorScheme] = signal;
 
@@ -57,8 +57,8 @@ describe("useColorScheme", () => {
 
     setColorScheme('light');
 
-    expect(screen.queryByTestId("stylesheet-dark")).toBeNull();
-    expect(screen.queryByTestId("stylesheet-light")).toBeInstanceOf(HTMLElement);
+    expect(screen.queryByTestId('stylesheet-dark')).toBeNull();
+    expect(screen.queryByTestId('stylesheet-light')).toBeInstanceOf(HTMLElement);
 
     expect(colorScheme()).toBe('light');
   });
