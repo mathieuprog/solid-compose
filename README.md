@@ -39,7 +39,7 @@ import { I18nProvider } from 'solid-compose';
 
 const App: VoidComponent = () => {
   return (
-    <I18nProvider locale="en" namespaces={["common", "todo-app"]}>
+    <I18nProvider locale="en" namespaces={['common', 'todo-app']}>
       <Hello/>
     </I18nProvider>
   );
@@ -51,25 +51,34 @@ const App: VoidComponent = () => {
 ```typescript
 import { addTranslations } from 'solid-compose';
 
-addTranslations("en" {
+addTranslations('en' {
   "hello": "hello!",
   "world": "world!"
 });
 
-addTranslations("fr" {
+addTranslations('fr' {
   "hello": "bonjour !",
   "world": "monde !"
 });
 
-addTranslations("en", "common", { // "common" namespace
+addTranslations('en', 'common', { // "common" namespace
   "hello": "hello!",
   "world": "world!"
 });
 
-addTranslations("fr", "common", { // "common" namespace
+addTranslations('fr', 'common', { // "common" namespace
   "hello": "bonjour !",
   "world": "monde !"
 });
+
+// from JSON files
+// (make sure to have TS config "resolveJsonModule" set to true)
+
+import enTranslations from './translations/en.json';
+import frTranslations from './translations/fr.json';
+
+addTranslations('en', enTranslations);
+addTranslations('fr', frTranslations);
 ```
 
 ### Translate
