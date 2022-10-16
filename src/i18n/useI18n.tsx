@@ -15,23 +15,37 @@ type Registry = {
   }
 }
 
-const registry: Registry = {};
-
 interface Props {
   locale?: string;
   fallbackLocale?: string;
   namespaces: string[];
 }
 
-type TranslateFunction = (key: string, params?: Record<string, string>) => string;
+type TranslateFunction = (key: string, params?: Record<string, any>) => string;
 type GetOrChangeLocaleFunction = (locale?: string) => string | undefined;
 
 type I18nContext = [TranslateFunction, GetOrChangeLocaleFunction];
 
-export function addTranslations(locale: string, namespace: string, translations: Record<string, string>) {
+let registry: Registry = {};
+
+let mergeTranslationsCache: Record<string, Record<string, any>> = {};
+
+let keySeparator: string | null = null;
+
+export function addTranslations(locale: string, namespace: string, translations: Record<string, any>) {
   registry[locale] ??= {};
   registry[locale][namespace] ??= {};
   registry[locale][namespace] = translations;
+}
+
+// used to setup tests
+export function removeAllTranslations() {
+  registry = {};
+  mergeTranslationsCache = {};
+}
+
+export function enableNestedTranslations(keySeparator_: string | false = '.') {
+  keySeparator = (keySeparator_) ? keySeparator_ : null;
 }
 
 // provide a default value to avoid the | undefined part of the type
@@ -73,6 +87,27 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
   };
 
   const translate: TranslateFunction = (key, _params = {}) => {
+    if (keySeparator) {
+      const splitKey = key.split('.');
+      const firstKey = splitKey.shift() as string;
+
+      const translationsObject =
+        (translations()[firstKey] && translations())
+          ?? (fallbackTranslations_()[firstKey] && fallbackTranslations_())
+          ?? (fallbackTranslations[firstKey] && fallbackTranslations)
+          ?? (englishTranslations[firstKey] && englishTranslations)
+          ?? (() => { throw new Error('translation not found') })();
+
+      let value = translationsObject[firstKey];
+
+      while (splitKey.length > 0) {
+        const key = splitKey.shift() as string;
+        value = value[key] ?? (() => { throw new Error('translation not found') })();
+      }
+
+      return value;
+    }
+
     return translations()[key]
         ?? fallbackTranslations_()[key]
         ?? fallbackTranslations[key]
@@ -98,8 +133,6 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
 export default function use18n(): I18nContext  {
   return useContext(I18nContext);
 }
-
-const mergeTranslationsCache: Record<string, Record<string, string>> = {};
 
 function mergeTranslations(locale: string, namespaces: string[]) {
   const keyCache = `${locale}.${namespaces.join('.')}`;

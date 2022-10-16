@@ -1,9 +1,17 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { cleanup, fireEvent, render, screen } from 'solid-testing-library';
-import use18n, { addTranslations, I18nProvider } from './useI18n';
+import use18n, {
+  addTranslations,
+  enableNestedTranslations,
+  I18nProvider,
+  removeAllTranslations
+} from './useI18n';
 
 describe("useI18n", () => {
   beforeEach(() => {
+    removeAllTranslations();
+    enableNestedTranslations(false);
+
     addTranslations("en", "foo", {
       "hello": "hello",
       "foo": "bar"
@@ -67,5 +75,55 @@ describe("useI18n", () => {
     expect(hello.textContent).toBe("bonjour !");
     expect(world.textContent).toBe("monde !!");
     expect(foo.textContent).toBe("bar");
+  });
+
+  test("key separator", async () => {
+    enableNestedTranslations('.');
+
+    addTranslations("en", "foo", {
+      "welcome": {
+        "hello": "hello!"
+      },
+      "world": "world!"
+    });
+
+    addTranslations("fr", "foo", {
+      "welcome": {
+        "hello": "bonjour !"
+      },
+      "world": "monde !"
+    });
+
+    function Hello() {
+      const [translate, locale] = use18n();
+      return <>
+        <div data-testid="hello">{translate('welcome.hello')}</div>
+        <div data-testid="world">{translate('world')}</div>
+        <button data-testid="locale" onClick={() => locale("fr-BE")}>
+          {locale()}
+        </button>
+      </>;
+    }
+
+    render(() =>
+      <I18nProvider locale="en" namespaces={["foo"]}>
+        <Hello/>
+      </I18nProvider>
+    );
+
+    const hello = screen.getByTestId("hello");
+    const world = screen.getByTestId("world");
+
+    expect(hello.textContent).toBe("hello!");
+    expect(world.textContent).toBe("world!");
+    const locale = screen.getByTestId("locale");
+
+    fireEvent.click(locale);
+    // the event loop takes one Promise to resolve to be finished
+    await Promise.resolve();
+
+    expect(locale.textContent).toBe("fr-BE");
+    expect(hello.textContent).toBe("bonjour !");
+    expect(world.textContent).toBe("monde !");
   });
 });
