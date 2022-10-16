@@ -52,24 +52,24 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
 
   const englishTranslations =
     (englishLocale)
-      ? mergeTranslationsFromNamespaces(englishLocale, mergedProps.namespaces)
+      ? mergeTranslations(englishLocale, mergedProps.namespaces)
       : {};
 
   const fallbackTranslations =
     (mergedProps.fallbackLocale)
-      ? mergeTranslationsFromNamespaces(mergedProps.fallbackLocale, mergedProps.namespaces)
+      ? mergeTranslations(mergedProps.fallbackLocale, mergedProps.namespaces)
       : {};
 
   const fallbackLocale_ = () => findFallbackLocale(locale());
 
   const fallbackTranslations_ = () => {
     return (fallbackLocale_())
-      ? mergeTranslationsFromNamespaces(fallbackLocale_() as string, mergedProps.namespaces)
+      ? mergeTranslations(fallbackLocale_() as string, mergedProps.namespaces)
       : {};
   };
 
   const translations = () => {
-    return mergeTranslationsFromNamespaces(locale(), mergedProps.namespaces);
+    return mergeTranslations(locale(), mergedProps.namespaces);
   };
 
   const translate: TranslateFunction = (key, _params = {}) => {
@@ -99,15 +99,27 @@ export default function use18n(): I18nContext  {
   return useContext(I18nContext);
 }
 
-function mergeTranslationsFromNamespaces(locale: string, namespaces: string[]) {
-  if (!registry[locale]) {
-    return {};
+const mergeTranslationsCache: Record<string, Record<string, string>> = {};
+
+function mergeTranslations(locale: string, namespaces: string[]) {
+  const keyCache = `${locale}.${namespaces.join('.')}`;
+
+  if (keyCache in mergeTranslationsCache) {
+    return mergeTranslationsCache[keyCache];
   }
 
-  return Object.entries(registry[locale])
-    .filter(([namespace, _]) => namespaces.includes(namespace))
-    .map(([_, obj]) => obj)
-    .reduce((acc, obj) => ({ ...acc, ...obj }) , {});
+  let translations = {};
+
+  if (registry[locale]) {
+    translations = Object.entries(registry[locale])
+      .filter(([namespace, _]) => namespaces.includes(namespace))
+      .map(([_, obj]) => obj)
+      .reduce((acc, obj) => ({ ...acc, ...obj }) , {});
+  }
+
+  mergeTranslationsCache[keyCache] = translations;
+
+  return translations;
 }
 
 function findFallbackLocale(locale: string) {
