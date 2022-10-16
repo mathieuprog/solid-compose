@@ -2,17 +2,55 @@
 
 ## `useI18n`
 
+### Add the context
+
 ```typescript
+import { I18nProvider } from 'solid-compose';
+
+const App: VoidComponent = () => {
+  return (
+    <I18nProvider locale="en-GB" namespaces={["common", "todo-app"]}>
+      <Hello/>
+    </I18nProvider>
+  );
+};
+```
+
+### Fallback locales
+
+When looking for a translation for a given key, the key is searched through the translations for the main locale, and if not found, for the the fallback locales. The locales are selected in that order:
+
+1. the main locale as specified to `I18nProvider`'s `locale` prop, eg. `'en-GB'` (if the locale has not been specified, the user's preferred locale is used)
+2. the shorter two-letter code, eg. `'en'`
+3. the fallback locale as specified to `I18nProvider`'s `fallbackLocale` prop  (if the locale has not been specified, the user's preferred locale is used; set it no `null` to disable the `fallbackLocale`)
+4. the `'en'` locale
+5. the `'en-US'` locale
+6. the `'en-GB'` locale
+7. throw an error
+
+### Namespaces
+
+Namespaces allow to load a subset of the available translations, which eases the handling of key collisions in larger apps.
+
+Say for instance that your application is made of multiple sub-apps, you may have a "common" namespace including common translations for the various sub-apps, and a namespace specific to a sub-app.
+
+### Add translations
+
+```typescript
+import { addTranslations } from 'solid-compose';
+
 addTranslations("en", "common", {
   "hello": "hello!",
   "world": "world!"
 });
 
 addTranslations("fr", "common", {
-  "hello": "bonjour!",
-  "world": "monde!"
+  "hello": "bonjour !",
+  "world": "monde !"
 });
 ```
+
+### Translate
 
 ```typescript
 import { use18n } from 'solid-compose';
@@ -29,6 +67,8 @@ function Hello() {
 ```
 
 ## `useColorScheme`
+
+### Add the context
 
 ```typescript
 import {
@@ -49,6 +89,8 @@ const App: VoidComponent = () => {
   );
 };
 ```
+
+### Get and set the color scheme
 
 ```typescript
 import { useColorScheme } from 'solid-compose';
