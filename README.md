@@ -9,7 +9,7 @@ import { I18nProvider } from 'solid-compose';
 
 const App: VoidComponent = () => {
   return (
-    <I18nProvider locale="en-GB" namespaces={["common", "todo-app"]}>
+    <I18nProvider locale="en-GB">
       <Hello/>
     </I18nProvider>
   );
@@ -34,17 +34,39 @@ Namespaces allow to load a subset of the available translations, which eases the
 
 Say for instance that your application is made of multiple sub-apps, you may have a "common" namespace including common translations for the various sub-apps, and a namespace specific to a sub-app.
 
+```typescript
+import { I18nProvider } from 'solid-compose';
+
+const App: VoidComponent = () => {
+  return (
+    <I18nProvider locale="en" namespaces={["common", "todo-app"]}>
+      <Hello/>
+    </I18nProvider>
+  );
+};
+```
+
 ### Add translations
 
 ```typescript
 import { addTranslations } from 'solid-compose';
 
-addTranslations("en", "common", {
+addTranslations("en" {
   "hello": "hello!",
   "world": "world!"
 });
 
-addTranslations("fr", "common", {
+addTranslations("fr" {
+  "hello": "bonjour !",
+  "world": "monde !"
+});
+
+addTranslations("en", "common", { // "common" namespace
+  "hello": "hello!",
+  "world": "world!"
+});
+
+addTranslations("fr", "common", { // "common" namespace
   "hello": "bonjour !",
   "world": "monde !"
 });
