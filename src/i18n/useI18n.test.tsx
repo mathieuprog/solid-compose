@@ -113,10 +113,10 @@ describe("useI18n", () => {
 
     const hello = screen.getByTestId("hello");
     const world = screen.getByTestId("world");
+    const locale = screen.getByTestId("locale");
 
     expect(hello.textContent).toBe("hello!");
     expect(world.textContent).toBe("world!");
-    const locale = screen.getByTestId("locale");
 
     fireEvent.click(locale);
     // the event loop takes one Promise to resolve to be finished
@@ -125,5 +125,45 @@ describe("useI18n", () => {
     expect(locale.textContent).toBe("fr-BE");
     expect(hello.textContent).toBe("bonjour !");
     expect(world.textContent).toBe("monde !");
+  });
+
+  test("default namespace", async () => {
+    addTranslations("en", {
+      "hello": "hello!",
+      "world": "world!"
+    });
+
+    addTranslations("fr", {
+      "hello": "bonjour !",
+      "world": "monde !"
+    });
+
+    function Hello() {
+      const [translate, locale] = use18n();
+      return <>
+        <div data-testid="hello">{translate('hello')}</div>
+        <button data-testid="locale" onClick={() => locale("fr-BE")}>
+          {locale()}
+        </button>
+      </>;
+    }
+
+    render(() =>
+      <I18nProvider locale="en">
+        <Hello/>
+      </I18nProvider>
+    );
+
+    const hello = screen.getByTestId("hello");
+    const locale = screen.getByTestId("locale");
+
+    expect(hello.textContent).toBe("hello!");
+
+    fireEvent.click(locale);
+    // the event loop takes one Promise to resolve to be finished
+    await Promise.resolve();
+
+    expect(locale.textContent).toBe("fr-BE");
+    expect(hello.textContent).toBe("bonjour !");
   });
 });

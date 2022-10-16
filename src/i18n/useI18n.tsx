@@ -18,7 +18,7 @@ type Registry = {
 interface Props {
   locale?: string;
   fallbackLocale?: string;
-  namespaces: string[];
+  namespaces?: string[];
 }
 
 type TranslateFunction = (key: string, params?: Record<string, any>) => string;
@@ -26,16 +26,29 @@ type GetOrChangeLocaleFunction = (locale?: string) => string | undefined;
 
 type I18nContext = [TranslateFunction, GetOrChangeLocaleFunction];
 
+const defaultNamespace = '__default';
+
 let registry: Registry = {};
 
 let mergeTranslationsCache: Record<string, Record<string, any>> = {};
 
 let keySeparator: string | null = null;
 
-export function addTranslations(locale: string, namespace: string, translations: Record<string, any>) {
+export function addTranslations(locale: string, translations: Record<string, any>): void;
+export function addTranslations(locale: string, namespace: string, translations: Record<string, any>): void;
+export function addTranslations(locale: string, namespaceOrTranslations: string | Record<string, any>, translations?: Record<string, any>): void {
+  let namespace: string;
+
+  if (typeof namespaceOrTranslations === 'string') {
+    namespace = namespaceOrTranslations;
+  } else {
+    namespace = defaultNamespace;
+    translations = namespaceOrTranslations;
+  }
+
   registry[locale] ??= {};
   registry[locale][namespace] ??= {};
-  registry[locale][namespace] = translations;
+  registry[locale][namespace] = translations as Record<string, any>;
 }
 
 // used to setup tests
@@ -57,7 +70,8 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
   const mergedProps =
     mergeProps({
       locale: getDefaultLocale(),
-      fallbackLocale: getDefaultLocale()
+      fallbackLocale: getDefaultLocale(),
+      namespaces: [defaultNamespace]
     }, props);
 
   const [locale, setLocale] = createSignal(mergedProps.locale);
