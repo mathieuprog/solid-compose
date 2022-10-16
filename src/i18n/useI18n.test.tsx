@@ -19,8 +19,12 @@ describe("useI18n", () => {
     });
 
     addTranslations("fr", "bar", {
-      "hello": "bonjour!",
-      "world": "monde!"
+      "hello": "bonjour !",
+      "world": "monde !"
+    });
+
+    addTranslations("fr-BE", "bar", {
+      "world": "monde !!"
     });
   });
 
@@ -33,7 +37,7 @@ describe("useI18n", () => {
         <div data-testid="hello">{translate('hello')}</div>
         <div data-testid="world">{translate('world')}</div>
         <div data-testid="foo">{translate('foo')}</div>
-        <button data-testid="locale" onClick={() => locale("fr")}>
+        <button data-testid="locale" onClick={() => locale("fr-BE")}>
           {locale()}
         </button>
       </>;
@@ -50,18 +54,18 @@ describe("useI18n", () => {
     const foo = screen.getByTestId("foo");
     const locale = screen.getByTestId("locale");
 
-    expect(hello).toHaveTextContent("hello!");
-    expect(world).toHaveTextContent("world!");
-    expect(foo).toHaveTextContent("bar");
-    expect(locale).toHaveTextContent("en");
+    expect(hello.textContent).toBe("hello!");
+    expect(world.textContent).toBe("world!");
+    expect(foo.textContent).toBe("bar");
+    expect(locale.textContent).toBe("en");
 
     fireEvent.click(locale);
     // the event loop takes one Promise to resolve to be finished
     await Promise.resolve();
 
-    expect(hello).toHaveTextContent("bonjour!");
-    expect(world).toHaveTextContent("monde!");
-    expect(foo).toHaveTextContent("bar");
-    expect(locale).toHaveTextContent("fr");
+    expect(locale.textContent).toBe("fr-BE");
+    expect(hello.textContent).toBe("bonjour !");
+    expect(world.textContent).toBe("monde !!");
+    expect(foo.textContent).toBe("bar");
   });
 });

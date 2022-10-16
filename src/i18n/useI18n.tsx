@@ -34,35 +34,6 @@ export function addTranslations(locale: string, namespace: string, translations:
   registry[locale][namespace] = translations;
 }
 
-function findEnglishLocale() {
-  if (registry['en']) {
-    return 'en';
-  }
-
-  if (registry['en-US']) {
-    return 'en-US';
-  }
-
-  if (registry['en-GB']) {
-    return 'en-GB';
-  }
-
-  return Object.keys(registry).find((locale) => {
-    return locale.startsWith('en-');
-  });
-}
-
-function mergeTranslationsFromNamespaces(locale: string, namespaces: string[]) {
-  if (!registry[locale]) {
-    return {};
-  }
-
-  return Object.entries(registry[locale])
-    .filter(([namespace, _]) => namespaces.includes(namespace))
-    .map(([_, obj]) => obj)
-    .reduce((acc, obj) => ({ ...acc, ...obj }) , {});
-}
-
 // provide a default value to avoid the | undefined part of the type
 const defaultValue: I18nContext = [(key, _params) => key, () => { throw new Error() }];
 
@@ -84,12 +55,26 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
       ? mergeTranslationsFromNamespaces(englishLocale, mergedProps.namespaces)
       : {};
 
-  const fallbackTranslations = mergeTranslationsFromNamespaces(mergedProps.fallbackLocale, mergedProps.namespaces);
+  const fallbackTranslations =
+    (mergedProps.fallbackLocale)
+      ? mergeTranslationsFromNamespaces(mergedProps.fallbackLocale, mergedProps.namespaces)
+      : {};
 
-  const translations = () => mergeTranslationsFromNamespaces(locale(), mergedProps.namespaces);
+  const fallbackLocale_ = () => findFallbackLocale(locale());
+
+  const fallbackTranslations_ = () => {
+    return (fallbackLocale_())
+      ? mergeTranslationsFromNamespaces(fallbackLocale_() as string, mergedProps.namespaces)
+      : {};
+  };
+
+  const translations = () => {
+    return mergeTranslationsFromNamespaces(locale(), mergedProps.namespaces);
+  };
 
   const translate: TranslateFunction = (key, _params = {}) => {
     return translations()[key]
+        ?? fallbackTranslations_()[key]
         ?? fallbackTranslations[key]
         ?? englishTranslations[key]
         ?? (() => { throw new Error('translation not found') })();
@@ -112,4 +97,45 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
 
 export default function use18n(): I18nContext  {
   return useContext(I18nContext);
+}
+
+function mergeTranslationsFromNamespaces(locale: string, namespaces: string[]) {
+  if (!registry[locale]) {
+    return {};
+  }
+
+  return Object.entries(registry[locale])
+    .filter(([namespace, _]) => namespaces.includes(namespace))
+    .map(([_, obj]) => obj)
+    .reduce((acc, obj) => ({ ...acc, ...obj }) , {});
+}
+
+function findFallbackLocale(locale: string) {
+  if (!locale.includes('-')) {
+    return null;
+  }
+
+  const fallbackLocale = locale.split('-')[0];
+
+  return (registry[fallbackLocale])
+    ? fallbackLocale
+    : null;
+}
+
+function findEnglishLocale() {
+  if (registry['en']) {
+    return 'en';
+  }
+
+  if (registry['en-US']) {
+    return 'en-US';
+  }
+
+  if (registry['en-GB']) {
+    return 'en-GB';
+  }
+
+  return Object.keys(registry).find((locale) => {
+    return locale.startsWith('en-');
+  });
 }
