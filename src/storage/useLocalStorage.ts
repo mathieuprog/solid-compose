@@ -18,7 +18,7 @@ export default function useLocalStorage<T>(key: string, defaultValue?: T, transf
   let signal = signalMap.get(key);
 
   if (signal === undefined) {
-    signal = createLocalStorageSignal(key, defaultValue, transform);
+    signal = createLocalStoragePrimitive(key, defaultValue, transform);
     signalMap.set(key, signal);
   }
 
@@ -35,7 +35,7 @@ const defaultTransform = {
   deserialize: JSON.parse
 };
 
-function createLocalStorageSignal<T>(key: string, defaultValue?: T, transform: Transform<T> = defaultTransform): Return<T> {
+export function createLocalStoragePrimitive<T>(key: string, defaultValue?: T, transform: Transform<T> = defaultTransform): Return<T> {
   const initialValue = getItemOrDefault<T>(key, transform, defaultValue);
 
   const [value, setValue] = createSignal(initialValue);

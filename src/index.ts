@@ -3,7 +3,7 @@ import getSystemColorScheme from './color-scheme/getSystemColorScheme';
 import { ColorSchemeStorage } from './color-scheme/useColorScheme';
 import useContextColorScheme, { ColorSchemeProvider } from './color-scheme/useColorScheme/context';
 import useGlobalColorScheme, { createColorSchemePrimitive } from './color-scheme/useColorScheme/global';
-import useLocalStorage from './storage/useLocalStorage';
+import useLocalStorage, { createLocalStoragePrimitive } from './storage/useLocalStorage';
 import use18n, { I18nProvider, addTranslations } from './i18n/useI18n';
 import useLocale, { createLocalePrimitive } from './locale/useLocale';
 
@@ -20,6 +20,7 @@ export {
   useContextColorScheme,
   useGlobalColorScheme,
 
+  createLocalStoragePrimitive,
   useLocalStorage,
 
   useLocale,
