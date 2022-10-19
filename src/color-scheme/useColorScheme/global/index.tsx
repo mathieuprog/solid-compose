@@ -40,5 +40,9 @@ export function createColorSchemePrimitive(config: Config) {
 }
 
 export default function useColorScheme(): ColorSchemePrimitive {
+  if (!signal) {
+    throw new Error('call createColorSchemePrimitive(config) to create the global state');
+  }
+
   return signal;
 }

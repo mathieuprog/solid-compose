@@ -4,12 +4,19 @@ import { cleanup, render, screen } from 'solid-testing-library';
 import {
   ColorSchemeStorage,
   ColorSchemeStylesheet,
-  createColorSchemePrimitive
+  createColorSchemePrimitive,
+  useGlobalColorScheme
 } from '@/index';
 import type { ColorScheme } from '@/color-scheme/useColorScheme';
 
 describe('useColorScheme', () => {
   afterEach(cleanup);
+
+  test('missing global state should throw error', () => {
+    expect(
+      () => useGlobalColorScheme()
+    ).toThrow(/createColorSchemePrimitive/);
+  });
 
   test('default to dark', () => {
     createColorSchemePrimitive({
