@@ -6,6 +6,7 @@ import useGlobalColorScheme, { createColorSchemePrimitive } from './color-scheme
 import useLocalStorage, { createLocalStoragePrimitive } from './storage/useLocalStorage';
 import use18n, { I18nProvider, addTranslations } from './i18n/useI18n';
 import useLocale, { createLocalePrimitive } from './locale/useLocale';
+import getDefaultLocale from './locale/getDefaultLocale';
 
 export {
   addTranslations,
@@ -23,6 +24,7 @@ export {
   createLocalStoragePrimitive,
   useLocalStorage,
 
-  useLocale,
   createLocalePrimitive,
+  getDefaultLocale,
+  useLocale,
 }
