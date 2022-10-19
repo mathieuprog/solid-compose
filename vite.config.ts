@@ -3,6 +3,7 @@
 
 import { defineConfig } from 'vite';
 import solidPlugin from 'vite-plugin-solid';
+import path from 'path';
 
 export default defineConfig({
   plugins: [
@@ -21,6 +22,12 @@ export default defineConfig({
     isolate: true,
   },
   resolve: {
-    conditions: ['development', 'browser']
+    conditions: ['development', 'browser'],
+    alias: [
+      {
+        find: '@',
+        replacement: path.resolve(__dirname, 'src/')
+      }
+    ]
   }
 });
