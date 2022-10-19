@@ -5,7 +5,7 @@ import use18n, {
   enableNestedTranslations,
   I18nProvider,
   removeAllTranslations
-} from './useI18n';
+} from '@/i18n/useI18n';
 import enTranslations from './support/en.json';
 import frTranslations from './support/fr.json';
 

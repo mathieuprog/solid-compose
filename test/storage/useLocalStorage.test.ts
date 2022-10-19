@@ -1,6 +1,6 @@
 import { createRoot } from 'solid-js';
 import { describe, expect, test } from 'vitest';
-import useLocalStorage from './useLocalStorage';
+import useLocalStorage from '@/storage/useLocalStorage';
 
 // @vitest-environment happy-dom
 

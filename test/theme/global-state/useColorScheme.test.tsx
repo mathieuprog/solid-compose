@@ -1,21 +1,27 @@
+import { createSignal } from 'solid-js';
 import { afterEach, describe, expect, test } from 'vitest';
 import { cleanup, render, screen } from 'solid-testing-library';
-import ColorSchemeStylesheet from './ColorSchemeStylesheet';
-import { ColorSchemeProvider, ColorSchemeStorage } from './useColorScheme';
-import type { ColorScheme } from './useColorScheme';
-import { createSignal } from 'solid-js';
+import {
+  ColorSchemeStorage,
+  ColorSchemeStylesheet,
+  createColorSchemePrimitive
+} from '@/index';
+import type { ColorScheme } from '@/color-scheme/useColorScheme';
 
 describe('useColorScheme', () => {
   afterEach(cleanup);
 
   test('default to dark', () => {
+    createColorSchemePrimitive({
+      default: 'dark',
+      storage: ColorSchemeStorage.signalStorage
+    });
+
     render(() =>
-      <ColorSchemeProvider storage={ColorSchemeStorage.signalStorage} defaultScheme="dark">
-        <ColorSchemeStylesheet
-          dark="https://example.com"
-          light="https://example.com"
-        />
-      </ColorSchemeProvider>
+      <ColorSchemeStylesheet
+        dark="https://example.com"
+        light="https://example.com"
+      />
     );
 
     expect(screen.queryByTestId('stylesheet-light')).toBeNull();
@@ -23,13 +29,16 @@ describe('useColorScheme', () => {
   });
 
   test('default to light', () => {
+    createColorSchemePrimitive({
+      default: 'light',
+      storage: ColorSchemeStorage.signalStorage
+    });
+
     render(() =>
-      <ColorSchemeProvider storage={ColorSchemeStorage.signalStorage} defaultScheme="light">
-        <ColorSchemeStylesheet
-          dark="https://example.com"
-          light="https://example.com"
-        />
-      </ColorSchemeProvider>
+      <ColorSchemeStylesheet
+        dark="https://example.com"
+        light="https://example.com"
+      />
     );
 
     expect(screen.queryByTestId('stylesheet-dark')).toBeNull();
@@ -39,13 +48,15 @@ describe('useColorScheme', () => {
   test('pick right stylesheet', () => {
     const signal = createSignal<ColorScheme>('dark');
 
+    createColorSchemePrimitive({
+      storage: signal
+    });
+
     render(() =>
-      <ColorSchemeProvider storage={signal}>
-        <ColorSchemeStylesheet
-          dark="https://example.com"
-          light="https://example.com"
-        />
-      </ColorSchemeProvider>
+      <ColorSchemeStylesheet
+        dark="https://example.com"
+        light="https://example.com"
+      />
     );
 
     expect(screen.queryByTestId('stylesheet-light')).toBeNull();
