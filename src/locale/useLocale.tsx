@@ -1,11 +1,11 @@
 import { Accessor, createSignal } from 'solid-js';
 import getDefaultLocale from './getDefaultLocale';
 
-export type LocalePrimitive = [Accessor<string | null>, LocaleSetter];
+export type LocalePrimitive = [Accessor<string>, LocaleSetter];
 
 export type LocaleSetter =
-  ((colorScheme: string) => void)
-  & ((callback: ((prevColorScheme: string | null) => string)) => void);
+  ((locale: string) => void)
+  & ((callback: ((prevLocale: string | null) => string)) => void);
 
 interface Config {
   default?: string;
