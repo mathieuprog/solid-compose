@@ -15,7 +15,7 @@ import type {
 
 interface Props {
   storage?: ColorSchemeStorage | Signal<ColorScheme>;
-  defaultScheme?: ColorScheme;
+  default?: ColorScheme;
 }
 
 const ColorSchemeContext = createContext<ColorSchemePrimitive>();
@@ -25,7 +25,7 @@ export const ColorSchemeProvider: ParentComponent<Props> = (props) => {
 
   const [colorScheme, setColorScheme] =
     (typeof mergedProps.storage === 'function')
-      ? mergedProps.storage(mergedProps.defaultScheme)
+      ? mergedProps.storage(mergedProps.default)
       : mergedProps.storage;
 
   const setColorScheme_: ColorSchemeSetter = (arg) => {

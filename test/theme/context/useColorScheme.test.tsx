@@ -13,7 +13,7 @@ describe('useColorScheme', () => {
 
   test('default to dark', () => {
     render(() =>
-      <ColorSchemeProvider storage={ColorSchemeStorage.signalStorage} defaultScheme="dark">
+      <ColorSchemeProvider storage={ColorSchemeStorage.signalStorage} default="dark">
         <ColorSchemeStylesheet
           dark="https://example.com"
           light="https://example.com"
@@ -27,7 +27,7 @@ describe('useColorScheme', () => {
 
   test('default to light', () => {
     render(() =>
-      <ColorSchemeProvider storage={ColorSchemeStorage.signalStorage} defaultScheme="light">
+      <ColorSchemeProvider storage={ColorSchemeStorage.signalStorage} default="light">
         <ColorSchemeStylesheet
           dark="https://example.com"
           light="https://example.com"
