@@ -15,13 +15,13 @@ interface Config {
 }
 
 let defaultScheme: ColorScheme = getSystemColorScheme();
-let storage: ColorSchemeStorage | Signal<ColorScheme> = ColorSchemeStorage.mediaQuery;
+let defaultStorage: ColorSchemeStorage | Signal<ColorScheme> = ColorSchemeStorage.mediaQuery;
 
 let signal: ColorSchemePrimitive;
 
-export function createColorSchemePrimitive(config: Config) {
-  defaultScheme = config.default ?? defaultScheme;
-  storage = config.storage ?? storage;
+export function createColorSchemePrimitive(config?: Config) {
+  defaultScheme = config?.default ?? defaultScheme;
+  const storage = config?.storage ?? defaultStorage;
 
   const [colorScheme, setColorScheme] =
     (typeof storage === 'function')
