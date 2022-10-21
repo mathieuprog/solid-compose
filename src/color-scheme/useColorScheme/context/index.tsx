@@ -1,4 +1,5 @@
 import type { ParentComponent, Signal } from 'solid-js';
+import getSystemColorScheme from '../../getSystemColorScheme';
 import {
   createContext,
   mergeProps,
@@ -21,7 +22,11 @@ interface Props {
 const ColorSchemeContext = createContext<ColorSchemePrimitive>();
 
 export const ColorSchemeProvider: ParentComponent<Props> = (props) => {
-  const mergedProps = mergeProps({ storage: ColorSchemeStorage.mediaQuery }, props);
+  const mergedProps =
+    mergeProps({
+      storage: ColorSchemeStorage.mediaQuery,
+      default: getSystemColorScheme()
+    }, props);
 
   const [colorScheme, setColorScheme] =
     (typeof mergedProps.storage === 'function')
