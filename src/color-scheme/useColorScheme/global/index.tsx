@@ -17,7 +17,7 @@ interface Config {
 let defaultScheme: ColorScheme = getSystemColorScheme();
 let defaultStorage: ColorSchemeStorage | Signal<ColorScheme> = ColorSchemeStorage.mediaQuery;
 
-let signal: ColorSchemePrimitive;
+let primitive: ColorSchemePrimitive;
 
 export function createColorSchemePrimitive(config?: Config) {
   defaultScheme = config?.default ?? defaultScheme;
@@ -36,13 +36,13 @@ export function createColorSchemePrimitive(config?: Config) {
     }
   };
 
-  signal = [colorScheme, setColorScheme_];
+  primitive = [colorScheme, setColorScheme_];
 }
 
 export default function useColorScheme(): ColorSchemePrimitive {
-  if (!signal) {
+  if (!primitive) {
     throw new Error('call createColorSchemePrimitive(config) to create the global state');
   }
 
-  return signal;
+  return primitive;
 }
