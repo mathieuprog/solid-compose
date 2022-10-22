@@ -1,17 +1,25 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { cleanup, fireEvent, render, screen } from 'solid-testing-library';
-import use18n, {
+import  {
+  removeAllTranslations,
+  setGlobalPrimitiveCreated
+} from '@/i18n/useI18n';
+import {
   addTranslations,
   enableNestedTranslations,
-  I18nProvider,
-  removeAllTranslations
-} from '@/i18n/useI18n';
-import enTranslations from './support/en.json';
-import frTranslations from './support/fr.json';
+  setFallbackLocalesForMissingTranslations,
+  createI18nPrimitive,
+  createLocalePrimitive,
+  useGlobal18n,
+  useLocale
+} from '@/index';
+import enTranslations from '../support/en.json';
+import frTranslations from '../support/fr.json';
 
-describe('useI18n', () => {
+describe('useContext18n', () => {
   beforeEach(() => {
     removeAllTranslations();
+    setGlobalPrimitiveCreated(false);
     enableNestedTranslations(false);
 
     addTranslations('en', 'foo', {
@@ -41,22 +49,25 @@ describe('useI18n', () => {
   afterEach(cleanup);
 
   test('translate', async () => {
+    createLocalePrimitive({ default: 'en' });
+    setFallbackLocalesForMissingTranslations(['en']);
+    createI18nPrimitive();
+
     function Hello() {
-      const [translate, locale] = use18n();
+      const [locale, setLocale] = useLocale();
+      const translate = useGlobal18n();
       return <>
         <div data-testid="hello">{translate('hello')}</div>
         <div data-testid="world">{translate('world')}</div>
         <div data-testid="foo">{translate('foo')}</div>
-        <button data-testid="locale" onClick={() => locale('fr-BE')}>
+        <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
           {locale()}
         </button>
       </>;
     }
 
     render(() =>
-      <I18nProvider locale="en" namespaces={['foo', 'bar']}>
-        <Hello/>
-      </I18nProvider>
+      <Hello/>
     );
 
     const hello = screen.getByTestId('hello');
@@ -81,7 +92,10 @@ describe('useI18n', () => {
 
   test('key separator', async () => {
     removeAllTranslations();
+    createLocalePrimitive({ default: 'en' });
+    setFallbackLocalesForMissingTranslations([]);
     enableNestedTranslations('.');
+    createI18nPrimitive();
 
     addTranslations('en', 'foo', {
       "welcome": {
@@ -98,20 +112,19 @@ describe('useI18n', () => {
     });
 
     function Hello() {
-      const [translate, locale] = use18n();
+      const [locale, setLocale] = useLocale();
+      const translate = useGlobal18n();
       return <>
         <div data-testid="hello">{translate('welcome.hello')}</div>
         <div data-testid="world">{translate('world')}</div>
-        <button data-testid="locale" onClick={() => locale('fr-BE')}>
+        <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
           {locale()}
         </button>
       </>;
     }
 
     render(() =>
-      <I18nProvider locale="en" namespaces={['foo']}>
-        <Hello/>
-      </I18nProvider>
+      <Hello/>
     );
 
     const hello = screen.getByTestId('hello');
@@ -132,6 +145,9 @@ describe('useI18n', () => {
 
   test('default namespace', async () => {
     removeAllTranslations();
+    createLocalePrimitive({ default: 'en' });
+    setFallbackLocalesForMissingTranslations([]);
+    createI18nPrimitive();
 
     addTranslations('en', {
       "hello": "hello!",
@@ -144,19 +160,18 @@ describe('useI18n', () => {
     });
 
     function Hello() {
-      const [translate, locale] = use18n();
+      const [locale, setLocale] = useLocale();
+      const translate = useGlobal18n();
       return <>
         <div data-testid="hello">{translate('hello')}</div>
-        <button data-testid="locale" onClick={() => locale('fr-BE')}>
+        <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
           {locale()}
         </button>
       </>;
     }
 
     render(() =>
-      <I18nProvider locale="en">
-        <Hello/>
-      </I18nProvider>
+      <Hello/>
     );
 
     const hello = screen.getByTestId('hello');
@@ -174,24 +189,26 @@ describe('useI18n', () => {
 
   test('add translations from json files', async () => {
     removeAllTranslations();
+    createLocalePrimitive({ default: 'en' });
+    setFallbackLocalesForMissingTranslations([]);
+    createI18nPrimitive();
 
     addTranslations('en', enTranslations);
     addTranslations('fr', frTranslations);
 
     function Hello() {
-      const [translate, locale] = use18n();
+      const [locale, setLocale] = useLocale();
+      const translate = useGlobal18n();
       return <>
         <div data-testid="hello">{translate('hello')}</div>
-        <button data-testid="locale" onClick={() => locale('fr-BE')}>
+        <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
           {locale()}
         </button>
       </>;
     }
 
     render(() =>
-      <I18nProvider locale="en">
-        <Hello/>
-      </I18nProvider>
+      <Hello/>
     );
 
     const hello = screen.getByTestId('hello');

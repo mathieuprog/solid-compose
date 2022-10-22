@@ -4,14 +4,24 @@ import { ColorSchemeStorage } from './color-scheme/useColorScheme';
 import useContextColorScheme, { ColorSchemeProvider } from './color-scheme/useColorScheme/context';
 import useGlobalColorScheme, { createColorSchemePrimitive } from './color-scheme/useColorScheme/global';
 import useLocalStorage, { createLocalStoragePrimitive } from './storage/useLocalStorage';
-import use18n, { I18nProvider, addTranslations } from './i18n/useI18n';
+import {
+  addTranslations,
+  enableNestedTranslations,
+  setFallbackLocalesForMissingTranslations
+} from './i18n/useI18n';
+import useContext18n, { I18nProvider } from './i18n/useI18n/context';
+import useGlobal18n, { createI18nPrimitive } from './i18n/useI18n/global';
 import useLocale, { createLocalePrimitive } from './locale/useLocale';
 import getDefaultLocale from './locale/getDefaultLocale';
 
 export {
   addTranslations,
+  createI18nPrimitive,
+  enableNestedTranslations,
   I18nProvider,
-  use18n,
+  setFallbackLocalesForMissingTranslations,
+  useContext18n,
+  useGlobal18n,
 
   ColorSchemeProvider,
   ColorSchemeStorage,
