@@ -1,3 +1,5 @@
+import useLocale from "@/locale/useLocale";
+
 type Registry = {
   [locale: string]: {
     [namespace: string]: {
@@ -30,10 +32,6 @@ export function setFallbackLocalesForMissingTranslations(locales: string[]) {
   fallbackLocales = locales;
 }
 
-export function getFallbackLocalesForMissingTranslations() {
-  return fallbackLocales;
-}
-
 export function addTranslations(locale: string, translations: Record<string, any>): void;
 export function addTranslations(locale: string, namespace: string, translations: Record<string, any>): void;
 export function addTranslations(locale: string, namespaceOrTranslations: string | Record<string, any>, translations?: Record<string, any>): void {
@@ -57,16 +55,61 @@ export function removeAllTranslations() {
   mergeTranslationsCache = {};
 }
 
+export function createTranslateFunction(namespaces?: string[]): TranslateFunction {
+  const [locale, _setLocale] = useLocale();
+
+  const fallbackTranslations =
+    fallbackLocales.map((locale) => {
+      return mergeTranslations(locale, namespaces);
+    });
+
+  const fallbackLocale_ = () => findFallbackLocale(locale());
+
+  const fallbackTranslations_ = () => {
+    return (fallbackLocale_())
+      ? mergeTranslations(fallbackLocale_() as string, namespaces)
+      : {};
+  };
+
+  const translations = (): Record<string, any> => {
+    return mergeTranslations(locale(), namespaces);
+  };
+
+  return (key, _params = {}) => {
+    if (keySeparator) {
+      const splitKey = key.split(keySeparator);
+      const firstKey = splitKey.shift() as string;
+
+      const translationsObject =
+        (translations()[firstKey] && translations())
+          ?? (fallbackTranslations_()[firstKey] && fallbackTranslations_())
+          ?? findInTranslationList(fallbackTranslations, firstKey)
+          ?? (() => { throw new Error(`translation for "${firstKey}" not found`) })();
+
+      let value = translationsObject[firstKey];
+
+      while (splitKey.length > 0) {
+        const key = splitKey.shift() as string;
+        value = value[key] ?? (() => { throw new Error(`translation for "${key}" not found`) })();
+      }
+
+      return value;
+    }
+
+    return translations()[key]
+        ?? fallbackTranslations_()[key]
+        ?? findInTranslationList(fallbackTranslations, key)
+        ?? fallbackTranslations.find((translations) => translations[key])
+        ?? (() => { throw new Error(`translation for "${key}" not found`) })();
+  };
+}
+
 export function enableNestedTranslations(keySeparator_: string | false = '.') {
   if (globalPrimitiveCreated) {
     throw new Error('Cannot set key separator while global i18n has already been created');
   }
 
   keySeparator = (keySeparator_) ? keySeparator_ : null;
-}
-
-export function getNestedTranslationsKeySeparator() {
-  return keySeparator;
 }
 
 let mergeTranslationsCache: Record<string, Record<string, any>> = {};

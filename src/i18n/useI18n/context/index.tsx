@@ -4,14 +4,9 @@ import {
   mergeProps,
   useContext,
 } from 'solid-js';
-import useLocale from '@/locale/useLocale';
 import {
+  createTranslateFunction,
   defaultNamespace,
-  findFallbackLocale,
-  findInTranslationList,
-  getFallbackLocalesForMissingTranslations,
-  getNestedTranslationsKeySeparator,
-  mergeTranslations,
   TranslateFunction
 } from '..';
 
@@ -30,54 +25,7 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
       namespaces: [defaultNamespace]
     }, props);
 
-  const [locale, _setLocale] = useLocale();
-
-  const fallbackTranslations =
-    getFallbackLocalesForMissingTranslations().map((locale) => {
-      return mergeTranslations(locale, mergedProps.namespaces);
-    });
-
-  const fallbackLocale_ = () => findFallbackLocale(locale());
-
-  const fallbackTranslations_ = () => {
-    return (fallbackLocale_())
-      ? mergeTranslations(fallbackLocale_() as string, mergedProps.namespaces)
-      : {};
-  };
-
-  const translations = (): Record<string, any> => {
-    return mergeTranslations(locale(), mergedProps.namespaces);
-  };
-
-  const keySeparator = getNestedTranslationsKeySeparator();
-
-  const translate: TranslateFunction = (key, _params = {}) => {
-    if (keySeparator) {
-      const splitKey = key.split(keySeparator);
-      const firstKey = splitKey.shift() as string;
-
-      const translationsObject =
-        (translations()[firstKey] && translations())
-          ?? (fallbackTranslations_()[firstKey] && fallbackTranslations_())
-          ?? findInTranslationList(fallbackTranslations, firstKey)
-          ?? (() => { throw new Error(`translation for "${firstKey}" not found`) })();
-
-      let value = translationsObject[firstKey];
-
-      while (splitKey.length > 0) {
-        const key = splitKey.shift() as string;
-        value = value[key] ?? (() => { throw new Error(`translation for "${key}" not found`) })();
-      }
-
-      return value;
-    }
-
-    return translations()[key]
-        ?? fallbackTranslations_()[key]
-        ?? findInTranslationList(fallbackTranslations, key)
-        ?? fallbackTranslations.find((translations) => translations[key])
-        ?? (() => { throw new Error(`translation for "${key}" not found`) })();
-  };
+  const translate = createTranslateFunction(mergedProps.namespaces);
 
   return (
     <I18nContext.Provider value={translate}>
