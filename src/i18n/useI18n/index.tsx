@@ -75,32 +75,49 @@ export function createTranslateFunction(namespaces?: string[]): TranslateFunctio
     return mergeTranslations(locale(), namespaces);
   };
 
-  return (key, _params = {}) => {
+  return (key, params = {}) => {
+    let value: string;
+
     if (keySeparator) {
       const splitKey = key.split(keySeparator);
       const firstKey = splitKey.shift() as string;
 
-      const translationsObject =
+      const translationsObject: Record<string, any> =
         (translations()[firstKey] && translations())
           ?? (fallbackTranslations_()[firstKey] && fallbackTranslations_())
           ?? findInTranslationList(fallbackTranslations, firstKey)
           ?? (() => { throw new Error(`translation for "${firstKey}" not found`) })();
 
-      let value = translationsObject[firstKey];
+      let o = translationsObject[firstKey];
 
       while (splitKey.length > 0) {
-        const key = splitKey.shift() as string;
-        value = value[key] ?? (() => { throw new Error(`translation for "${key}" not found`) })();
+        const k = splitKey.shift() as string;
+        o = o[k] ?? (() => { throw new Error(`translation for "${key}" not found`) })();
       }
 
-      return value;
-    }
-
-    return translations()[key]
+      value = o;
+    } else {
+      value =
+        translations()[key]
         ?? fallbackTranslations_()[key]
         ?? findInTranslationList(fallbackTranslations, key)
         ?? fallbackTranslations.find((translations) => translations[key])
         ?? (() => { throw new Error(`translation for "${key}" not found`) })();
+    }
+
+    return value.replace(/{{(.*?)}}/g, (_: unknown, path: string): string => {
+      const splitKey = path.trim().split('.');
+
+      const value = splitKey.reduce((o, key) => {
+        return o[key] ?? (() => { throw new Error(`translation for "${path}" not found`) })();
+      }, params);
+
+      if (typeof value !== 'string') {
+        throw new Error(`translation for "${path}" not found`);
+      }
+
+      return value;
+    });
   };
 }
 
