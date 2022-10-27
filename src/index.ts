@@ -9,7 +9,7 @@ import {
   enableNestedTranslations,
   setFallbackLocalesForMissingTranslations
 } from './i18n/useI18n';
-import useContext18n, { I18nProvider } from './i18n/useI18n/context';
+import useContext18n, { I18nProvider, setupI18n } from './i18n/useI18n/context';
 import useGlobal18n, { createI18nPrimitive } from './i18n/useI18n/global';
 import useLocale, { createLocalePrimitive } from './locale/useLocale';
 import getDefaultLocale from './locale/getDefaultLocale';
@@ -20,6 +20,7 @@ export {
   enableNestedTranslations,
   I18nProvider,
   setFallbackLocalesForMissingTranslations,
+  setupI18n,
   useContext18n,
   useGlobal18n,
 

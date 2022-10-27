@@ -3,10 +3,9 @@ import { cleanup, fireEvent, render, screen } from 'solid-testing-library';
 import { removeAllTranslations } from '@/i18n/useI18n';
 import {
   addTranslations,
-  enableNestedTranslations,
-  setFallbackLocalesForMissingTranslations,
   I18nProvider,
   createLocalePrimitive,
+  setupI18n,
   useContext18n,
   useLocale
 } from '@/index';
@@ -16,7 +15,6 @@ import frTranslations from '../support/fr.json';
 describe('useContext18n', () => {
   beforeEach(() => {
     removeAllTranslations();
-    enableNestedTranslations(false);
 
     addTranslations('en', 'foo', {
       "hello": "hello",
@@ -46,7 +44,10 @@ describe('useContext18n', () => {
 
   test('translate', async () => {
     createLocalePrimitive({ default: 'en' });
-    setFallbackLocalesForMissingTranslations(['en']);
+    setupI18n({
+      fallbackLocales: ['en'],
+      keySeparator: ''
+    });
 
     function Hello() {
       const [locale, setLocale] = useLocale();
@@ -88,10 +89,11 @@ describe('useContext18n', () => {
   });
 
   test('key separator', async () => {
-    removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
-    setFallbackLocalesForMissingTranslations([]);
-    enableNestedTranslations('.');
+    setupI18n({
+      fallbackLocales: [],
+      keySeparator: '.'
+    });
 
     addTranslations('en', 'foo', {
       "welcome": {
@@ -142,9 +144,11 @@ describe('useContext18n', () => {
   });
 
   test('default namespace', async () => {
-    removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
-    setFallbackLocalesForMissingTranslations([]);
+    setupI18n({
+      fallbackLocales: [],
+      keySeparator: ''
+    });
 
     addTranslations('en', {
       "hello": "hello!",
@@ -187,9 +191,11 @@ describe('useContext18n', () => {
   });
 
   test('add translations from json files', async () => {
-    removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
-    setFallbackLocalesForMissingTranslations([]);
+    setupI18n({
+      fallbackLocales: [],
+      keySeparator: ''
+    });
 
     addTranslations('en', enTranslations);
     addTranslations('fr', frTranslations);

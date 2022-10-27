@@ -7,6 +7,8 @@ import {
 import {
   createTranslateFunction,
   defaultNamespace,
+  enableNestedTranslations,
+  setFallbackLocalesForMissingTranslations,
   TranslateFunction
 } from '..';
 
@@ -36,4 +38,19 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
 
 export default function use18n(): TranslateFunction  {
   return useContext(I18nContext);
+}
+
+interface Config {
+  fallbackLocales?: string[];
+  keySeparator?: string;
+}
+
+export function setupI18n(config?: Config) {
+  if (config?.fallbackLocales !== undefined) {
+    setFallbackLocalesForMissingTranslations(config?.fallbackLocales);
+  }
+
+  if (config?.keySeparator !== undefined) {
+    enableNestedTranslations(config?.keySeparator || false);
+  }
 }

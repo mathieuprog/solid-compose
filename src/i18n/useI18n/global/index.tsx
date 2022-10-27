@@ -1,12 +1,27 @@
 import {
   createTranslateFunction,
+  enableNestedTranslations,
+  setFallbackLocalesForMissingTranslations,
   setGlobalPrimitiveCreated,
   TranslateFunction
 } from '..';
 
+interface Config {
+  fallbackLocales?: string[];
+  keySeparator?: string;
+}
+
 let primitive: TranslateFunction;
 
-export function createI18nPrimitive() {
+export function createI18nPrimitive(config?: Config) {
+  if (config?.fallbackLocales !== undefined) {
+    setFallbackLocalesForMissingTranslations(config?.fallbackLocales);
+  }
+
+  if (config?.keySeparator !== undefined) {
+    enableNestedTranslations(config?.keySeparator || false);
+  }
+
   const translate = createTranslateFunction();
 
   setGlobalPrimitiveCreated();

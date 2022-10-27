@@ -6,8 +6,6 @@ import {
 } from '@/i18n/useI18n';
 import {
   addTranslations,
-  enableNestedTranslations,
-  setFallbackLocalesForMissingTranslations,
   createI18nPrimitive,
   createLocalePrimitive,
   useGlobal18n,
@@ -20,7 +18,6 @@ describe('useContext18n', () => {
   beforeEach(() => {
     removeAllTranslations();
     setGlobalPrimitiveCreated(false);
-    enableNestedTranslations(false);
 
     addTranslations('en', 'foo', {
       "hello": "hello",
@@ -50,8 +47,10 @@ describe('useContext18n', () => {
 
   test('translate', async () => {
     createLocalePrimitive({ default: 'en' });
-    setFallbackLocalesForMissingTranslations(['en']);
-    createI18nPrimitive();
+    createI18nPrimitive({
+      fallbackLocales: ['en'],
+      keySeparator: ''
+    });
 
     function Hello() {
       const [locale, setLocale] = useLocale();
@@ -93,9 +92,10 @@ describe('useContext18n', () => {
   test('key separator', async () => {
     removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
-    setFallbackLocalesForMissingTranslations([]);
-    enableNestedTranslations('.');
-    createI18nPrimitive();
+    createI18nPrimitive({
+      fallbackLocales: [],
+      keySeparator: '.'
+    });
 
     addTranslations('en', 'foo', {
       "welcome": {
@@ -146,8 +146,10 @@ describe('useContext18n', () => {
   test('default namespace', async () => {
     removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
-    setFallbackLocalesForMissingTranslations([]);
-    createI18nPrimitive();
+    createI18nPrimitive({
+      fallbackLocales: [],
+      keySeparator: ''
+    });
 
     addTranslations('en', {
       "hello": "hello!",
@@ -190,8 +192,10 @@ describe('useContext18n', () => {
   test('add translations from json files', async () => {
     removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
-    setFallbackLocalesForMissingTranslations([]);
-    createI18nPrimitive();
+    createI18nPrimitive({
+      fallbackLocales: [],
+      keySeparator: ''
+    });
 
     addTranslations('en', enTranslations);
     addTranslations('fr', frTranslations);

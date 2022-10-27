@@ -7,13 +7,13 @@
 ```typescript
 import {
   createI18nPrimitive,
-  createLocalePrimitive,
-  setFallbackLocalesForMissingTranslations
+  createLocalePrimitive
 } from 'solid-compose';
 
 createLocalePrimitive({ default: 'en' });
-createI18nPrimitive();
-setFallbackLocalesForMissingTranslations(['en']);
+createI18nPrimitive({
+  fallbackLocales: ['en']
+});
 ```
 
 ```typescript
@@ -39,11 +39,13 @@ function Hello() {
 ```typescript
 import {
   createLocalePrimitive,
-  setFallbackLocalesForMissingTranslations
+  setupI18n
 } from 'solid-compose';
 
 createLocalePrimitive({ default: 'en' });
-setFallbackLocalesForMissingTranslations(['en']);
+setupI18n({
+  fallbackLocales: ['en']
+});
 ```
 
 ```typescript
