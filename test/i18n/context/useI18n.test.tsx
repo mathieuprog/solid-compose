@@ -67,6 +67,50 @@ describe('useContext18n', () => {
     expect(foo.textContent).toBe('bar');
   });
 
+  test('translate with parameter', async () => {
+    createLocalePrimitive({ default: 'en' });
+    setupI18n({
+      fallbackLocales: ['en'],
+      keySeparator: ''
+    });
+
+    addTranslations('en', {
+      "hello": "hello {{ name }}",
+      "welcome": "welcome {{ name }}"
+    });
+
+    addTranslations('fr', {
+      "hello": "bonjour {{ name }}"
+    });
+
+    function Hello() {
+      const [_locale, setLocale] = useLocale();
+      const translate = useContext18n();
+      return <>
+        <div data-testid="hello">{translate('hello', { name: 'John' })}</div>
+        <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
+        </button>
+      </>;
+    }
+
+    render(() =>
+      <I18nProvider>
+        <Hello/>
+      </I18nProvider>
+    );
+
+    const hello = screen.getByTestId('hello');
+    const locale = screen.getByTestId('locale');
+
+    expect(hello.textContent).toBe('hello John');
+
+    fireEvent.click(locale);
+    // the event loop takes one Promise to resolve to be finished
+    await Promise.resolve();
+
+    expect(hello.textContent).toBe('bonjour John');
+  });
+
   test('key separator', async () => {
     createLocalePrimitive({ default: 'en' });
     setupI18n({
