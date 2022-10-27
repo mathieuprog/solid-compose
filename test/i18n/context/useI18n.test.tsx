@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { cleanup, fireEvent, render, screen } from 'solid-testing-library';
-import  { removeAllTranslations } from '@/i18n/useI18n';
+import { removeAllTranslations } from '@/i18n/useI18n';
 import {
   addTranslations,
   enableNestedTranslations,
