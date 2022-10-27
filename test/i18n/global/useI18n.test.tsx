@@ -77,7 +77,7 @@ describe('useContext18n', () => {
 
     addTranslations('en', {
       "hello": "hello {{ name }}",
-      "world": "world"
+      "welcome": "welcome {{ name }}"
     });
 
     addTranslations('fr', {
@@ -88,7 +88,7 @@ describe('useContext18n', () => {
     const translate = useGlobal18n();
 
     expect(translate('hello', { name: 'John' })).toBe('hello John');
-    expect(translate('world', { name: 'John', age: 25 })).toBe('world');
+    expect(() => translate('welcome', { name: 'John', age: 25 })).toThrow(/age/);
 
     setLocale('fr');
 
