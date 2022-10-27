@@ -68,6 +68,33 @@ describe('useContext18n', () => {
     expect(foo.textContent).toBe('bar');
   });
 
+  test('translate with parameter', () => {
+    createLocalePrimitive({ default: 'en' });
+    createI18nPrimitive({
+      fallbackLocales: ['en'],
+      keySeparator: ''
+    });
+
+    addTranslations('en', {
+      "hello": "hello {{ name }}",
+      "world": "world"
+    });
+
+    addTranslations('fr', {
+      "hello": "bonjour {{ name }}"
+    });
+
+    const [_locale, setLocale] = useLocale();
+    const translate = useGlobal18n();
+
+    expect(translate('hello', { name: 'John' })).toBe('hello John');
+    expect(translate('world', { name: 'John' })).toBe('world'); // todo make it fail
+
+    setLocale('fr');
+
+    expect(translate('hello', { name: 'John' })).toBe('bonjour John');
+  });
+
   test('key separator', async () => {
     createLocalePrimitive({ default: 'en' });
     createI18nPrimitive({
