@@ -106,14 +106,15 @@ export function createTranslateFunction(namespaces?: string[]): TranslateFunctio
     }
 
     return value.replace(/{{(.*?)}}/g, (_: unknown, path: string): string => {
+      path = path.trim();
       const splitKey = path.trim().split('.');
 
-      const value = splitKey.reduce((o, key) => {
-        return o[key] ?? (() => { throw new Error(`translation for "${path}" not found`) })();
+      const value = splitKey.reduce((params, key) => {
+        return params[key] ?? (() => { throw new Error(`translation for parameter "${path}" not found`) })();
       }, params);
 
       if (typeof value !== 'string') {
-        throw new Error(`translation for "${path}" not found`);
+        throw new Error(`translation for parameter "${path}" not found`);
       }
 
       return value;
