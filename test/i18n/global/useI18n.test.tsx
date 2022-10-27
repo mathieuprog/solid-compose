@@ -13,39 +13,18 @@ import {
 } from '@/index';
 import enTranslations from '../support/en.json';
 import frTranslations from '../support/fr.json';
+import addDefaultTranslations from '../support/addDefaultTranslations';
 
 describe('useContext18n', () => {
   beforeEach(() => {
     removeAllTranslations();
     setGlobalPrimitiveCreated(false);
-
-    addTranslations('en', 'foo', {
-      "hello": "hello",
-      "foo": "bar"
-    });
-
-    addTranslations('fr', 'foo', {
-      "hello": "bonjour",
-    });
-
-    addTranslations('en', 'bar', {
-      "hello": "hello!",
-      "world": "world!"
-    });
-
-    addTranslations('fr', 'bar', {
-      "hello": "bonjour !",
-      "world": "monde !"
-    });
-
-    addTranslations('fr-BE', 'bar', {
-      "world": "monde !!"
-    });
   });
 
   afterEach(cleanup);
 
   test('translate', async () => {
+    addDefaultTranslations();
     createLocalePrimitive({ default: 'en' });
     createI18nPrimitive({
       fallbackLocales: ['en'],
@@ -90,7 +69,6 @@ describe('useContext18n', () => {
   });
 
   test('key separator', async () => {
-    removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
     createI18nPrimitive({
       fallbackLocales: [],
@@ -144,7 +122,6 @@ describe('useContext18n', () => {
   });
 
   test('default namespace', async () => {
-    removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
     createI18nPrimitive({
       fallbackLocales: [],
@@ -190,7 +167,6 @@ describe('useContext18n', () => {
   });
 
   test('add translations from json files', async () => {
-    removeAllTranslations();
     createLocalePrimitive({ default: 'en' });
     createI18nPrimitive({
       fallbackLocales: [],
