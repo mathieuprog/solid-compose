@@ -88,7 +88,7 @@ describe('useContext18n', () => {
     const translate = useGlobal18n();
 
     expect(translate('hello', { name: 'John' })).toBe('hello John');
-    expect(translate('world', { name: 'John' })).toBe('world'); // todo make it fail
+    expect(translate('world', { name: 'John', age: 25 })).toBe('world');
 
     setLocale('fr');
 
