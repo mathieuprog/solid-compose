@@ -105,20 +105,29 @@ export function createTranslateFunction(namespaces?: string[]): TranslateFunctio
         ?? (() => { throw new Error(`translation for "${key}" not found`) })();
     }
 
-    return value.replace(/{{(.*?)}}/g, (_: unknown, path: string): string => {
-      path = path.trim();
-      const splitKey = path.trim().split('.');
+    value =
+      value.replace(/{{(.*?)}}/g, (_: unknown, path: string): string => {
+        path = path.trim();
+        const splitKey = path.trim().split('.');
 
-      const value = splitKey.reduce((params, key) => {
-        return params[key] ?? (() => { throw new Error(`translation for parameter "${path}" not found`) })();
-      }, params);
+        const value = splitKey.reduce((params, key) => {
+          const v = params[key];
+          delete params[key];
+          return v ?? (() => { throw new Error(`translation for parameter "${path}" not found`) })();
+        }, params);
 
-      if (typeof value !== 'string') {
-        throw new Error(`translation for parameter "${path}" not found`);
-      }
+        if (typeof value !== 'string') {
+          throw new Error(`translation for parameter "${path}" not found`);
+        }
 
-      return value;
-    });
+        return value;
+      });
+
+    if (Object.keys(params).length > 0) {
+      throw new Error(`parameter(s) "${Object.keys(params).join(', ')}" not found`);
+    }
+
+    return value;
   };
 }
 
