@@ -88,11 +88,40 @@ describe('useContext18n', () => {
     const translate = useGlobal18n();
 
     expect(translate('hello', { name: 'John' })).toBe('hello John');
-    expect(() => translate('welcome', { name: 'John', age: 25 })).toThrow(/age/);
+    expect(() => translate('welcome', { age: 25 })).toThrow(/name/);
+    expect(() => translate('welcome', { name: 'John', age: 25 })).toThrow(/too many parameters/);
 
     setLocale('fr');
 
     expect(translate('hello', { name: 'John' })).toBe('bonjour John');
+  });
+
+  test('translate with parameter being object', () => {
+    createLocalePrimitive({ default: 'en' });
+    createI18nPrimitive({
+      fallbackLocales: ['en'],
+      keySeparator: ''
+    });
+
+    addTranslations('en', {
+      "hello": "hello {{ user.firstName }}, {{ user.firstName }} {{ user.lastName }}",
+      "welcome": "welcome {{ user.name }}"
+    });
+
+    addTranslations('fr', {
+      "welcome": "bienvenue {{ user.name }}"
+    });
+
+    const [_locale, setLocale] = useLocale();
+    const translate = useGlobal18n();
+
+    expect(translate('hello', { user: { firstName: 'John', lastName: 'Doe' }})).toBe('hello John, John Doe');
+    expect(() => translate('hello', { user: { firstName: 'John' }})).toThrow(/lastName/);
+    expect(() => translate('welcome', { user: { name: 'John', age: 25 }})).toThrow(/too many parameters/);
+
+    setLocale('fr');
+
+    expect(translate('welcome', { user: { name: 'John' }})).toBe('bienvenue John');
   });
 
   test('key separator', async () => {

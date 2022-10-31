@@ -1,3 +1,4 @@
+import { areObjectsEqual, isObjectLiteral } from "object-array-utils";
 import useLocale from "@/locale/useLocale";
 
 type Registry = {
@@ -105,15 +106,20 @@ export function createTranslateFunction(namespaces?: string[]): TranslateFunctio
         ?? (() => { throw new Error(`translation for "${key}" not found`) })();
     }
 
+    let paramsUsed: Record<string, any> = {};
+
     value =
       value.replace(/{{(.*?)}}/g, (_: unknown, path: string): string => {
+        let paramsUsed_ = paramsUsed;
+
         path = path.trim();
-        const splitKey = path.trim().split('.');
+        const splitKey = path.split('.');
 
         const value = splitKey.reduce((params, key) => {
-          const v = params[key];
-          delete params[key];
-          return v ?? (() => { throw new Error(`translation for parameter "${path}" not found`) })();
+          paramsUsed_[key] = isObjectLiteral(params[key]) ? (paramsUsed_[key] ?? {}) : params[key];
+          paramsUsed_ = paramsUsed_[key];
+
+          return params[key] ?? (() => { throw new Error(`translation for parameter "${path}" not found`) })();
         }, params);
 
         if (typeof value !== 'string') {
@@ -123,8 +129,8 @@ export function createTranslateFunction(namespaces?: string[]): TranslateFunctio
         return value;
       });
 
-    if (Object.keys(params).length > 0) {
-      throw new Error(`parameter(s) "${Object.keys(params).join(', ')}" not found`);
+    if (!areObjectsEqual(params, paramsUsed)) {
+      throw new Error(`too many parameters passed "${JSON.stringify(params)}"`);
     }
 
     return value;
