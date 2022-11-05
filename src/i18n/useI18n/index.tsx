@@ -1,5 +1,5 @@
-import { areObjectsEqual, isObjectLiteral } from "object-array-utils";
-import useLocale from "@/locale/useLocale";
+import { areObjectsEqual, isEmptyObjectLiteral, isObjectLiteral, rejectProperties } from 'object-array-utils';
+import useLocale from '@/locale/useLocale';
 
 type Registry = {
   [locale: string]: {
@@ -108,6 +108,31 @@ export function createTranslateFunction(namespaces?: string[]): TranslateFunctio
 
     let paramsUsed: Record<string, any> = {};
 
+    let isPlural = false;
+
+    if (isObjectLiteral(value)) {
+      const pluralTranslations: Record<string, string> = value as any;
+
+      const rejectedProps = rejectProperties(pluralTranslations, ['zero', 'one', 'two', 'few', 'many', 'other']);
+      if (!isEmptyObjectLiteral(rejectedProps)) {
+        throw new Error(`Invalid keys "${JSON.stringify(rejectedProps)}"`);
+      }
+
+      const count = params['count'];
+      if (!count) {
+        throw new Error('count parameter not found');
+      }
+
+      const pluralRule = new Intl.PluralRules(locale()).select(count);
+
+      value = pluralTranslations[pluralRule];
+      if (!value) {
+        throw new Error(`message for plural rule "${pluralRule}" not found`);
+      }
+
+      isPlural = true;
+    }
+
     value =
       value.replace(/{{(.*?)}}/g, (_: unknown, path: string): string => {
         let paramsUsed_ = paramsUsed;
@@ -128,6 +153,10 @@ export function createTranslateFunction(namespaces?: string[]): TranslateFunctio
 
         return value;
       });
+
+    if (isPlural) {
+      paramsUsed.count = params.count;
+    }
 
     if (!areObjectsEqual(params, paramsUsed)) {
       throw new Error(`too many parameters passed "${JSON.stringify(params)}"`);

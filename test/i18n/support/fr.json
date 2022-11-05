@@ -1,4 +1,9 @@
 {
   "hello": "bonjour !",
-  "world": "monde !"
+  "world": "monde !",
+  "messages": {
+    "one": "Un mesage reçu.",
+    "other": "{{ count }} mesages reçus.",
+    "zero": "Aucun mesage reçu."
+  }
 }

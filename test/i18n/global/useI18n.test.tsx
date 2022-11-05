@@ -124,6 +124,39 @@ describe('useContext18n', () => {
     expect(translate('welcome', { user: { name: 'John' }})).toBe('bienvenue John');
   });
 
+  test('translate plural forms', () => {
+    createLocalePrimitive({ default: 'en' });
+    createI18nPrimitive({
+      fallbackLocales: ['en'],
+      keySeparator: ''
+    });
+
+    addTranslations('en', {
+      "messages": {
+        "one": "One message received, {{ name }}.",
+        "other": "{{ count }} messages received, {{ name }}.",
+        "zero": "No messages received, {{ name }}."
+      }
+    });
+
+    addTranslations('fr', {
+      "messages": {
+        "one": "Un mesage reçu, {{ name }}.",
+        "other": "{{ count }} mesages reçus, {{ name }}.",
+        "zero": "Aucun mesage reçu, {{ name }}."
+      }
+    });
+
+    const [_locale, setLocale] = useLocale();
+    const translate = useGlobal18n();
+
+    expect(translate('messages', { count: 1, name: 'John' })).toBe('One message received, John.');
+
+    setLocale('fr');
+
+    expect(translate('messages', { count: 1, name: 'John' })).toBe('Un mesage reçu, John.');
+  });
+
   test('key separator', async () => {
     createLocalePrimitive({ default: 'en' });
     createI18nPrimitive({
@@ -133,14 +166,24 @@ describe('useContext18n', () => {
 
     addTranslations('en', 'foo', {
       "welcome": {
-        "hello": "hello!"
+        "hello": "hello!",
+        "messages": {
+          "one": "One message received, {{ name }}.",
+          "other": "{{ count }} messages received, {{ name }}.",
+          "zero": "No messages received, {{ name }}."
+        }
       },
       "world": "world!"
     });
 
     addTranslations('fr', 'foo', {
       "welcome": {
-        "hello": "bonjour !"
+        "hello": "bonjour !",
+        "messages": {
+          "one": "Un mesage reçu, {{ name }}.",
+          "other": "{{ count }} mesages reçus, {{ name }}.",
+          "zero": "Aucun mesage reçu, {{ name }}."
+        }
       },
       "world": "monde !"
     });
@@ -150,6 +193,7 @@ describe('useContext18n', () => {
       const translate = useGlobal18n();
       return <>
         <div data-testid="hello">{translate('welcome.hello')}</div>
+        <div data-testid="messages">{translate('welcome.messages', { count: 1, name: 'John' })}</div>
         <div data-testid="world">{translate('world')}</div>
         <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
           {locale()}
@@ -163,10 +207,12 @@ describe('useContext18n', () => {
 
     const hello = screen.getByTestId('hello');
     const world = screen.getByTestId('world');
+    const messages = screen.getByTestId('messages');
     const locale = screen.getByTestId('locale');
 
     expect(hello.textContent).toBe('hello!');
     expect(world.textContent).toBe('world!');
+    expect(messages.textContent).toBe('One message received, John.');
 
     fireEvent.click(locale);
     // the event loop takes one Promise to resolve to be finished
@@ -175,6 +221,7 @@ describe('useContext18n', () => {
     expect(locale.textContent).toBe('fr-BE');
     expect(hello.textContent).toBe('bonjour !');
     expect(world.textContent).toBe('monde !');
+    expect(messages.textContent).toBe('Un mesage reçu, John.');
   });
 
   test('default namespace', async () => {
