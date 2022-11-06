@@ -1,8 +1,17 @@
-# `solid-compose`
+# Solid Compose
 
-## `useI18n`
+`solid-compose` provides a set of reactive state for commonly used features for web apps.
 
-### Global state
+Currently, it includes
+* [internationalization (i18n)](#internationalization-i18n)
+* [color scheme (dark, light mode)](#color-scheme-dark-light-mode)
+* [localStorage (client-side storage)](#localstorage-client-side-storage)
+
+## Internationalization (i18n)
+
+Solid Compose provides i18n support allowing to build multilingual apps.
+
+First, initialize and configure the locale and i18n global primitives:
 
 ```typescript
 import {
@@ -10,81 +19,16 @@ import {
   createLocalePrimitive
 } from 'solid-compose';
 
-createLocalePrimitive({ default: 'en' });
+createLocalePrimitive({
+  default: 'en'
+});
+
 createI18nPrimitive({
   fallbackLocales: ['en']
 });
 ```
 
-```typescript
-import {
-  useGlobalI18n,
-  useLocale
-} from 'solid-compose';
-
-function Hello() {
-  const [locale, setLocale] = useLocale();
-  const translate = useGlobalI18n();
-
-  return <>
-    <div>{translate('hello')}</div>
-    <div>Current locale: {locale()}</div>
-    <div>Switch locale: {locale('fr')}</div>
-  </>;
-}
-```
-
-### Context
-
-```typescript
-import {
-  createLocalePrimitive,
-  setupI18n
-} from 'solid-compose';
-
-createLocalePrimitive({ default: 'en' });
-setupI18n({
-  fallbackLocales: ['en']
-});
-```
-
-```typescript
-import { I18nProvider } from 'solid-compose';
-
-const App: VoidComponent = () => {
-  return (
-    <I18nProvider namespaces={['foo', 'bar']>
-      <Hello/>
-    </I18nProvider>
-  );
-};
-```
-
-```typescript
-import {
-  useContextI18n,
-  useLocale
-} from 'solid-compose';
-
-function Hello() {
-  const [locale, setLocale] = useLocale();
-  const translate = useContextI18n();
-
-  return <>
-    <div>{translate('hello')}</div>
-    <div>Current locale: {locale()}</div>
-    <div>Switch locale: {locale('fr')}</div>
-  </>;
-}
-```
-
-### Namespaces
-
-Namespaces allow to load a subset of the available translations, which eases the handling of key collisions in larger apps.
-
-Say for instance that your application is made of multiple sub-apps, you may have a "common" namespace including common translations for the all the sub-apps, and a namespace specific to a sub-app.
-
-### Add translations
+Add your app's translations (this may also be done before creating the primitives):
 
 ```typescript
 import { addTranslations } from 'solid-compose';
@@ -99,16 +43,6 @@ addTranslations('fr' {
   "world": "monde !"
 });
 
-addTranslations('en', 'common', { // "common" namespace
-  "hello": "hello!",
-  "world": "world!"
-});
-
-addTranslations('fr', 'common', { // "common" namespace
-  "hello": "bonjour !",
-  "world": "monde !"
-});
-
 // from JSON files
 // (make sure to have TS config "resolveJsonModule" set to true)
 
@@ -119,16 +53,88 @@ addTranslations('en', enTranslations);
 addTranslations('fr', frTranslations);
 ```
 
-## `useColorScheme`
-
-### Global state
+Translate your app:
 
 ```typescript
-createColorSchemePrimitive({
-  default: 'dark',
-  storage: ColorSchemeStorage.signalStorage
+import {
+  useI18n,
+  useLocale
+} from 'solid-compose';
+
+function Hello() {
+  const [locale, setLocale] = useLocale();
+  const translate = useI18n();
+
+  return <>
+    <div>{translate('hello')}</div>
+    <div>Current locale: {locale()}</div>
+    <div>Switch locale: {locale('fr')}</div>
+  </>;
+}
+```
+
+### Multilingual support
+
+Languages have different rules for plurals.
+
+Solid Compose allows you to define a translation per plural rule:
+
+```typescript
+addTranslations('en', {
+  "messages": {
+    "one": "One message received.",
+    "other": "{{ count }} messages received.",
+    "zero": "No messages received."
+  }
 });
 ```
+
+A `count` parameter must be present when translating (you may not use another naming), for the library to pick the right message:
+
+```typescript
+translate('messages', { count: 1 }); // One message received.
+```
+
+### Namespaces
+
+Namespaces allow to load only a subset of the available translations, which eases the handling of key collisions in larger apps.
+
+Say for instance that your application is made of multiple sub-apps, you may have a "common" namespace including common translations for the all the sub-apps, and a namespace specific to a sub-app.
+
+`addTranslations` optionally accepts as second argument a namespace:
+
+```typescript
+addTranslations('en', 'common', { // "common" namespace
+  "hello": "hello!",
+  "world": "world!"
+});
+
+addTranslations('fr', 'common', { // "common" namespace
+  "hello": "bonjour !",
+  "world": "monde !"
+});
+```
+
+## Color scheme (dark, light mode)
+
+Solid Compose provides color scheme toggling (light vs dark mode).
+
+First, initialize and configure the color scheme primitive:
+
+```typescript
+import {
+  ColorScheme,
+  ColorSchemeStorage,
+  createColorSchemePrimitive
+} from 'solid-compose';
+
+createColorSchemePrimitive({
+  default: ColorScheme.Dark,
+  storage: ColorSchemeStorage.localStorage
+});
+```
+
+You may then add the `ColorSchemeStylesheet` component to your app which will pick the right stylesheet according to the current color scheme.
 
 ```typescript
 import {
@@ -148,38 +154,12 @@ const App: VoidComponent = () => {
 };
 ```
 
-```typescript
-import { useGlobalColorScheme } from 'solid-compose';
-
-const [colorScheme, setColorScheme] = useGlobalColorScheme();
-```
-
-### Context
+Call `setColorScheme` in order to switch the color scheme:
 
 ```typescript
-import {
-  ColorSchemeProvider,
-  ColorSchemeStorage,
-  ColorSchemeStylesheet
-} from 'solid-compose';
+import { useColorScheme } from 'solid-compose';
 
-const App: VoidComponent = () => {
-  return (
-    <ColorSchemeProvider storage={ColorSchemeStorage.localStorage} default="dark">
-      <ColorSchemeStylesheet
-        dark="./css/themes/dark-theme.css"
-        light="./css/themes/light-theme.css"
-      />
-      <div>…</div>
-    </ColorSchemeProvider>
-  );
-};
-```
-
-```typescript
-import { useContextColorScheme } from 'solid-compose';
-
-const [colorScheme, setColorScheme] = useContextColorScheme();
+const [colorScheme, setColorScheme] = useColorScheme();
 ```
 
 * `storage`: data source from where the color scheme is retrieved. Built-in storages:
@@ -205,12 +185,15 @@ const signalStorage = (defaultValue) => {
 }
 ```
 
-## `useLocalStorage`
+## localStorage (client-side storage)
+
+Solid Compose makes localStorage values reactive:
 
 ```typescript
 import { useLocalStorage } from 'solid-compose';
 
-const [value, { set: setValue, remove: removeValue }] =  useLocalStorage<string>('myKey', 'defaultValue');
+const [value, { set: setValue, remove: removeValue }] =
+  useLocalStorage<string>('myKey', 'defaultValue');
 ```
 
 ## Install
