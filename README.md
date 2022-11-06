@@ -52,7 +52,7 @@ createI18nPrimitive({
 ```
 
 `createI18nPrimitive` accepts 2 optional configuration params:
-* `fallbackLocales`: the locale to fallback to if no translation is found for the current locale;
+* `fallbackLocales`: the locales to fallback to if no translation is found for the current locale;
 * `keySeparator`: allows to have nested translations.
 <details>
   <summary>Example using keySeparator</summary>
