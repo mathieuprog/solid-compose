@@ -1,84 +1,82 @@
 import { createRoot } from 'solid-js';
-import { describe, expect, test } from 'vitest';
+import { expect, test } from 'vitest';
 import { createLocalStoragePrimitive, useLocalStorage } from '@/index';
 
 // @vitest-environment happy-dom
 
-describe('useLocalStorage', () => {
-  test('createLocalStoragePrimitive', () => {
-    createRoot((dispose) => {
-      createLocalStoragePrimitive('key1', 'a value');
-      createLocalStoragePrimitive('key2', 'another value');
+test('createLocalStoragePrimitive', () => {
+  createRoot((dispose) => {
+    createLocalStoragePrimitive('key1', 'a value');
+    createLocalStoragePrimitive('key2', 'another value');
 
-      const [value1] = useLocalStorage('key1', 'foo');
-      expect(value1()).toEqual('a value');
+    const [value1] = useLocalStorage('key1', 'foo');
+    expect(value1()).toEqual('a value');
 
-      const [value2] = useLocalStorage('key2', 'foo');
-      expect(value2()).toEqual('another value');
+    const [value2] = useLocalStorage('key2', 'foo');
+    expect(value2()).toEqual('another value');
 
-      const [value3] = useLocalStorage('key3', 'foo');
-      expect(value3()).toEqual('foo');
+    const [value3] = useLocalStorage('key3', 'foo');
+    expect(value3()).toEqual('foo');
 
-      dispose();
-    });
+    dispose();
   });
+});
 
-  test('initialize state with pre-existing value from localStorage', () => {
-    createRoot((dispose) => {
-      localStorage.setItem('foo', JSON.stringify('hello'));
+test('initialize state with pre-existing value from localStorage', () => {
+  createRoot((dispose) => {
+    localStorage.setItem('foo', JSON.stringify('hello'));
 
-      const [value, { remove: removeValue }] = useLocalStorage('foo', 'world');
+    const [value, { remove: removeValue }] = useLocalStorage('foo', 'world');
 
-      expect(value()).toEqual('hello');
+    expect(value()).toEqual('hello');
 
-      removeValue();
+    removeValue();
 
-      expect(value()).toBeNull();
-      expect(localStorage.getItem('foo')).toBeNull();
+    expect(value()).toBeNull();
+    expect(localStorage.getItem('foo')).toBeNull();
 
-      dispose();
-    });
+    dispose();
   });
+});
 
-  test('initialize state with pre-existing value from localStorage', () => {
-    createRoot((dispose) => {
-      localStorage.setItem('foo', JSON.stringify('hello'));
+test('initialize state with pre-existing value from localStorage', () => {
+  createRoot((dispose) => {
+    localStorage.setItem('foo', JSON.stringify('hello'));
 
-      const [value, { remove: removeValue }] = useLocalStorage('foo', 'world');
+    const [value, { remove: removeValue }] = useLocalStorage('foo', 'world');
 
-      expect(value()).toEqual('hello');
+    expect(value()).toEqual('hello');
 
-      removeValue();
+    removeValue();
 
-      expect(value()).toBeNull();
-      expect(localStorage.getItem('foo')).toBeNull();
+    expect(value()).toBeNull();
+    expect(localStorage.getItem('foo')).toBeNull();
 
-      dispose();
-    });
+    dispose();
   });
+});
 
-  test('update state and localStorage', () => {
-    createRoot((dispose) => {
-      expect(localStorage.getItem('foo')).toBeNull();
+test('update state and localStorage', () => {
+  createRoot((dispose) => {
+    expect(localStorage.getItem('foo')).toBeNull();
 
-      const [value, { set: setValue, remove: removeValue }] = useLocalStorage('foo', 'world');
-      useLocalStorage('bar');
+    const [value, { set: setValue, remove: removeValue }] = useLocalStorage('foo', 'world');
+    useLocalStorage('bar');
 
-      expect(JSON.parse(localStorage.getItem('foo') as string)).toEqual('world');
+    expect(JSON.parse(localStorage.getItem('foo') as string)).toEqual('world');
 
-      expect(value()).toEqual('world');
+    expect(value()).toEqual('world');
 
-      setValue('hello');
+    setValue('hello');
 
-      expect(value()).toEqual('hello');
-      expect(JSON.parse(localStorage.getItem('foo') as string)).toEqual('hello');
+    expect(value()).toEqual('hello');
+    expect(JSON.parse(localStorage.getItem('foo') as string)).toEqual('hello');
 
-      removeValue();
+    removeValue();
 
-      expect(value()).toBeNull();
-      expect(localStorage.getItem('foo')).toBeNull();
+    expect(value()).toBeNull();
+    expect(localStorage.getItem('foo')).toBeNull();
 
-      dispose();
-    });
+    dispose();
   });
 });
