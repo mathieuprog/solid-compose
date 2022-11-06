@@ -1,4 +1,5 @@
-import { ColorSchemePrimitive, getPrimitive } from './globalPrimitive';
+import { getPrimitive } from './globalPrimitive';
+import type { ColorSchemePrimitive } from './globalPrimitive';
 
 export default function useColorScheme(): ColorSchemePrimitive {
   const primitive = getPrimitive();

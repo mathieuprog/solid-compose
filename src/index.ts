@@ -15,7 +15,8 @@ import {
 import useContext18n, { I18nProvider, setupI18n } from './i18n/useI18n/context';
 import useGlobal18n, { createI18nPrimitive } from './i18n/useI18n/global';
 
-import useLocale, { createLocalePrimitive } from './locale/useLocale';
+import useLocale from './locale/useLocale';
+import createLocalePrimitive from './locale/createLocalePrimitive';
 import getDefaultLocale from './locale/getDefaultLocale';
 
 export {
