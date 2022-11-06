@@ -18,13 +18,13 @@ createI18nPrimitive({
 
 ```typescript
 import {
-  useGlobal18n,
+  useGlobalI18n,
   useLocale
 } from 'solid-compose';
 
 function Hello() {
   const [locale, setLocale] = useLocale();
-  const translate = useGlobal18n();
+  const translate = useGlobalI18n();
 
   return <>
     <div>{translate('hello')}</div>
@@ -62,13 +62,13 @@ const App: VoidComponent = () => {
 
 ```typescript
 import {
-  useContext18n,
+  useContextI18n,
   useLocale
 } from 'solid-compose';
 
 function Hello() {
   const [locale, setLocale] = useLocale();
-  const translate = useContext18n();
+  const translate = useContextI18n();
 
   return <>
     <div>{translate('hello')}</div>
