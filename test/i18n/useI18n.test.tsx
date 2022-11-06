@@ -10,7 +10,6 @@ import {
 } from '@/index';
 import enTranslations from './support/en.json';
 import frTranslations from './support/fr.json';
-import addDefaultTranslations from './support/addDefaultTranslations';
 import { removeAllTranslations } from '@/i18n/createI18nPrimitive';
 import { setPrimitive } from '@/i18n/globalPrimitive';
 
@@ -22,7 +21,31 @@ beforeEach(() => {
 afterEach(cleanup);
 
 test('translate', async () => {
-  addDefaultTranslations(); // TODO: is needed?
+  // TODO: on collision option?
+  // TODO: can't come after create primitive? readme
+  addTranslations('en', {
+    "hello": "hello",
+    "foo": "bar"
+  });
+
+  addTranslations('fr', {
+    "hello": "bonjour"
+  });
+
+  addTranslations('en', {
+    "hello": "hello!",
+    "world": "world!"
+  });
+
+  addTranslations('fr', {
+    "hello": "bonjour !",
+    "world": "monde !"
+  });
+
+  addTranslations('fr-BE', {
+    "world": "monde !!"
+  });
+
   createLocalePrimitive({ default: 'en' });
   createI18nPrimitive({
     fallbackLocales: ['en'],
