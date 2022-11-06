@@ -1,7 +1,7 @@
 import type { Accessor } from 'solid-js';
 import { createSignal } from 'solid-js';
 import getSystemColorScheme from './getSystemColorScheme';
-import useLocalStorage from '@/storage/useLocalStorage';
+import { useLocalStorage } from '..';
 import ColorScheme from './ColorScheme';
 
 type ColorSchemeStorage = (defaultValue?: ColorScheme) => [Accessor<ColorScheme | null>, (colorScheme: ColorScheme) => void];

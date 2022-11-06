@@ -7,11 +7,9 @@ import {
   I18nProvider,
   useI18n,
   useLocale
-} from '@/index';
-import enTranslations from './support/en.json';
-import frTranslations from './support/fr.json';
-import { removeAllTranslations } from '@/i18n/createI18nPrimitive';
-import { setPrimitive } from '@/i18n/globalPrimitive';
+} from '../../src';
+import { removeAllTranslations } from '../../src/i18n/createI18nPrimitive';
+import { setPrimitive } from '../../src/i18n/globalPrimitive';
 
 beforeEach(() => {
   removeAllTranslations();
@@ -363,42 +361,4 @@ test('namespaced translations', async () => {
   expect(global.textContent).toBe('quelque chose');
   expect(hello.textContent).toBe('bonjour...');
   expect(world.textContent).toBe('monde...');
-});
-
-test('add translations from json files', async () => {
-  addTranslations('en', enTranslations);
-  addTranslations('fr', frTranslations);
-
-  createLocalePrimitive({ default: 'en' });
-  createI18nPrimitive({
-    fallbackLocales: [],
-    keySeparator: ''
-  });
-
-  function Hello() {
-    const [locale, setLocale] = useLocale();
-    const translate = useI18n();
-    return <>
-      <div data-testid="hello">{translate('hello')}</div>
-      <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
-        {locale()}
-      </button>
-    </>;
-  }
-
-  render(() =>
-    <Hello/>
-  );
-
-  const hello = screen.getByTestId('hello');
-  const locale = screen.getByTestId('locale');
-
-  expect(hello.textContent).toBe('hello!');
-
-  fireEvent.click(locale);
-  // the event loop takes one Promise to resolve to be finished
-  await Promise.resolve();
-
-  expect(locale.textContent).toBe('fr-BE');
-  expect(hello.textContent).toBe('bonjour !');
 });

@@ -1,9 +1,0 @@
-{
-  "hello": "hello!",
-  "world": "world!",
-  "messages": {
-    "one": "One message received.",
-    "other": "{{ count }} messages received.",
-    "zero": "No messages received."
-  }
-}

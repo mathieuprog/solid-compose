@@ -7,7 +7,7 @@ import {
   ColorSchemeStylesheet,
   createColorSchemePrimitive,
   useColorScheme
-} from '@/index';
+} from '../../src';
 
 afterEach(cleanup);
 

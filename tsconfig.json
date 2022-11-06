@@ -1,16 +1,22 @@
 {
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./test/**/*.ts",
+    "./test/**/*.tsx"
+  ],
   "compilerOptions": {
-    "outDir": "dist",
+    "rootDirs": [
+      "./src",
+      "./test"
+    ],
+    "outDir": "./dist",
     "declaration": true,
     "moduleResolution": "node",
     "target": "es2015",
     "module": "es2015",
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
-    "resolveJsonModule": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    },
 
     /* Visit https://aka.ms/tsconfig to read more about this file */
 

@@ -3,7 +3,7 @@ import { cleanup } from 'solid-testing-library';
 import {
   createLocalePrimitive,
   useLocale
-} from '@/index';
+} from '../../src';
 
 afterEach(cleanup);
 
