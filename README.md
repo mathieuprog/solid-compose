@@ -96,9 +96,7 @@ You may also have objects as parameters:
 addTranslations('en' {
   "hello": "hello, {{ user.name }}!"
 });
-```
 
-```typescript
 function Hello() {
   const translate = useI18n();
 
