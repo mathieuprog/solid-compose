@@ -1,7 +1,8 @@
 {
   "name": "solid-compose",
   "version": "0.2.1",
-  "description": "A set of primitives to compose reactivity",
+  "description": "A set of reactive state for commonly used features in web apps",
+  "funding": "https://github.com/mathieuprog/solid-compose?sponsor=1",
   "source": "src/index.ts",
   "main": "dist/esm/index.js",
   "module": "dist/esm/index.js",
@@ -12,6 +13,8 @@
   "scripts": {
     "test": "vitest"
   },
+  "author": "Mathieu Decaffmeyer",
+  "license": "Apache-2.0",
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@tsconfig/node18": "^1.0.1",
@@ -28,5 +31,9 @@
   "dependencies": {
     "object-array-utils": "^2.12.0",
     "solid-js": "^1.6.1"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/mathieuprog/solid-compose/issues"
+  },
+  "homepage": "https://github.com/mathieuprog/solid-compose#readme"
 }
