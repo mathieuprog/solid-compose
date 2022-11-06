@@ -16,7 +16,6 @@ const defaultTransform = {
   deserialize: JSON.parse
 };
 
-// TODO: no Config object?
 export default function createLocalStoragePrimitive<T>(key: string, defaultValue?: T, transform: Transform<T> = defaultTransform): Return<T> {
   const initialValue = getItemOrDefault<T>(key, transform, defaultValue);
 
