@@ -1,6 +1,6 @@
 import registry from './registry';
 
-export const defaultNamespace = '__default';
+const defaultNamespace = '__default';
 
 export function addTranslations(locale: string, translations: Record<string, any>): void;
 export function addTranslations(locale: string, namespace: string, translations: Record<string, any>): void;
