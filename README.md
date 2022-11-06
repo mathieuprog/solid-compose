@@ -28,7 +28,7 @@ createI18nPrimitive({
 });
 ```
 
-Add your app's translations (this may also be done before creating the primitives):
+Add your app's translations:
 
 ```typescript
 import { addTranslations } from 'solid-compose';
@@ -99,20 +99,40 @@ translate('messages', { count: 1 }); // One message received.
 
 Namespaces allow to load only a subset of the available translations, which eases the handling of key collisions in larger apps.
 
-Say for instance that your application is made of multiple sub-apps, you may have a "common" namespace including common translations for the all the sub-apps, and a namespace specific to a sub-app.
+Say for instance that your application is made of multiple sub-apps, you may have a "todo" namespace including the translations for the todo sub-app, a "scheduler" namespace for the scheduler sub-app, etc.
 
 `addTranslations` optionally accepts as second argument a namespace:
 
 ```typescript
-addTranslations('en', 'common', { // "common" namespace
-  "hello": "hello!",
-  "world": "world!"
+addTranslations('en', { // global namespace with common translations
+  // common translations
 });
 
-addTranslations('fr', 'common', { // "common" namespace
-  "hello": "bonjour !",
-  "world": "monde !"
+addTranslations('en', 'todo', {
+  // translations for the todo app
 });
+
+addTranslations('en', 'scheduler', {
+  // translations for the scheduler app
+});
+```
+
+You may then use the `I18nProvider` component to scope the translations per namespace:
+
+```typescript
+import { I18nProvider } from 'solid-compose';
+
+render(() =>
+  <>
+    <I18nProvider namespaces={['todo']}>
+      <TodoApp/>
+    </I18nProvider>
+
+    <I18nProvider namespaces={['time', 'scheduler']}>
+      <SchedulerApp/>
+    </I18nProvider>
+  </>
+);
 ```
 
 ## Color scheme (dark, light mode)
@@ -137,9 +157,7 @@ createColorSchemePrimitive({
 You may then add the `ColorSchemeStylesheet` component to your app which will pick the right stylesheet according to the current color scheme.
 
 ```typescript
-import {
-  ColorSchemeStylesheet
-} from 'solid-compose';
+import { ColorSchemeStylesheet } from 'solid-compose';
 
 const App: VoidComponent = () => {
   return (
