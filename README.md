@@ -11,7 +11,30 @@ Currently, it includes
 
 Solid Compose provides i18n support allowing to build multilingual apps.
 
-First, initialize and configure the locale and i18n global primitives:
+First, add your app's translations:
+
+```typescript
+import { addTranslations } from 'solid-compose';
+
+addTranslations('en' {
+  "hello": "hello, {{ name }}!"
+});
+
+addTranslations('fr' {
+  "hello": "bonjour, {{ name }} !",
+});
+
+// from JSON files
+// (make sure to have TS config "resolveJsonModule" set to true)
+
+import enTranslations from './translations/en.json';
+import frTranslations from './translations/fr.json';
+
+addTranslations('en', enTranslations);
+addTranslations('fr', frTranslations);
+```
+
+Then initialize and configure the locale and i18n global primitives:
 
 ```typescript
 import {
@@ -28,47 +51,61 @@ createI18nPrimitive({
 });
 ```
 
-Add your app's translations:
+`createI18nPrimitive` accepts 2 optional configuration params:
+* `fallbackLocales`: the locale to fallback to if no translation is found for the current locale;
+* `keySeparator`: allows to have nested translations.
+<details>
+  <summary>Example using keySeparator</summary>
 
-```typescript
-import { addTranslations } from 'solid-compose';
+  ```typescript
+  addTranslations('fr', {
+    "welcome": {
+      "hello": "bonjour !"
+    }
+  });
 
-addTranslations('en' {
-  "hello": "hello!",
-  "world": "world!"
-});
+  createI18nPrimitive({
+    fallbackLocales: ['en'],
+    keySeparator: '.'
+  });
 
-addTranslations('fr' {
-  "hello": "bonjour !",
-  "world": "monde !"
-});
-
-// from JSON files
-// (make sure to have TS config "resolveJsonModule" set to true)
-
-import enTranslations from './translations/en.json';
-import frTranslations from './translations/fr.json';
-
-addTranslations('en', enTranslations);
-addTranslations('fr', frTranslations);
-```
-
+  translate('welcome.hello') // bonjour !
+  ```
+</details>
+<br/>
 Translate your app:
 
 ```typescript
-import {
-  useI18n,
-  useLocale
-} from 'solid-compose';
+import { useI18n, useLocale } from 'solid-compose';
 
 function Hello() {
   const [locale, setLocale] = useLocale();
   const translate = useI18n();
 
   return <>
-    <div>{translate('hello')}</div>
+    <div>{translate('hello', { name: 'John' })}</div>
     <div>Current locale: {locale()}</div>
     <div>Switch locale: {locale('fr')}</div>
+  </>;
+}
+```
+
+You may also have objects as parameters:
+
+```typescript
+addTranslations('en' {
+  "hello": "hello, {{ user.name }}!"
+});
+```
+
+```typescript
+import { useI18n, useLocale } from 'solid-compose';
+
+function Hello() {
+  const translate = useI18n();
+
+  return <>
+    <div>{translate('hello', { user: { name: 'John' }})}</div>
   </>;
 }
 ```
@@ -104,7 +141,7 @@ Say for instance that your application is made of multiple sub-apps, you may hav
 `addTranslations` optionally accepts as second argument a namespace:
 
 ```typescript
-addTranslations('en', { // global namespace with common translations
+addTranslations('en', {
   // common translations
 });
 
@@ -114,6 +151,10 @@ addTranslations('en', 'todo', {
 
 addTranslations('en', 'scheduler', {
   // translations for the scheduler app
+});
+
+addTranslations('en', 'time', {
+  // translations related to time
 });
 ```
 
