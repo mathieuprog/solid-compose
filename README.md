@@ -195,7 +195,7 @@ createColorSchemePrimitive({
 });
 ```
 
-You may then add the `ColorSchemeStylesheet` component to your app which will pick the right stylesheet according to the current color scheme.
+You may then add the `ColorSchemeStylesheet` component in your app which will pick the right stylesheet according to the current color scheme.
 
 ```typescript
 import { ColorSchemeStylesheet } from 'solid-compose';
@@ -221,16 +221,31 @@ import { useColorScheme } from 'solid-compose';
 const [colorScheme, setColorScheme] = useColorScheme();
 ```
 
-* `storage`: data source from where the color scheme is retrieved. Built-in storages:
-  * `ColorSchemeStorage.signalStorage`: retrieves the color scheme from a signal.
-  * `ColorSchemeStorage.localStorage`: retrieves the color scheme from local storage.
-  * `ColorSchemeStorage.mediaQuery`: retrieve the color scheme from the media query, setter throws an error.
-  * `ColorSchemeStorage.queryString`: retrieves the color scheme from the URL's query parameter `color-scheme`.
+`createColorSchemePrimitive` accepts 2 configuration params:
 
-  You may also pass a signal if you want to manage the color scheme via external state.
+### `storage` option
 
-* `default`: the default color scheme to be used if non is found. Ignored for the mediaQuery strategy.
-  If `default` has not been specified, the default color scheme from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme) is used.
+Indicates the data source from where the color scheme is retrieved. Built-in storages are:
+* `signalStorage`: retrieves the color scheme from a signal.
+* `localStorage`: retrieves the color scheme from local storage.
+* `mediaQuery`: retrieves the color scheme from the media query, setter throws an error.
+* `queryString`: retrieves the color scheme from the URL's query parameter `"color-scheme"`.
+
+You may also pass an external signal if you want to manage the color scheme via external state:
+
+```typescript
+const mySignal = createSignal<ColorScheme>(ColorScheme.Dark);
+
+createColorSchemePrimitive({
+  storage: mySignal
+});
+```
+
+### `default` option
+
+Indicates the default color scheme to be used if non is found. Ignored for the mediaQuery strategy.
+
+If a `default` has not been specified, the default color scheme from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme) is used.
 
 ### Custom storage strategy
 
@@ -253,6 +268,17 @@ import { useLocalStorage } from 'solid-compose';
 
 const [value, { set: setValue, remove: removeValue }] =
   useLocalStorage<string>('myKey', 'defaultValue');
+```
+
+`useLocalStorage` accepts as 3rd argument an object containing the functions serializing and deserializing values to be stored and to be retrieved.
+
+By default, the following object is used:
+
+```typescript
+{
+  serialize: JSON.stringify,
+  deserialize: JSON.parse
+}
 ```
 
 ## Install
