@@ -1,6 +1,6 @@
 # Solid Compose
 
-`solid-compose` provides a set of reactive state for commonly used features for web apps.
+`solid-compose` provides a set of reactive state for commonly used features in web apps.
 
 Currently, it includes
 * [internationalization (i18n)](#internationalization-i18n)
