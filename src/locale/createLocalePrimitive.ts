@@ -14,7 +14,7 @@ export default function createLocalePrimitive(config?: Config) {
 
   const [locale, setLocale] = createSignal(defaultLocale);
 
-  const setLocale_: LocaleSetter= (arg) => {
+  const setLocale_: LocaleSetter = (arg) => {
     if (typeof arg === 'function') {
       setLocale(arg(locale()));
     } else {
