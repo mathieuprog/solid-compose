@@ -139,9 +139,9 @@ describe('useContext18n', () => {
 
     addTranslations('fr', {
       "messages": {
-        "one": "Un mesage reçu, {{ name }}.",
-        "other": "{{ count }} mesages reçus, {{ name }}.",
-        "zero": "Aucun mesage reçu, {{ name }}."
+        "one": "Un message reçu, {{ name }}.",
+        "other": "{{ count }} messages reçus, {{ name }}.",
+        "zero": "Aucun message reçu, {{ name }}."
       }
     });
 
@@ -152,7 +152,7 @@ describe('useContext18n', () => {
 
     setLocale('fr');
 
-    expect(translate('messages', { count: 1, name: 'John' })).toBe('Un mesage reçu, John.');
+    expect(translate('messages', { count: 1, name: 'John' })).toBe('Un message reçu, John.');
   });
 
   test('key separator', async () => {
@@ -178,9 +178,9 @@ describe('useContext18n', () => {
       "welcome": {
         "hello": "bonjour !",
         "messages": {
-          "one": "Un mesage reçu, {{ name }}.",
-          "other": "{{ count }} mesages reçus, {{ name }}.",
-          "zero": "Aucun mesage reçu, {{ name }}."
+          "one": "Un message reçu, {{ name }}.",
+          "other": "{{ count }} messages reçus, {{ name }}.",
+          "zero": "Aucun message reçu, {{ name }}."
         }
       },
       "world": "monde !"
@@ -219,7 +219,7 @@ describe('useContext18n', () => {
     expect(locale.textContent).toBe('fr-BE');
     expect(hello.textContent).toBe('bonjour !');
     expect(world.textContent).toBe('monde !');
-    expect(messages.textContent).toBe('Un mesage reçu, John.');
+    expect(messages.textContent).toBe('Un message reçu, John.');
   });
 
   test('default namespace', async () => {
