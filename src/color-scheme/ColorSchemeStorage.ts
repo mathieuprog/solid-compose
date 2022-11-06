@@ -1,23 +1,16 @@
 import type { Accessor } from 'solid-js';
 import { createSignal } from 'solid-js';
-import getSystemColorScheme from '../getSystemColorScheme';
+import getSystemColorScheme from './getSystemColorScheme';
 import useLocalStorage from '@/storage/useLocalStorage';
+import ColorScheme from './ColorScheme';
 
-export type ColorScheme = 'light' | 'dark';
-
-export type ColorSchemeStorage = (defaultValue?: ColorScheme) => [Accessor<ColorScheme | null>, (colorScheme: ColorScheme) => void];
+type ColorSchemeStorage = (defaultValue?: ColorScheme) => [Accessor<ColorScheme | null>, (colorScheme: ColorScheme) => void];
 
 type ColorSchemeStorageDict = {
   [key: string]: ColorSchemeStorage;
 };
 
-export type ColorSchemePrimitive = [Accessor<ColorScheme | null>, ColorSchemeSetter];
-
-export type ColorSchemeSetter =
-  ((colorScheme: ColorScheme) => void)
-  & ((callback: ((prevColorScheme: ColorScheme | null) => ColorScheme)) => void);
-
-export const ColorSchemeStorage: ColorSchemeStorageDict = {
+const ColorSchemeStorage: ColorSchemeStorageDict = {
   mediaQuery: () => {
     return [getSystemColorScheme, () => { throw new Error() }];
   },
@@ -43,3 +36,5 @@ export const ColorSchemeStorage: ColorSchemeStorageDict = {
     return [get, set];
   }
 };
+
+export default ColorSchemeStorage;

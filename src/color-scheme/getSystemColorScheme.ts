@@ -1,7 +1,7 @@
-import type { ColorScheme } from './useColorScheme';
+import ColorScheme from './ColorScheme';
 
-export default function getSystemColorScheme(): ColorScheme {
+export default function getSystemColorScheme() {
   return (window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ? 'dark'
-    : 'light';
+    ? ColorScheme.Dark
+    : ColorScheme.Light;
 }

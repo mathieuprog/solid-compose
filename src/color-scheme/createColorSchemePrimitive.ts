@@ -1,13 +1,9 @@
 import type { Signal } from 'solid-js';
-import getSystemColorScheme from '../../getSystemColorScheme';
-import {
-  ColorSchemeStorage
-} from '..';
-import type {
-  ColorScheme,
-  ColorSchemePrimitive,
-  ColorSchemeSetter
-} from '..';
+import getSystemColorScheme from './getSystemColorScheme';
+import { setPrimitive } from './globalPrimitive';
+import type { ColorSchemeSetter } from './globalPrimitive';
+import ColorScheme from './ColorScheme';
+import ColorSchemeStorage from './ColorSchemeStorage';
 
 interface Config {
   storage?: ColorSchemeStorage | Signal<ColorScheme>;
@@ -17,16 +13,14 @@ interface Config {
 let defaultScheme: ColorScheme = getSystemColorScheme();
 let defaultStorage: ColorSchemeStorage | Signal<ColorScheme> = ColorSchemeStorage.mediaQuery;
 
-let primitive: ColorSchemePrimitive;
-
-export function createColorSchemePrimitive(config?: Config) {
+export default function createColorSchemePrimitive(config?: Config) {
   defaultScheme = config?.default ?? defaultScheme;
   const storage = config?.storage ?? defaultStorage;
 
   const [colorScheme, setColorScheme] =
     (typeof storage === 'function')
-      ? storage(defaultScheme)
-      : storage;
+    ? storage(defaultScheme)
+    : storage;
 
   const setColorScheme_: ColorSchemeSetter = (arg) => {
     if (typeof arg === 'function') {
@@ -36,13 +30,5 @@ export function createColorSchemePrimitive(config?: Config) {
     }
   };
 
-  primitive = [colorScheme, setColorScheme_];
-}
-
-export default function useColorScheme(): ColorSchemePrimitive {
-  if (!primitive) {
-    throw new Error('call createColorSchemePrimitive(config) to create the global state');
-  }
-
-  return primitive;
+  setPrimitive([colorScheme, setColorScheme_]);
 }

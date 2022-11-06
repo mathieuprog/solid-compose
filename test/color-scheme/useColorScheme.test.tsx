@@ -2,25 +2,25 @@ import { createSignal } from 'solid-js';
 import { afterEach, describe, expect, test } from 'vitest';
 import { cleanup, render, screen } from 'solid-testing-library';
 import {
+  ColorScheme,
   ColorSchemeStorage,
   ColorSchemeStylesheet,
   createColorSchemePrimitive,
-  useGlobalColorScheme
+  useColorScheme
 } from '@/index';
-import type { ColorScheme } from '@/color-scheme/useColorScheme';
 
 describe('useColorScheme', () => {
   afterEach(cleanup);
 
   test('missing global state should throw error', () => {
     expect(
-      () => useGlobalColorScheme()
+      () => useColorScheme()
     ).toThrow(/createColorSchemePrimitive/);
   });
 
   test('default to dark', () => {
     createColorSchemePrimitive({
-      default: 'dark',
+      default: ColorScheme.Dark,
       storage: ColorSchemeStorage.signalStorage
     });
 
@@ -31,13 +31,13 @@ describe('useColorScheme', () => {
       />
     );
 
-    expect(screen.queryByTestId('stylesheet-light')).toBeNull();
-    expect(screen.queryByTestId('stylesheet-dark')).toBeInstanceOf(HTMLElement);
+    expect(screen.queryByTestId('stylesheet-LIGHT')).toBeNull();
+    expect(screen.queryByTestId('stylesheet-DARK')).toBeInstanceOf(HTMLElement);
   });
 
   test('default to light', () => {
     createColorSchemePrimitive({
-      default: 'light',
+      default: ColorScheme.Light,
       storage: ColorSchemeStorage.signalStorage
     });
 
@@ -48,12 +48,12 @@ describe('useColorScheme', () => {
       />
     );
 
-    expect(screen.queryByTestId('stylesheet-dark')).toBeNull();
-    expect(screen.queryByTestId('stylesheet-light')).toBeInstanceOf(HTMLElement);
+    expect(screen.queryByTestId('stylesheet-DARK')).toBeNull();
+    expect(screen.queryByTestId('stylesheet-LIGHT')).toBeInstanceOf(HTMLElement);
   });
 
   test('pick right stylesheet', () => {
-    const signal = createSignal<ColorScheme>('dark');
+    const signal = createSignal<ColorScheme>(ColorScheme.Dark);
 
     createColorSchemePrimitive({
       storage: signal
@@ -66,18 +66,18 @@ describe('useColorScheme', () => {
       />
     );
 
-    expect(screen.queryByTestId('stylesheet-light')).toBeNull();
-    expect(screen.queryByTestId('stylesheet-dark')).toBeInstanceOf(HTMLElement);
+    expect(screen.queryByTestId('stylesheet-LIGHT')).toBeNull();
+    expect(screen.queryByTestId('stylesheet-DARK')).toBeInstanceOf(HTMLElement);
 
     const [colorScheme, setColorScheme] = signal;
 
-    expect(colorScheme()).toBe('dark');
+    expect(colorScheme()).toBe(ColorScheme.Dark);
 
-    setColorScheme('light');
+    setColorScheme(ColorScheme.Light);
 
-    expect(screen.queryByTestId('stylesheet-dark')).toBeNull();
-    expect(screen.queryByTestId('stylesheet-light')).toBeInstanceOf(HTMLElement);
+    expect(screen.queryByTestId('stylesheet-DARK')).toBeNull();
+    expect(screen.queryByTestId('stylesheet-LIGHT')).toBeInstanceOf(HTMLElement);
 
-    expect(colorScheme()).toBe('light');
+    expect(colorScheme()).toBe(ColorScheme.Light);
   });
 });

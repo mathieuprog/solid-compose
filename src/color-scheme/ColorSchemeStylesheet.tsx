@@ -1,8 +1,8 @@
 import type { VoidComponent } from 'solid-js';
 import { Show } from 'solid-js';
 import { Portal } from 'solid-js/web';
-import useContextColorScheme from './useColorScheme/context';
-import useGlobalColorScheme from './useColorScheme/global';
+import ColorScheme from './ColorScheme';
+import useColorScheme from './useColorScheme';
 
 interface Props {
   dark: string;
@@ -10,13 +10,13 @@ interface Props {
 }
 
 const ColorSchemeStylesheet: VoidComponent<Props> = (props) => {
-  const [colorScheme, _] = useContextColorScheme() || useGlobalColorScheme();
+  const [colorScheme, _] = useColorScheme();
 
   return (
     <>
       <Portal mount={document.head}>
         <Show
-          when={colorScheme() === 'dark'}
+          when={colorScheme() === ColorScheme.Dark}
           fallback={<link rel="stylesheet" href={props.light} />}
         >
           <link rel="stylesheet" href={props.dark} />
