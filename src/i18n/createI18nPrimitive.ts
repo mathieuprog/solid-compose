@@ -1,6 +1,8 @@
 import { areObjectsEqual, isEmptyObjectLiteral, isObjectLiteral, rejectProperties } from 'object-array-utils';
 import { useLocale } from '..';
-import { getPrimitive, setPrimitive, TranslateFunction } from './globalPrimitive';
+import { defaultNamespace } from './addTranslations';
+import { setPrimitive } from './globalPrimitive';
+import type { TranslateFunction } from './globalPrimitive';
 import registry from './registry';
 
 interface Config {
@@ -12,35 +14,19 @@ let keySeparator: string | null = null;
 
 let fallbackLocales: string[] = [];
 
-function setFallbackLocalesForMissingTranslations(locales: string[]) {
-  if (getPrimitive()) {
-    throw new Error('Cannot set fallback locales while global i18n has already been created');
-  }
-
-  fallbackLocales = locales;
-}
-
-function enableNestedTranslations(keySeparator_: string | false = '.') {
-  if (getPrimitive()) {
-    throw new Error('Cannot set key separator while global i18n has already been created');
-  }
-
-  keySeparator = (keySeparator_) ? keySeparator_ : null;
-}
-
 export default function createI18nPrimitive(config?: Config) {
   if (config?.fallbackLocales !== undefined) {
-    setFallbackLocalesForMissingTranslations(config?.fallbackLocales);
+    fallbackLocales = config?.fallbackLocales;
   }
 
   if (config?.keySeparator !== undefined) {
-    enableNestedTranslations(config?.keySeparator || false);
+    keySeparator = config?.keySeparator || null;
   }
 
-  setPrimitive(createTranslateFunction());
+  setPrimitive(createTranslateFunction([defaultNamespace]));
 }
 
-function createTranslateFunction(namespaces?: string[]): TranslateFunction {
+export function createTranslateFunction(namespaces: string[]): TranslateFunction {
   const [locale, _setLocale] = useLocale();
 
   const fallbackTranslations =
@@ -170,24 +156,9 @@ function findFallbackLocale(locale: string) {
     : null;
 }
 
-function mergeTranslations(locale: string, namespaces?: string[]): Record<string, any> {
-  if (namespaces === undefined) {
-    return mergeAllTranslations(locale);
-  }
-
+// TODO: remove useless function
+function mergeTranslations(locale: string, namespaces: string[]): Record<string, any> {
   return mergeNamespacedTranslations(locale, namespaces);
-}
-
-function mergeAllTranslations(locale: string): Record<string, any> {
-  let translations = {};
-
-  if (registry[locale]) {
-    translations = Object.entries(registry[locale])
-      .map(([_, obj]) => obj)
-      .reduce((acc, obj) => ({ ...acc, ...obj }) , {});
-  }
-
-  return translations;
 }
 
 let mergeTranslationsCache: Record<string, Record<string, any>> = {};
@@ -202,10 +173,17 @@ function mergeNamespacedTranslations(locale: string, namespaces: string[]): Reco
   let translations = {};
 
   if (registry[locale]) {
-    translations = Object.entries(registry[locale])
-      .filter(([namespace, _]) => namespaces.includes(namespace))
-      .map(([_, obj]) => obj)
-      .reduce((acc, obj) => ({ ...acc, ...obj }) , {});
+    translations =
+      namespaces.reduce((translations, namespace) => {
+        if (!registry[locale][namespace]) {
+          return translations;
+        }
+
+        return {
+          ...translations,
+          ...registry[locale][namespace]
+        };
+      }, {});
   }
 
   mergeTranslationsCache[keyCache] = translations;

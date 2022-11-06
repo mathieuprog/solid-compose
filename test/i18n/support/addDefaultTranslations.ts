@@ -1,26 +1,27 @@
 import { addTranslations } from '@/index';
 
 export default function addDefaultTranslations() {
-  addTranslations('en', 'foo', {
+  // TODO: on collision option?
+  addTranslations('en', {
     "hello": "hello",
     "foo": "bar"
   });
 
-  addTranslations('fr', 'foo', {
-    "hello": "bonjour",
+  addTranslations('fr', {
+    "hello": "bonjour"
   });
 
-  addTranslations('en', 'bar', {
+  addTranslations('en', {
     "hello": "hello!",
     "world": "world!"
   });
 
-  addTranslations('fr', 'bar', {
+  addTranslations('fr', {
     "hello": "bonjour !",
     "world": "monde !"
   });
 
-  addTranslations('fr-BE', 'bar', {
+  addTranslations('fr-BE', {
     "world": "monde !!"
   });
 }
