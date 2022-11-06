@@ -1,24 +1,22 @@
 import { afterEach, beforeEach, describe, expect, test } from 'vitest';
 import { cleanup, fireEvent, render, screen } from 'solid-testing-library';
 import {
-  removeAllTranslations,
-  setGlobalPrimitiveCreated
-} from '@/i18n/useI18n';
-import {
   addTranslations,
   createI18nPrimitive,
   createLocalePrimitive,
-  useGlobal18n,
+  useI18n,
   useLocale
 } from '@/index';
-import enTranslations from '../support/en.json';
-import frTranslations from '../support/fr.json';
-import addDefaultTranslations from '../support/addDefaultTranslations';
+import enTranslations from './support/en.json';
+import frTranslations from './support/fr.json';
+import addDefaultTranslations from './support/addDefaultTranslations';
+import { removeAllTranslations } from '@/i18n/createI18nPrimitive';
+import { setPrimitive } from '@/i18n/globalPrimitive';
 
 describe('useContext18n', () => {
   beforeEach(() => {
     removeAllTranslations();
-    setGlobalPrimitiveCreated(false);
+    setPrimitive(null);
   });
 
   afterEach(cleanup);
@@ -33,7 +31,7 @@ describe('useContext18n', () => {
 
     function Hello() {
       const [locale, setLocale] = useLocale();
-      const translate = useGlobal18n();
+      const translate = useI18n();
       return <>
         <div data-testid="hello">{translate('hello')}</div>
         <div data-testid="world">{translate('world')}</div>
@@ -85,7 +83,7 @@ describe('useContext18n', () => {
     });
 
     const [_locale, setLocale] = useLocale();
-    const translate = useGlobal18n();
+    const translate = useI18n();
 
     expect(translate('hello', { name: 'John' })).toBe('hello John');
     expect(() => translate('welcome', { age: 25 })).toThrow(/name/);
@@ -113,7 +111,7 @@ describe('useContext18n', () => {
     });
 
     const [_locale, setLocale] = useLocale();
-    const translate = useGlobal18n();
+    const translate = useI18n();
 
     expect(translate('hello', { user: { firstName: 'John', lastName: 'Doe' }})).toBe('hello John, John Doe');
     expect(() => translate('hello', { user: { firstName: 'John' }})).toThrow(/lastName/);
@@ -148,7 +146,7 @@ describe('useContext18n', () => {
     });
 
     const [_locale, setLocale] = useLocale();
-    const translate = useGlobal18n();
+    const translate = useI18n();
 
     expect(translate('messages', { count: 1, name: 'John' })).toBe('One message received, John.');
 
@@ -190,7 +188,7 @@ describe('useContext18n', () => {
 
     function Hello() {
       const [locale, setLocale] = useLocale();
-      const translate = useGlobal18n();
+      const translate = useI18n();
       return <>
         <div data-testid="hello">{translate('welcome.hello')}</div>
         <div data-testid="messages">{translate('welcome.messages', { count: 1, name: 'John' })}</div>
@@ -243,7 +241,7 @@ describe('useContext18n', () => {
 
     function Hello() {
       const [locale, setLocale] = useLocale();
-      const translate = useGlobal18n();
+      const translate = useI18n();
       return <>
         <div data-testid="hello">{translate('hello')}</div>
         <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
@@ -281,7 +279,7 @@ describe('useContext18n', () => {
 
     function Hello() {
       const [locale, setLocale] = useLocale();
-      const translate = useGlobal18n();
+      const translate = useI18n();
       return <>
         <div data-testid="hello">{translate('hello')}</div>
         <button data-testid="locale" onClick={() => setLocale('fr-BE')}>

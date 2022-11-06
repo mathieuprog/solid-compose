@@ -7,13 +7,9 @@ import createColorSchemePrimitive from './color-scheme/createColorSchemePrimitiv
 
 import useLocalStorage, { createLocalStoragePrimitive } from './storage/useLocalStorage';
 
-import {
-  addTranslations,
-  enableNestedTranslations,
-  setFallbackLocalesForMissingTranslations
-} from './i18n/useI18n';
-import useContext18n, { I18nProvider, setupI18n } from './i18n/useI18n/context';
-import useGlobal18n, { createI18nPrimitive } from './i18n/useI18n/global';
+import { addTranslations } from './i18n/addTranslations';
+import useI18n from './i18n/useI18n';
+import createI18nPrimitive from './i18n/createI18nPrimitive';
 
 import useLocale from './locale/useLocale';
 import createLocalePrimitive from './locale/createLocalePrimitive';
@@ -22,12 +18,7 @@ import getDefaultLocale from './locale/getDefaultLocale';
 export {
   addTranslations,
   createI18nPrimitive,
-  enableNestedTranslations,
-  I18nProvider,
-  setFallbackLocalesForMissingTranslations,
-  setupI18n,
-  useContext18n,
-  useGlobal18n,
+  useI18n,
 
   ColorScheme,
   ColorSchemeStorage,
