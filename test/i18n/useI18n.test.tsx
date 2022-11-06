@@ -21,15 +21,8 @@ beforeEach(() => {
 afterEach(cleanup);
 
 test('translate', async () => {
-  // TODO: on collision option?
-  // TODO: can't come after create primitive? readme
   addTranslations('en', {
-    "hello": "hello",
     "foo": "bar"
-  });
-
-  addTranslations('fr', {
-    "hello": "bonjour"
   });
 
   addTranslations('en', {
@@ -87,6 +80,18 @@ test('translate', async () => {
   expect(hello.textContent).toBe('bonjour !');
   expect(world.textContent).toBe('monde !!');
   expect(foo.textContent).toBe('bar');
+});
+
+test('translate with parameter', () => {
+  addTranslations('en', {
+    "hello": "hello"
+  });
+
+  expect(() => {
+    addTranslations('en', {
+      "hello": "hello!"
+    });
+  }).toThrow(/colliding/);
 });
 
 test('translate with parameter', () => {
