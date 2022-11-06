@@ -17,11 +17,11 @@ First, add your app's translations:
 import { addTranslations } from 'solid-compose';
 
 addTranslations('en' {
-  "hello": "hello, {{ name }}!"
+  "hello": "Hello, {{ name }}!"
 });
 
 addTranslations('fr' {
-  "hello": "bonjour, {{ name }} !",
+  "hello": "Bonjour, {{ name }} !",
 });
 
 // from JSON files
@@ -60,7 +60,7 @@ createI18nPrimitive({
   ```typescript
   addTranslations('fr', {
     "welcome": {
-      "hello": "bonjour !"
+      "hello": "Bonjour !"
     }
   });
 
@@ -69,7 +69,7 @@ createI18nPrimitive({
     keySeparator: '.'
   });
 
-  translate('welcome.hello') // bonjour !
+  translate('welcome.hello') // Bonjour !
   ```
 </details>
 <br/>
@@ -99,8 +99,6 @@ addTranslations('en' {
 ```
 
 ```typescript
-import { useI18n, useLocale } from 'solid-compose';
-
 function Hello() {
   const translate = useI18n();
 
