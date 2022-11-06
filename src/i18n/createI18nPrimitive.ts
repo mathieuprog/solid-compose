@@ -156,14 +156,9 @@ function findFallbackLocale(locale: string) {
     : null;
 }
 
-// TODO: remove useless function
-function mergeTranslations(locale: string, namespaces: string[]): Record<string, any> {
-  return mergeNamespacedTranslations(locale, namespaces);
-}
-
 let mergeTranslationsCache: Record<string, Record<string, any>> = {};
 
-function mergeNamespacedTranslations(locale: string, namespaces: string[]): Record<string, any> {
+function mergeTranslations(locale: string, namespaces: string[]): Record<string, any> {
   const keyCache = `${locale}.${namespaces.join('.')}`;
 
   if (keyCache in mergeTranslationsCache) {
