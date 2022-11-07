@@ -239,7 +239,7 @@ createColorSchemePrimitive({
 
 ### `default` option
 
-Indicates the default color scheme to be used if non is found. Ignored for the mediaQuery strategy.
+Indicates the default color scheme to be used if none is found. Ignored for the mediaQuery strategy.
 
 If a `default` has not been specified, the default color scheme from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme) is used.
 
