@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.x
+
+  * Handle cardinal and ordinal pluralization
+
 ## 0.3.x
 
   * Add internationalization (i18n) support
