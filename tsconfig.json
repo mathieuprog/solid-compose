@@ -1,14 +1,15 @@
 {
   "include": [
     "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./test/**/*.ts",
-    "./test/**/*.tsx"
+    "./src/**/*.tsx"
+  ],
+  "exclude": [
+    "./dist",
+    "./node_modules"
   ],
   "compilerOptions": {
     "rootDirs": [
-      "./src",
-      "./test"
+      "./src"
     ],
     "outDir": "./dist",
     "declaration": true,
