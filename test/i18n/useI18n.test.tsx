@@ -152,16 +152,26 @@ test('translate plural forms', () => {
   addTranslations('en', {
     "messages": {
       "one": "One message received, {{ name }}.",
-      "other": "{{ count }} messages received, {{ name }}.",
+      "other": "{{ cardinal }} messages received, {{ name }}.",
       "zero": "No messages received, {{ name }}."
+    },
+    "position": {
+      "one": "{{ ordinal }}st",
+      "two": "{{ ordinal }}nd",
+      "few": "{{ ordinal }}rd",
+      "other": "{{ ordinal }}th",
     }
   });
 
   addTranslations('fr', {
     "messages": {
       "one": "Un message reçu, {{ name }}.",
-      "other": "{{ count }} messages reçus, {{ name }}.",
+      "other": "{{ cardinal }} messages reçus, {{ name }}.",
       "zero": "Aucun message reçu, {{ name }}."
+    },
+    "position": {
+      "one": "Premier",
+      "other": "{{ ordinal }}ème",
     }
   });
 
@@ -174,11 +184,13 @@ test('translate plural forms', () => {
   const [_locale, setLocale] = useLocale();
   const translate = useI18n();
 
-  expect(translate('messages', { count: 1, name: 'John' })).toBe('One message received, John.');
+  expect(translate('messages', { cardinal: 1, name: 'John' })).toBe('One message received, John.');
+  expect(translate('position', { ordinal: 1 })).toBe('1st');
 
   setLocale('fr');
 
-  expect(translate('messages', { count: 1, name: 'John' })).toBe('Un message reçu, John.');
+  expect(translate('messages', { cardinal: 1, name: 'John' })).toBe('Un message reçu, John.');
+  expect(translate('position', { ordinal: 1 })).toBe('Premier');
 });
 
 test('key separator', async () => {
@@ -187,7 +199,7 @@ test('key separator', async () => {
       "hello": "hello!",
       "messages": {
         "one": "One message received, {{ name }}.",
-        "other": "{{ count }} messages received, {{ name }}.",
+        "other": "{{ cardinal }} messages received, {{ name }}.",
         "zero": "No messages received, {{ name }}."
       }
     },
@@ -199,7 +211,7 @@ test('key separator', async () => {
       "hello": "bonjour !",
       "messages": {
         "one": "Un message reçu, {{ name }}.",
-        "other": "{{ count }} messages reçus, {{ name }}.",
+        "other": "{{ cardinal }} messages reçus, {{ name }}.",
         "zero": "Aucun message reçu, {{ name }}."
       }
     },
@@ -217,7 +229,7 @@ test('key separator', async () => {
     const translate = useI18n();
     return <>
       <div data-testid="hello">{translate('welcome.hello')}</div>
-      <div data-testid="messages">{translate('welcome.messages', { count: 1, name: 'John' })}</div>
+      <div data-testid="messages">{translate('welcome.messages', { cardinal: 1, name: 'John' })}</div>
       <div data-testid="world">{translate('world')}</div>
       <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
         {locale()}

@@ -88,10 +88,16 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
         throw new Error(`Invalid keys "${JSON.stringify(rejectedProps)}"`);
       }
 
-      const count = params['count'];
-      if (!count) {
-        throw new Error('count parameter not found');
+      const cardinal = params['cardinal'];
+      const ordinal = params['ordinal'];
+      if (!cardinal && !ordinal) {
+        throw new Error('cardinal or ordinal parameter not found');
       }
+      if (cardinal && ordinal) {
+        throw new Error('cannot use both cardinal and ordinal parameters');
+      }
+
+      const count = cardinal || ordinal;
 
       const pluralRule = new Intl.PluralRules(locale()).select(count);
 
@@ -114,18 +120,25 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
           paramsUsed_[key] = isObjectLiteral(params[key]) ? (paramsUsed_[key] ?? {}) : params[key];
           paramsUsed_ = paramsUsed_[key];
 
-          return params[key] ?? (() => { throw new Error(`translation for parameter "${path}" not found`) })();
+          return params[key] ?? (() => { throw new Error(`value for parameter "${path}" not found`) })();
         }, params);
 
-        if (typeof value !== 'string') {
-          throw new Error(`translation for parameter "${path}" not found`);
+        if (typeof value !== 'string' && typeof value !== 'number') {
+          (value === undefined)
+            ? (() => { throw new Error(`value for parameter "${path}" not found`) })()
+            : (() => { throw new Error(`invalid value for parameter "${path}": ${value}`) })();
         }
 
         return value;
       });
 
     if (isPlural) {
-      paramsUsed.count = params.count;
+      if ('cardinal' in params) {
+        paramsUsed.cardinal = params.cardinal;
+      }
+      if ('ordinal' in params) {
+        paramsUsed.ordinal = params.ordinal;
+      }
     }
 
     if (!areObjectsEqual(params, paramsUsed)) {
