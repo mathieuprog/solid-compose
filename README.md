@@ -116,16 +116,26 @@ Solid Compose allows you to define a translation per plural rule:
 addTranslations('en', {
   "messages": {
     "one": "One message received.",
-    "other": "{{ count }} messages received.",
+    "other": "{{ cardinal }} messages received.",
     "zero": "No messages received."
+  },
+  "position": {
+    "one": "{{ ordinal }}st",
+    "two": "{{ ordinal }}nd",
+    "few": "{{ ordinal }}rd",
+    "other": "{{ ordinal }}th",
   }
 });
 ```
 
-A `count` parameter must be present when translating (you may not use another naming), for the library to pick the right message:
+Either a `cardinal` or `ordinal` parameter must be present when translating, for the library to pick the right message:
 
 ```typescript
-translate('messages', { count: 1 }); // One message received.
+translate('messages', { cardinal: 1 }); // One message received.
+```
+
+```typescript
+translate('position', { ordinal: 1 }); // 1st
 ```
 
 ### Namespaces
