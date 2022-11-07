@@ -94,7 +94,7 @@ You may also have objects as parameters:
 
 ```typescript
 addTranslations('en' {
-  "hello": "hello, {{ user.name }}!"
+  "hello": "Hello, {{ user.name }}!"
 });
 
 function Hello() {
@@ -223,7 +223,7 @@ const [colorScheme, setColorScheme] = useColorScheme();
 
 Indicates the data source from where the color scheme is retrieved. Built-in storages are:
 * `signalStorage`: retrieves the color scheme from a signal.
-* `localStorage`: retrieves the color scheme from local storage.
+* `localStorage`: retrieves the color scheme from localStorage.
 * `mediaQuery`: retrieves the color scheme from the media query, setter throws an error.
 * `queryString`: retrieves the color scheme from the URL's query parameter `"color-scheme"`.
 
