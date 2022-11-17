@@ -7,9 +7,9 @@ import {
   I18nProvider,
   useI18n,
   useLocale
-} from '../../src';
-import { removeAllTranslations } from '../../src/i18n/createI18nPrimitive';
-import { setPrimitive } from '../../src/i18n/globalPrimitive';
+} from '..';
+import { removeAllTranslations } from './createI18nPrimitive';
+import { setPrimitive } from './globalPrimitive';
 
 beforeEach(() => {
   removeAllTranslations();
@@ -37,21 +37,21 @@ test('translate', async () => {
     "world": "monde !!"
   });
 
-  createLocalePrimitive({ default: 'en' });
+  createLocalePrimitive({ supportedLanguageTags: ['en'] });
   createI18nPrimitive({
     fallbackLocales: ['en'],
     keySeparator: ''
   });
 
   function Hello() {
-    const [locale, setLocale] = useLocale();
+    const [locale, { setLanguageTag }] = useLocale();
     const translate = useI18n();
     return <>
       <div data-testid="hello">{translate('hello')}</div>
       <div data-testid="world">{translate('world')}</div>
       <div data-testid="foo">{translate('foo')}</div>
-      <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
-        {locale()}
+      <button data-testid="locale" onClick={() => setLanguageTag('fr-BE')}>
+        {locale.languageTag}
       </button>
     </>;
   }
@@ -80,6 +80,11 @@ test('translate', async () => {
   expect(foo.textContent).toBe('bar');
 });
 
+test('fallback locale not supported should throw an error', () => {
+  createLocalePrimitive({ supportedLanguageTags: ['en'] });
+  expect(() => createI18nPrimitive({ fallbackLocales: ['fr'] })).toThrow(/support/);
+});
+
 test('translate with parameter', () => {
   addTranslations('en', {
     "hello": "hello"
@@ -102,20 +107,20 @@ test('translate with parameter', () => {
     "hello": "bonjour {{ name }}"
   });
 
-  createLocalePrimitive({ default: 'en' });
+  createLocalePrimitive({ supportedLanguageTags: ['en'] });
   createI18nPrimitive({
     fallbackLocales: ['en'],
     keySeparator: ''
   });
 
-  const [_locale, setLocale] = useLocale();
+  const [_locale, { setLanguageTag }] = useLocale();
   const translate = useI18n();
 
   expect(translate('hello', { name: 'John' })).toBe('hello John');
   expect(() => translate('welcome', { age: 25 })).toThrow(/name/);
   expect(() => translate('welcome', { name: 'John', age: 25 })).toThrow(/too many parameters/);
 
-  setLocale('fr');
+  setLanguageTag('fr');
 
   expect(translate('hello', { name: 'John' })).toBe('bonjour John');
 });
@@ -130,20 +135,20 @@ test('translate with parameter being object', () => {
     "welcome": "bienvenue {{ user.name }}"
   });
 
-  createLocalePrimitive({ default: 'en' });
+  createLocalePrimitive({ supportedLanguageTags: ['en'] });
   createI18nPrimitive({
     fallbackLocales: ['en'],
     keySeparator: ''
   });
 
-  const [_locale, setLocale] = useLocale();
+  const [_locale, { setLanguageTag }] = useLocale();
   const translate = useI18n();
 
   expect(translate('hello', { user: { firstName: 'John', lastName: 'Doe' }})).toBe('hello John, John Doe');
   expect(() => translate('hello', { user: { firstName: 'John' }})).toThrow(/lastName/);
   expect(() => translate('welcome', { user: { name: 'John', age: 25 }})).toThrow(/too many parameters/);
 
-  setLocale('fr');
+  setLanguageTag('fr');
 
   expect(translate('welcome', { user: { name: 'John' }})).toBe('bienvenue John');
 });
@@ -175,19 +180,19 @@ test('translate plural forms', () => {
     }
   });
 
-  createLocalePrimitive({ default: 'en' });
+  createLocalePrimitive({ supportedLanguageTags: ['en'] });
   createI18nPrimitive({
     fallbackLocales: ['en'],
     keySeparator: ''
   });
 
-  const [_locale, setLocale] = useLocale();
+  const [_locale, { setLanguageTag }] = useLocale();
   const translate = useI18n();
 
   expect(translate('messages', { cardinal: 1, name: 'John' })).toBe('One message received, John.');
   expect(translate('position', { ordinal: 1 })).toBe('1st');
 
-  setLocale('fr');
+  setLanguageTag('fr');
 
   expect(translate('messages', { cardinal: 1, name: 'John' })).toBe('Un message reçu, John.');
   expect(translate('position', { ordinal: 1 })).toBe('Premier');
@@ -218,21 +223,21 @@ test('key separator', async () => {
     "world": "monde !"
   });
 
-  createLocalePrimitive({ default: 'en' });
+  createLocalePrimitive({ supportedLanguageTags: ['en'] });
   createI18nPrimitive({
     fallbackLocales: [],
     keySeparator: '.'
   });
 
   function Hello() {
-    const [locale, setLocale] = useLocale();
+    const [locale, { setLanguageTag }] = useLocale();
     const translate = useI18n();
     return <>
       <div data-testid="hello">{translate('welcome.hello')}</div>
       <div data-testid="messages">{translate('welcome.messages', { cardinal: 1, name: 'John' })}</div>
       <div data-testid="world">{translate('world')}</div>
-      <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
-        {locale()}
+      <button data-testid="locale" onClick={() => setLanguageTag('fr-BE')}>
+        {locale.languageTag}
       </button>
     </>;
   }
@@ -287,21 +292,21 @@ test('namespaced translations', async () => {
     "world": "monde..."
   });
 
-  createLocalePrimitive({ default: 'en' });
+  createLocalePrimitive({ supportedLanguageTags: ['en'] });
   createI18nPrimitive({
     fallbackLocales: [],
     keySeparator: ''
   });
 
   function Namespaced1() {
-    const [locale, setLocale] = useLocale();
+    const [locale, { setLanguageTag }] = useLocale();
     const translate = useI18n();
     return <>
       <div data-testid="global1">{translate('global')}</div>
       <div data-testid="hello1">{translate('hello')}</div>
       <div data-testid="world1">{translate('world')}</div>
-      <button data-testid="locale" onClick={() => setLocale('fr-BE')}>
-        {locale()}
+      <button data-testid="locale" onClick={() => setLanguageTag('fr-BE')}>
+        {locale.languageTag}
       </button>
     </>;
   }

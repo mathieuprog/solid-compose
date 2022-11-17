@@ -1,10 +1,37 @@
-import type { Accessor } from 'solid-js';
+import { ColorScheme, DateEndianness, FirstDayOfWeek } from 'user-locale';
 
-export type LocalePrimitive = [Accessor<string>, LocaleSetter];
+export type LocalePrimitive = [Getters, Setters];
 
-export type LocaleSetter =
-  ((locale: string) => void)
-  & ((callback: ((prevLocale: string | null) => string)) => void);
+type Getters = {
+  languageTag: string;
+  supportedLanguageTags: string[];
+  timeZone: string;
+  dateFormat: {
+    endianness: DateEndianness;
+    separator: string;
+  };
+  timeFormat: {
+    is24HourClock: boolean;
+    separator: string;
+  };
+  firstDayOfWeek: FirstDayOfWeek;
+  colorScheme: ColorScheme;
+};
+
+type Setters = {
+  setLanguageTag: Setter<string>;
+  setTimeZone: Setter<string>;
+  setDateEndianness: Setter<DateEndianness>;
+  setDateSeparator: Setter<string>;
+  set24HourClock: Setter<boolean>;
+  setTimeSeparator: Setter<string>;
+  setFirstDayOfWeek: Setter<FirstDayOfWeek>;
+  setColorScheme: Setter<ColorScheme>;
+};
+
+export type Setter<T> =
+  ((value: T) => void)
+  & ((callback: ((prevValue: T | null) => T)) => void);
 
 let primitive: LocalePrimitive;
 

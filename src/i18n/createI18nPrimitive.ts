@@ -1,4 +1,9 @@
-import { areObjectsEqual, isEmptyObjectLiteral, isObjectLiteral, rejectProperties } from 'object-array-utils';
+import {
+  areObjectsEqual,
+  isEmptyObjectLiteral,
+  isObjectLiteral,
+  rejectProperties
+} from 'object-array-utils';
 import { useLocale } from '..';
 import { defaultNamespace } from './addTranslations';
 import { setPrimitive } from './globalPrimitive';
@@ -16,7 +21,13 @@ let fallbackLocales: string[] = [];
 
 export default function createI18nPrimitive(config?: Config) {
   if (config?.fallbackLocales !== undefined) {
-    fallbackLocales = config?.fallbackLocales;
+    const [locale] = useLocale();
+
+    if (config.fallbackLocales.some((fallbackLocale) => !locale.supportedLanguageTags.includes(fallbackLocale))) {
+      throw new Error('Fallback locale has not been included in the supported language tags list');
+    }
+
+    fallbackLocales = config.fallbackLocales;
   }
 
   if (config?.keySeparator !== undefined) {
@@ -27,14 +38,14 @@ export default function createI18nPrimitive(config?: Config) {
 }
 
 export function createTranslateFunction(namespaces: string[]): TranslateFunction {
-  const [locale, _setLocale] = useLocale();
+  const [locale] = useLocale();
 
   const fallbackTranslations =
     fallbackLocales.map((locale) => {
       return mergeTranslations(locale, namespaces);
     });
 
-  const fallbackLocale_ = () => findFallbackLocale(locale());
+  const fallbackLocale_ = () => findFallbackLocale(locale.languageTag);
 
   const fallbackTranslations_ = () => {
     return (fallbackLocale_())
@@ -43,7 +54,7 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
   };
 
   const translations = (): Record<string, any> => {
-    return mergeTranslations(locale(), namespaces);
+    return mergeTranslations(locale.languageTag, namespaces);
   };
 
   return (key, params = {}) => {
@@ -99,7 +110,7 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
 
       const count = cardinal || ordinal;
 
-      const pluralRule = new Intl.PluralRules(locale()).select(count);
+      const pluralRule = new Intl.PluralRules(locale.languageTag).select(count);
 
       value = pluralTranslations[pluralRule];
       if (!value) {
