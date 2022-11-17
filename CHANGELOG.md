@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.x
+
+  * Refactor i18n and locale primitives
+
 ## 0.4.x
 
   * Handle cardinal and ordinal pluralization
