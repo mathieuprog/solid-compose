@@ -5,7 +5,6 @@ import {
   createLocalePrimitive,
   useLocale
 } from '..';
-import { getDefaultLanguageTag } from './createLocalePrimitive';
 
 afterEach(cleanup);
 
@@ -31,13 +30,54 @@ test('set language tag', () => {
 
 test('get default language tag', () => {
   createLocalePrimitive({
-    defaultLanguageTag: 'fr',
-    supportedLanguageTags: ['es', 'fr']
+    supportedLanguageTags: ['xx', 'yy']
   });
 
   const [locale] = useLocale();
 
-  expect(locale.languageTag).toBe('fr');
+  expect(locale.languageTag).toBe('xx');
+});
+
+test('get default language tag when default given', () => {
+  createLocalePrimitive({
+    supportedLanguageTags: ['xx', 'yy', 'zz'],
+    defaultLanguageTag: 'yy'
+  });
+
+  const [locale] = useLocale();
+
+  expect(locale.languageTag).toBe('yy');
+});
+
+test('get default language tag when no default english is present', () => {
+  createLocalePrimitive({
+    supportedLanguageTags: ['xx', 'yy', 'en-XX']
+  });
+
+  const [locale] = useLocale();
+
+  expect(locale.languageTag).toBe('en-XX');
+});
+
+test('get default language tag when no default and no english is present', () => {
+  createLocalePrimitive({
+    supportedLanguageTags: ['xx', 'yy', 'zz']
+  });
+
+  const [locale] = useLocale();
+
+  expect(locale.languageTag).toBe('xx');
+});
+
+test('default language tag not supported should throw error', () => {
+  expect(
+    () => {
+      createLocalePrimitive({
+        supportedLanguageTags: ['es', 'en', 'fr'],
+        defaultLanguageTag: 'nl'
+      });
+    }
+  ).toThrow(/nl not found in supported language tags/);
 });
 
 test('set color scheme', () => {
@@ -55,8 +95,3 @@ test('set color scheme', () => {
   expect(locale.colorScheme).toBe(ColorScheme.Light);
 });
 
-test('getDefaultLanguageTag', () => {
-  expect(getDefaultLanguageTag(['en-US', 'en'], ['fr', 'es'], 'en')).toBe('fr');
-  expect(getDefaultLanguageTag(['en-US', 'en'], ['fr', 'es'], 'es')).toBe('es');
-  expect(getDefaultLanguageTag(['en-US', 'en'], ['en'], 'es')).toBe('en');
-});

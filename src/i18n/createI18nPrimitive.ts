@@ -1,37 +1,40 @@
 import {
+  areArraysEqual,
   areObjectsEqual,
   isEmptyObjectLiteral,
   isObjectLiteral,
   rejectProperties
 } from 'object-array-utils';
 import { useLocale } from '..';
-import { defaultNamespace } from './addTranslations';
+import { defaultNamespace } from './registry';
 import { setPrimitive } from './globalPrimitive';
 import type { TranslateFunction } from './globalPrimitive';
 import registry from './registry';
 
 interface Config {
-  fallbackLocales?: string[];
+  fallbackLanguageTag?: string;
   keySeparator?: string;
 }
 
+let fallbackLanguageTag: string | null = null;
 let keySeparator: string | null = null;
 
-let fallbackLocales: string[] = [];
-
 export default function createI18nPrimitive(config?: Config) {
-  if (config?.fallbackLocales !== undefined) {
-    const [locale] = useLocale();
-
-    if (config.fallbackLocales.some((fallbackLocale) => !locale.supportedLanguageTags.includes(fallbackLocale))) {
-      throw new Error('Fallback locale has not been included in the supported language tags list');
-    }
-
-    fallbackLocales = config.fallbackLocales;
+  if (config?.keySeparator !== undefined) {
+    keySeparator = config.keySeparator || null;
   }
 
-  if (config?.keySeparator !== undefined) {
-    keySeparator = config?.keySeparator || null;
+  if (config?.fallbackLanguageTag !== undefined) {
+    if (!Object.keys(registry).includes(config.fallbackLanguageTag)) {
+      throw new Error(`no translations found for language ${config.fallbackLanguageTag}`);
+    }
+    fallbackLanguageTag = config.fallbackLanguageTag;
+  }
+
+  const [locale] = useLocale();
+
+  if (!areArraysEqual(Object.keys(registry), locale.supportedLanguageTags)) {
+    throw new Error('list of supported language tags doesn\'t match with language tags having translations');
   }
 
   setPrimitive(createTranslateFunction([defaultNamespace]));
@@ -41,15 +44,15 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
   const [locale] = useLocale();
 
   const fallbackTranslations =
-    fallbackLocales.map((locale) => {
-      return mergeTranslations(locale, namespaces);
-    });
+    (fallbackLanguageTag)
+      ? mergeTranslations(fallbackLanguageTag, namespaces)
+      : {};
 
-  const fallbackLocale_ = () => findFallbackLocale(locale.languageTag);
+  const fallbackLanguageTag_ = () => findFallbackLanguageTag(locale.languageTag);
 
   const fallbackTranslations_ = () => {
-    return (fallbackLocale_())
-      ? mergeTranslations(fallbackLocale_() as string, namespaces)
+    return (fallbackLanguageTag_())
+      ? mergeTranslations(fallbackLanguageTag_() as string, namespaces)
       : {};
   };
 
@@ -67,7 +70,7 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
       const translationsObject: Record<string, any> =
         (translations()[firstKey] && translations())
           ?? (fallbackTranslations_()[firstKey] && fallbackTranslations_())
-          ?? findInTranslationList(fallbackTranslations, firstKey)
+          ?? (fallbackTranslations[firstKey] && fallbackTranslations)
           ?? (() => { throw new Error(`translation for "${firstKey}" not found`) })();
 
       let o = translationsObject[firstKey];
@@ -82,8 +85,7 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
       value =
         translations()[key]
         ?? fallbackTranslations_()[key]
-        ?? findInTranslationList(fallbackTranslations, key)
-        ?? fallbackTranslations.find((translations) => translations[key])
+        ?? fallbackTranslations[key]
         ?? (() => { throw new Error(`translation for "${key}" not found`) })();
     }
 
@@ -96,7 +98,7 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
 
       const rejectedProps = rejectProperties(pluralTranslations, ['zero', 'one', 'two', 'few', 'many', 'other']);
       if (!isEmptyObjectLiteral(rejectedProps)) {
-        throw new Error(`Invalid keys "${JSON.stringify(rejectedProps)}"`);
+        throw new Error(`invalid keys "${JSON.stringify(rejectedProps)}"`);
       }
 
       const cardinal = params['cardinal'];
@@ -160,23 +162,23 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
   };
 }
 
+function findFallbackLanguageTag(locale: string) {
+  if (!locale.includes('-')) {
+    return null;
+  }
+
+  const fallbackLanguageTag = locale.split('-')[0];
+
+  return (registry[fallbackLanguageTag])
+    ? fallbackLanguageTag
+    : null;
+}
+
 function findInTranslationList(translationList: Record<string, any>[], key: string) {
   const translations = translationList.find((translations) => translations[key]);
 
   return (translations)
     ? translations[key]
-    : null;
-}
-
-function findFallbackLocale(locale: string) {
-  if (!locale.includes('-')) {
-    return null;
-  }
-
-  const fallbackLocale = locale.split('-')[0];
-
-  return (registry[fallbackLocale])
-    ? fallbackLocale
     : null;
 }
 

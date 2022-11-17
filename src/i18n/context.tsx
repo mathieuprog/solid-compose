@@ -2,7 +2,7 @@ import { createContext, useContext } from 'solid-js';
 import type { ParentComponent } from 'solid-js';
 import { createTranslateFunction } from './createI18nPrimitive';
 import type { TranslateFunction } from './globalPrimitive';
-import { defaultNamespace } from './addTranslations';
+import { defaultNamespace } from './registry';
 
 interface Props {
   namespaces: string[];

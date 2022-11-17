@@ -3,8 +3,8 @@ import { ColorScheme, DateEndianness, FirstDayOfWeek } from 'user-locale';
 export type LocalePrimitive = [Getters, Setters];
 
 type Getters = {
-  languageTag: string;
   supportedLanguageTags: string[];
+  languageTag: string;
   timeZone: string;
   dateFormat: {
     endianness: DateEndianness;

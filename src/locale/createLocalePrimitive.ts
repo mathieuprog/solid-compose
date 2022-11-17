@@ -20,14 +20,25 @@ interface Config {
 }
 
 export default function createLocalePrimitive(config: Config) {
+  if (config.defaultLanguageTag && !config.supportedLanguageTags.includes(config.defaultLanguageTag)) {
+    throw new Error(`${config.defaultLanguageTag} not found in supported language tags`);
+  }
+
   const preferredLanguageTags = getPreferredLanguageTags();
 
-  const defaultLanguageTag = getDefaultLanguageTag(preferredLanguageTags, config.supportedLanguageTags, config?.defaultLanguageTag || 'en');
+  const languageTag =
+    preferredLanguageTags.find((languageTag) => {
+      return config.supportedLanguageTags.includes(languageTag);
+    });
 
   const [locale, setLocale] =
     createStore({
-      languageTag: defaultLanguageTag,
       supportedLanguageTags: config.supportedLanguageTags,
+      languageTag:
+        languageTag 
+          ?? config.defaultLanguageTag
+          ?? config.supportedLanguageTags.find((languageTag) => languageTag.startsWith('en'))
+          ?? config.supportedLanguageTags[0],
       timeZone: getTimeZone(),
       dateFormat: getDateFormat(),
       timeFormat: getTimeFormat(),
@@ -63,20 +74,4 @@ export default function createLocalePrimitive(config: Config) {
     setFirstDayOfWeek,
     setColorScheme
   }]);
-}
-
-export function getDefaultLanguageTag(preferredLanguageTags: string[], supportedLanguageTags: string[], defaultLanguageTag: string): string {
-  if (supportedLanguageTags.length === 0) {
-    throw new Error('Add at least one language in `supportedLanguageTags` option');
-  }
-  
-  const preferredSupportedLanguageTags = preferredLanguageTags.filter((languageTag) => supportedLanguageTags.includes(languageTag));
-
-  if (preferredSupportedLanguageTags.length > 0) {
-    return preferredSupportedLanguageTags[0];
-  }
-
-  return defaultLanguageTag && supportedLanguageTags.includes(defaultLanguageTag)
-    ? defaultLanguageTag
-    : supportedLanguageTags[0];
 }

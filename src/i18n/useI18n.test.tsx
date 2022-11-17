@@ -4,6 +4,7 @@ import {
   addTranslations,
   createI18nPrimitive,
   createLocalePrimitive,
+  getSupportedLanguageTags,
   I18nProvider,
   useI18n,
   useLocale
@@ -37,9 +38,11 @@ test('translate', async () => {
     "world": "monde !!"
   });
 
-  createLocalePrimitive({ supportedLanguageTags: ['en'] });
+  createLocalePrimitive({
+    supportedLanguageTags: getSupportedLanguageTags()
+  });
   createI18nPrimitive({
-    fallbackLocales: ['en'],
+    fallbackLanguageTag: 'en',
     keySeparator: ''
   });
 
@@ -81,8 +84,9 @@ test('translate', async () => {
 });
 
 test('fallback locale not supported should throw an error', () => {
-  createLocalePrimitive({ supportedLanguageTags: ['en'] });
-  expect(() => createI18nPrimitive({ fallbackLocales: ['fr'] })).toThrow(/support/);
+  addTranslations('en', { "foo": "bar" });
+  createLocalePrimitive({ supportedLanguageTags: getSupportedLanguageTags() });
+  expect(() => createI18nPrimitive({ fallbackLanguageTag: 'fr' })).toThrow(/no translations found for language fr/);
 });
 
 test('translate with parameter', () => {
@@ -107,9 +111,11 @@ test('translate with parameter', () => {
     "hello": "bonjour {{ name }}"
   });
 
-  createLocalePrimitive({ supportedLanguageTags: ['en'] });
+  createLocalePrimitive({
+    supportedLanguageTags: getSupportedLanguageTags()
+  });
   createI18nPrimitive({
-    fallbackLocales: ['en'],
+    fallbackLanguageTag: 'en',
     keySeparator: ''
   });
 
@@ -135,9 +141,11 @@ test('translate with parameter being object', () => {
     "welcome": "bienvenue {{ user.name }}"
   });
 
-  createLocalePrimitive({ supportedLanguageTags: ['en'] });
+  createLocalePrimitive({
+    supportedLanguageTags: getSupportedLanguageTags()
+  });
   createI18nPrimitive({
-    fallbackLocales: ['en'],
+    fallbackLanguageTag: 'en',
     keySeparator: ''
   });
 
@@ -180,9 +188,11 @@ test('translate plural forms', () => {
     }
   });
 
-  createLocalePrimitive({ supportedLanguageTags: ['en'] });
+  createLocalePrimitive({
+    supportedLanguageTags: getSupportedLanguageTags()
+  });
   createI18nPrimitive({
-    fallbackLocales: ['en'],
+    fallbackLanguageTag: 'en',
     keySeparator: ''
   });
 
@@ -223,9 +233,10 @@ test('key separator', async () => {
     "world": "monde !"
   });
 
-  createLocalePrimitive({ supportedLanguageTags: ['en'] });
+  createLocalePrimitive({
+    supportedLanguageTags: getSupportedLanguageTags()
+  });
   createI18nPrimitive({
-    fallbackLocales: [],
     keySeparator: '.'
   });
 
@@ -292,9 +303,10 @@ test('namespaced translations', async () => {
     "world": "monde..."
   });
 
-  createLocalePrimitive({ supportedLanguageTags: ['en'] });
+  createLocalePrimitive({
+    supportedLanguageTags: getSupportedLanguageTags()
+  });
   createI18nPrimitive({
-    fallbackLocales: [],
     keySeparator: ''
   });
 
