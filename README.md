@@ -4,8 +4,14 @@
 
 Currently, it includes
 * [internationalization (i18n)](#internationalization-i18n)
-* [color scheme (dark, light mode)](#color-scheme-dark-light-mode)
 * [localStorage (client-side storage)](#localstorage-client-side-storage)
+* [localization (l10n)](#localization-l10n)
+  * [color scheme (dark, light mode)](#color-scheme-dark-light-mode)
+  * [language tag](#language-tag)
+  * [date format](#date-format)
+  * [time format](#time-format)
+  * [time zone](#time-zone)
+  * [first day of the week](#first-day-of-the-week)
 
 ## Internationalization (i18n)
 
@@ -39,20 +45,23 @@ Then initialize and configure the locale and i18n global primitives:
 ```typescript
 import {
   createI18nPrimitive,
-  createLocalePrimitive
+  createLocalePrimitive,
+  getSupportedLanguageTags
 } from 'solid-compose';
 
 createLocalePrimitive({
-  default: 'en'
+  // getSupportedLanguageTags() returns the language tags
+  // for which translations exist
+  supportedLanguageTags: getSupportedLanguageTags()
 });
 
 createI18nPrimitive({
-  fallbackLocales: ['en']
+  fallbackLanguageTag: 'en'
 });
 ```
 
 `createI18nPrimitive` accepts 2 optional configuration params:
-* `fallbackLocales`: the locales to fallback to if no translation is found for the current locale;
+* `fallbackLanguageTag`: the locale to fallback to if no translation is found for the current locale;
 * `keySeparator`: allows to have nested translations.
 <details>
   <summary>Example using keySeparator</summary>
@@ -65,7 +74,7 @@ createI18nPrimitive({
   });
 
   createI18nPrimitive({
-    fallbackLocales: ['en'],
+    fallbackLanguageTag: 'en',
     keySeparator: '.'
   });
 
@@ -79,13 +88,13 @@ Translate your app:
 import { useI18n, useLocale } from 'solid-compose';
 
 function Hello() {
-  const [locale, setLocale] = useLocale();
+  const [locale, { setLanguageTag }] = useLocale();
   const translate = useI18n();
 
   return <>
     <div>{translate('hello', { name: 'John' })}</div>
-    <div>Current locale: {locale()}</div>
-    <div>Switch locale: {locale('fr')}</div>
+    <div>Current locale: {locale.languageTag}</div>
+    <div>Switch locale: {setLanguageTag('fr')}</div>
   </>;
 }
 ```
@@ -182,89 +191,6 @@ render(() =>
 );
 ```
 
-## Color scheme (dark, light mode)
-
-Solid Compose provides color scheme toggling (light vs dark mode).
-
-First, initialize and configure the color scheme primitive:
-
-```typescript
-import {
-  ColorScheme,
-  ColorSchemeStorage,
-  createColorSchemePrimitive
-} from 'solid-compose';
-
-createColorSchemePrimitive({
-  default: ColorScheme.Dark,
-  storage: ColorSchemeStorage.localStorage
-});
-```
-
-You may then add the `ColorSchemeStylesheet` component in your app which will pick the right stylesheet according to the current color scheme.
-
-```typescript
-import { ColorSchemeStylesheet } from 'solid-compose';
-
-const App: VoidComponent = () => {
-  return (
-    <>
-      <ColorSchemeStylesheet
-        dark="./css/themes/dark-theme.css"
-        light="./css/themes/light-theme.css"
-      />
-      <div>…</div>
-    </>
-  );
-};
-```
-
-Call `setColorScheme` in order to switch the color scheme:
-
-```typescript
-import { useColorScheme } from 'solid-compose';
-
-const [colorScheme, setColorScheme] = useColorScheme();
-```
-
-`createColorSchemePrimitive` accepts 2 configuration params:
-
-### `storage` option
-
-Indicates the data source from where the color scheme is retrieved. Built-in storages are:
-* `signalStorage`: retrieves the color scheme from a signal.
-* `localStorage`: retrieves the color scheme from localStorage.
-* `mediaQuery`: retrieves the color scheme from the media query, setter throws an error.
-* `queryString`: retrieves the color scheme from the URL's query parameter `"color-scheme"`.
-
-You may also pass an external signal if you want to manage the color scheme via external state:
-
-```typescript
-const mySignal = createSignal<ColorScheme>(ColorScheme.Dark);
-
-createColorSchemePrimitive({
-  storage: mySignal
-});
-```
-
-### `default` option
-
-Indicates the default color scheme to be used if none is found. Ignored for the mediaQuery strategy.
-
-If a `default` has not been specified, the default color scheme from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme) is used.
-
-### Custom storage strategy
-
-You may pass your own custom storage strategy to `ColorSchemeProvider`.
-As an example, below is the code of the `signalStorage` strategy:
-```javascript
-import { getSystemColorScheme } from 'solid-compose';
-
-const signalStorage = (defaultValue) => {
-  return createSignal(defaultValue || getSystemColorScheme());
-}
-```
-
 ## localStorage (client-side storage)
 
 Solid Compose makes localStorage values reactive:
@@ -285,6 +211,151 @@ By default, the following object is used:
   serialize: JSON.stringify,
   deserialize: JSON.parse
 }
+```
+
+## Localization (l10n)
+
+Solid Compose stores user locale parameters into a store.
+
+First, initialize and configure the locale primitive:
+
+```typescript
+import {
+  createLocalePrimitive
+} from 'solid-compose';
+
+createLocalePrimitive({
+  supportedLanguageTags: ['en']
+});
+```
+
+The supported language tags allow to filter out the user language tags only to those which are supported by your application.
+
+You may then access the locale parameters:
+
+```typescript
+import { useLocale } from 'solid-compose';
+
+const [locale] = useLocale();
+
+console.log(locale.colorScheme);
+console.log(locale.languageTag);
+console.log(locale.dateFormat);
+console.log(locale.timeFormat);
+console.log(locale.timeZone);
+console.log(locale.firstDayOfWeek);
+```
+
+All those parameters are reactive.
+
+### Color scheme (dark, light mode)
+
+Solid Compose provides color scheme toggling (light vs dark mode).
+
+You may then add the `ColorSchemeStylesheet` component in your app which will pick the right stylesheet according to the current color scheme.
+
+```typescript
+import { ColorSchemeStylesheet } from 'solid-compose';
+
+const App: VoidComponent = () => {
+  return (
+    <>
+      <ColorSchemeStylesheet
+        dark="./css/themes/dark-theme.css"
+        light="./css/themes/light-theme.css"
+      />
+      <div>…</div>
+    </>
+  );
+};
+```
+
+`setColorScheme` allows to switch the color scheme:
+
+```typescript
+import { useLocale } from 'solid-compose';
+
+const [locale, { setColorScheme }] = useLocale();
+```
+
+The initial color scheme is taken from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme).
+
+This may be overridden by a default color scheme passed to `createLocalePrimitive` configuration:
+
+```typescript
+import {
+  ColorScheme,
+  createLocalePrimitive
+} from 'solid-compose';
+
+createLocalePrimitive({
+  defaultColorScheme: ColorScheme.Dark,
+  supportedLanguageTags: ['en']
+});
+```
+
+### Language tag
+
+`setLanguageTag` allows to change the language:
+
+```typescript
+import { useLocale } from 'solid-compose';
+
+const [locale, { setLanguageTag }] = useLocale();
+```
+
+### Date format
+
+`setDateEndianness` and `setDateSeparator` allow to change the date format:
+
+```typescript
+import {
+  useLocale,
+  setDateEndianness,
+  setDateSeparator
+} from 'solid-compose';
+
+const [locale, { setDateEndianness, setDateSeparator }] = useLocale();
+```
+
+### Time format
+
+`set24HourClock` and `setTimeSeparator` allow to change the time format:
+
+```typescript
+import {
+  useLocale,
+  set24HourClock,
+  setTimeSeparator
+} from 'solid-compose';
+
+const [locale, { set24HourClock, setTimeSeparator }] = useLocale();
+```
+
+### Time zone
+
+`setTimeZone` allows to change the first day of the week:
+
+```typescript
+import {
+  useLocale,
+  setTimeZone
+} from 'solid-compose';
+
+const [locale, { setTimeZone }] = useLocale();
+```
+
+### First day of the week
+
+`setFirstDayOfWeek` allows to change the first day of the ween:
+
+```typescript
+import {
+  useLocale,
+  setFirstDayOfWeek
+} from 'solid-compose';
+
+const [locale, { setFirstDayOfWeek }] = useLocale();
 ```
 
 ## Install
