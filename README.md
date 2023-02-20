@@ -347,7 +347,7 @@ const [locale, { setTimeZone }] = useLocale();
 
 ### First day of the week
 
-`setFirstDayOfWeek` allows to change the first day of the ween:
+`setFirstDayOfWeek` allows to change the first day of the week:
 
 ```typescript
 import {
