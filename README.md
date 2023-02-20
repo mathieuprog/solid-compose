@@ -334,7 +334,7 @@ const [locale, { set24HourClock, setTimeSeparator }] = useLocale();
 
 ### Time zone
 
-`setTimeZone` allows to change the first day of the week:
+`setTimeZone` allows to change the time zone:
 
 ```typescript
 import {
