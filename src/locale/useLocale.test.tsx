@@ -28,6 +28,16 @@ test('set language tag', () => {
   expect(locale.languageTag).toBe('it');
 });
 
+test('empty supportedLanguageTags', () => {
+  expect(
+    () => {
+      createLocalePrimitive({
+        supportedLanguageTags: []
+      });
+    }
+  ).toThrow(/no supported language tags/);
+});
+
 test('get default language tag', () => {
   createLocalePrimitive({
     supportedLanguageTags: ['xx', 'yy']

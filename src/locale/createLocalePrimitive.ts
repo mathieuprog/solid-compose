@@ -20,6 +20,10 @@ interface Config {
 }
 
 export default function createLocalePrimitive(config: Config) {
+  if (!config.supportedLanguageTags || config.supportedLanguageTags.length === 0) {
+    throw new Error(`no supported language tags provided`);
+  }
+
   if (config.defaultLanguageTag && !config.supportedLanguageTags.includes(config.defaultLanguageTag)) {
     throw new Error(`${config.defaultLanguageTag} not found in supported language tags`);
   }
