@@ -225,11 +225,16 @@ import {
 } from 'solid-compose';
 
 createLocalePrimitive({
-  supportedLanguageTags: ['en']
+  supportedLanguageTags: ['en', 'de', 'fr'],
+  defaultLanguageTag: 'de'
 });
 ```
 
-The supported language tags allow to filter out the user language tags only to those which are supported by your application.
+The `supportedLanguageTags` configuration field is mandatory and specifies which language tags are supported by your application.
+
+When first initializing the locale primitive, the library looks for a language tag that is both supported by your application and listed in the user's browser as one of their preferred language tags.
+
+If a matching preferred language tag cannot be found, the optional `defaultLanguageTag` configuration is utilized. If not provided, either an English language tag is used or the first language tag in the list of supported language tags.
 
 You may then access the locale parameters:
 

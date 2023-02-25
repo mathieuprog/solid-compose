@@ -39,7 +39,7 @@ export default function createLocalePrimitive(config: Config) {
     createStore({
       supportedLanguageTags: config.supportedLanguageTags,
       languageTag:
-        languageTag 
+        languageTag
           ?? config.defaultLanguageTag
           ?? config.supportedLanguageTags.find((languageTag) => languageTag.startsWith('en'))
           ?? config.supportedLanguageTags[0],
