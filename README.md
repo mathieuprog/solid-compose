@@ -12,6 +12,7 @@ Currently, it includes
   * [time format](#time-format)
   * [time zone](#time-zone)
   * [first day of the week](#first-day-of-the-week)
+  * [text direction](#text-direction)
 
 ## Internationalization (i18n)
 
@@ -220,9 +221,7 @@ Solid Compose stores user locale parameters into a store.
 First, initialize and configure the locale primitive:
 
 ```typescript
-import {
-  createLocalePrimitive
-} from 'solid-compose';
+import { createLocalePrimitive } from 'solid-compose';
 
 createLocalePrimitive({
   supportedLanguageTags: ['en', 'de', 'fr'],
@@ -245,6 +244,7 @@ const [locale] = useLocale();
 
 console.log(locale.colorScheme);
 console.log(locale.languageTag);
+console.log(locale.textDirection);
 console.log(locale.dateFormat);
 console.log(locale.timeFormat);
 console.log(locale.timeZone);
@@ -314,11 +314,7 @@ const [locale, { setLanguageTag }] = useLocale();
 `setDateEndianness` and `setDateSeparator` allow to change the date format:
 
 ```typescript
-import {
-  useLocale,
-  setDateEndianness,
-  setDateSeparator
-} from 'solid-compose';
+import { useLocale } from 'solid-compose';
 
 const [locale, { setDateEndianness, setDateSeparator }] = useLocale();
 ```
@@ -328,11 +324,7 @@ const [locale, { setDateEndianness, setDateSeparator }] = useLocale();
 `set24HourClock` and `setTimeSeparator` allow to change the time format:
 
 ```typescript
-import {
-  useLocale,
-  set24HourClock,
-  setTimeSeparator
-} from 'solid-compose';
+import { useLocale } from 'solid-compose';
 
 const [locale, { set24HourClock, setTimeSeparator }] = useLocale();
 ```
@@ -342,10 +334,7 @@ const [locale, { set24HourClock, setTimeSeparator }] = useLocale();
 `setTimeZone` allows to change the time zone:
 
 ```typescript
-import {
-  useLocale,
-  setTimeZone
-} from 'solid-compose';
+import { useLocale } from 'solid-compose';
 
 const [locale, { setTimeZone }] = useLocale();
 ```
@@ -355,12 +344,19 @@ const [locale, { setTimeZone }] = useLocale();
 `setFirstDayOfWeek` allows to change the first day of the week:
 
 ```typescript
-import {
-  useLocale,
-  setFirstDayOfWeek
-} from 'solid-compose';
+import { useLocale } from 'solid-compose';
 
 const [locale, { setFirstDayOfWeek }] = useLocale();
+```
+
+### Text direction
+
+`createTextDirectionEffect` function allows the text direction of the entire page to be changed by setting the `dir` attribute on the `html` tag to `"ltr"` or `"rtl"` based on the current locale:
+
+```typescript
+import { createTextDirectionEffect } from 'solid-compose';
+
+createTextDirectionEffect();
 ```
 
 ## Install
