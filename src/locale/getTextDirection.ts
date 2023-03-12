@@ -1,4 +1,5 @@
-import isPartOfLanguageTag from "./isPartOfLanguageTag";
+import isPartOfLanguageTag from './isPartOfLanguageTag';
+import TextDirection from './TextDirection';
 
 const rtlLanguageTags = [
   'ar', 'dv', 'fa', 'ha', 'he',
@@ -7,12 +8,12 @@ const rtlLanguageTags = [
 
 export default function getTextDirection(languageTag: string) {
   if (rtlLanguageTags.includes(languageTag)) {
-    return 'rtl';
+    return TextDirection.RightToLeft;
   }
 
   const isRtl = rtlLanguageTags.find((rtlLanguageTag) => {
     return isPartOfLanguageTag(languageTag, rtlLanguageTag);
   });
   
-  return (isRtl) ? 'rtl' : 'ltr';
+  return (isRtl) ? TextDirection.RightToLeft : TextDirection.LeftToRight;
 }
