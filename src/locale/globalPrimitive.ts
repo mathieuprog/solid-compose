@@ -1,10 +1,12 @@
 import { ColorScheme, DateEndianness, FirstDayOfWeek } from 'user-locale';
+import TextDirection from './TextDirection';
 
 export type LocalePrimitive = [Getters, Setters];
 
 type Getters = {
   supportedLanguageTags: string[];
   languageTag: string;
+  textDirection: TextDirection;
   timeZone: string;
   dateFormat: {
     endianness: DateEndianness;
