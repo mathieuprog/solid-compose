@@ -1,6 +1,4 @@
 import { createStore } from 'solid-js/store';
-import { setPrimitive } from './globalPrimitive';
-import type { Setter } from './globalPrimitive';
 import {
   ColorScheme,
   DateEndianness,
@@ -12,6 +10,11 @@ import {
   getTimeFormat,
   getTimeZone
 } from 'user-locale';
+import findValue from '@mathieuprog/find-value';
+import { setPrimitive } from './globalPrimitive';
+import type { Setter } from './globalPrimitive';
+import getTextDirection from './getTextDirection';
+import isPartOfLanguageTag from './isPartOfLanguageTag';
 
 interface Config {
   defaultColorScheme?: ColorScheme;
@@ -30,19 +33,28 @@ export default function createLocalePrimitive(config: Config) {
 
   const preferredLanguageTags = getPreferredLanguageTags();
 
-  const languageTag =
-    preferredLanguageTags.find((languageTag) => {
-      return config.supportedLanguageTags.includes(languageTag);
+  const preferredSupportedLanguageTag =
+    findValue(preferredLanguageTags, (preferredLanguageTag) => {
+      if (config.supportedLanguageTags.includes(preferredLanguageTag)) {
+        return preferredLanguageTag;
+      }
+
+      return config.supportedLanguageTags.find((supportedLanguageTag) => {
+        return isPartOfLanguageTag(preferredLanguageTag, supportedLanguageTag) && supportedLanguageTag;
+      });
     });
+
+  const languageTag =
+    preferredSupportedLanguageTag
+      ?? config.defaultLanguageTag
+      ?? config.supportedLanguageTags.find((languageTag) => languageTag.startsWith('en'))
+      ?? config.supportedLanguageTags[0];
 
   const [locale, setLocale] =
     createStore({
       supportedLanguageTags: config.supportedLanguageTags,
-      languageTag:
-        languageTag
-          ?? config.defaultLanguageTag
-          ?? config.supportedLanguageTags.find((languageTag) => languageTag.startsWith('en'))
-          ?? config.supportedLanguageTags[0],
+      languageTag,
+      textDirection: getTextDirection(languageTag),
       timeZone: getTimeZone(),
       dateFormat: getDateFormat(),
       timeFormat: getTimeFormat(),
