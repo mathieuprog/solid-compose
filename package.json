@@ -1,6 +1,6 @@
 {
   "name": "solid-compose",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "A set of reactive state for commonly used features in web apps",
   "funding": "https://github.com/mathieuprog/solid-compose?sponsor=1",
   "source": "src/index.ts",
