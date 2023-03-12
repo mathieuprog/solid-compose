@@ -62,7 +62,7 @@ export default function createLocalePrimitive(config: Config) {
       colorScheme: config?.defaultColorScheme ?? getColorScheme()
     });
 
-  const setLanguageTag_ = (languageTag: string) => setLocale({ languageTag });
+  const setLanguageTag_ = (languageTag: string) => setLocale({ languageTag, textDirection: getTextDirection(languageTag) });
   const setTimeZone_ = (timeZone: string) => setLocale({ timeZone });
   const setDateEndianness_ = (endianness: DateEndianness) => setLocale('dateFormat', 'endianness', endianness);
   const setDateSeparator_ = (separator: string) => setLocale('dateFormat', 'separator', separator);
