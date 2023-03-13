@@ -174,14 +174,6 @@ function findFallbackLanguageTag(locale: string) {
     : null;
 }
 
-function findInTranslationList(translationList: Record<string, any>[], key: string) {
-  const translations = translationList.find((translations) => translations[key]);
-
-  return (translations)
-    ? translations[key]
-    : null;
-}
-
 let mergeTranslationsCache: Record<string, Record<string, any>> = {};
 
 function mergeTranslations(locale: string, namespaces: string[]): Record<string, any> {
