@@ -247,7 +247,7 @@ test('key separator', async () => {
       <div data-testid="hello">{translate('welcome.hello')}</div>
       <div data-testid="messages">{translate('welcome.messages', { cardinal: 1, name: 'John' })}</div>
       <div data-testid="world">{translate('world')}</div>
-      <button data-testid="locale" onClick={() => setLanguageTag('fr-BE')}>
+      <button data-testid="locale" onClick={() => setLanguageTag('fr')}>
         {locale.languageTag}
       </button>
     </>;
@@ -270,7 +270,7 @@ test('key separator', async () => {
   // the event loop takes one Promise to resolve to be finished
   await Promise.resolve();
 
-  expect(locale.textContent).toBe('fr-BE');
+  expect(locale.textContent).toBe('fr');
   expect(hello.textContent).toBe('bonjour !');
   expect(world.textContent).toBe('monde !');
   expect(messages.textContent).toBe('Un message reçu, John.');
@@ -317,7 +317,7 @@ test('namespaced translations', async () => {
       <div data-testid="global1">{translate('global')}</div>
       <div data-testid="hello1">{translate('hello')}</div>
       <div data-testid="world1">{translate('world')}</div>
-      <button data-testid="locale" onClick={() => setLanguageTag('fr-BE')}>
+      <button data-testid="locale" onClick={() => setLanguageTag('fr')}>
         {locale.languageTag}
       </button>
     </>;
@@ -380,7 +380,7 @@ test('namespaced translations', async () => {
   // the event loop takes one Promise to resolve to be finished
   await Promise.resolve();
 
-  expect(locale.textContent).toBe('fr-BE');
+  expect(locale.textContent).toBe('fr');
   expect(globalNs1.textContent).toBe('quelque chose');
   expect(helloNs1.textContent).toBe('bonjour !');
   expect(worldNs1.textContent).toBe('monde !');

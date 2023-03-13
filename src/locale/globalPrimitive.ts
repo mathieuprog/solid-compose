@@ -1,4 +1,5 @@
-import { ColorScheme, DateEndianness, FirstDayOfWeek } from 'user-locale';
+import { ColorScheme, DateFormat, FirstDayOfWeek, TimeFormat } from 'user-locale';
+import { SettableLocaleProps } from './createLocalePrimitive';
 import TextDirection from './TextDirection';
 
 export type LocalePrimitive = [Getters, Setters];
@@ -8,14 +9,8 @@ type Getters = {
   languageTag: string;
   textDirection: TextDirection;
   timeZone: string;
-  dateFormat: {
-    endianness: DateEndianness;
-    separator: string;
-  };
-  timeFormat: {
-    is24HourClock: boolean;
-    separator: string;
-  };
+  dateFormat: DateFormat;
+  timeFormat: TimeFormat;
   firstDayOfWeek: FirstDayOfWeek;
   colorScheme: ColorScheme;
 };
@@ -23,12 +18,11 @@ type Getters = {
 type Setters = {
   setLanguageTag: Setter<string>;
   setTimeZone: Setter<string>;
-  setDateEndianness: Setter<DateEndianness>;
-  setDateSeparator: Setter<string>;
-  set24HourClock: Setter<boolean>;
-  setTimeSeparator: Setter<string>;
+  setDateFormat: Setter<DateFormat>;
+  setTimeFormat: Setter<TimeFormat>;
   setFirstDayOfWeek: Setter<FirstDayOfWeek>;
   setColorScheme: Setter<ColorScheme>;
+  setLocale: (props: SettableLocaleProps) => void;
 };
 
 export type Setter<T> =

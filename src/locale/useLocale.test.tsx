@@ -16,7 +16,7 @@ test('missing global state should throw error', () => {
 
 test('set language tag', () => {
   createLocalePrimitive({
-    supportedLanguageTags: ['es']
+    supportedLanguageTags: ['es', 'it']
   });
 
   const [locale, { setLanguageTag }] = useLocale();
@@ -50,8 +50,10 @@ test('get default language tag', () => {
 
 test('get default language tag when default given', () => {
   createLocalePrimitive({
-    supportedLanguageTags: ['xx', 'yy', 'zz'],
-    defaultLanguageTag: 'yy'
+    initialValues: {
+      languageTag: 'yy'
+    },
+    supportedLanguageTags: ['xx', 'yy', 'zz']
   });
 
   const [locale] = useLocale();
@@ -83,8 +85,10 @@ test('default language tag not supported should throw error', () => {
   expect(
     () => {
       createLocalePrimitive({
-        supportedLanguageTags: ['es', 'en', 'fr'],
-        defaultLanguageTag: 'nl'
+        initialValues: {
+          languageTag: 'nl'
+        },
+        supportedLanguageTags: ['es', 'en', 'fr']
       });
     }
   ).toThrow(/nl not found in supported language tags/);
@@ -92,7 +96,9 @@ test('default language tag not supported should throw error', () => {
 
 test('set color scheme', () => {
   createLocalePrimitive({
-    defaultColorScheme: ColorScheme.Dark,
+    initialValues: {
+      colorScheme: ColorScheme.Dark
+    },
     supportedLanguageTags: ['es']
   });
 

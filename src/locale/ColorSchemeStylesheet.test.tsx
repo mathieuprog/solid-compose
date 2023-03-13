@@ -10,7 +10,9 @@ afterEach(cleanup);
 
 test('default to dark', () => {
   createLocalePrimitive({
-    defaultColorScheme: ColorScheme.Dark,
+    initialValues: {
+      colorScheme: ColorScheme.Dark
+    },
     supportedLanguageTags: ['en']
   });
 
@@ -27,7 +29,9 @@ test('default to dark', () => {
 
 test('default to light', () => {
   createLocalePrimitive({
-    defaultColorScheme: ColorScheme.Light,
+    initialValues: {
+      colorScheme: ColorScheme.Light
+    },
     supportedLanguageTags: ['en']
   });
 
