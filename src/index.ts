@@ -18,6 +18,10 @@ import ColorSchemeStylesheet from './locale/ColorSchemeStylesheet';
 import TextDirection from './locale/TextDirection';
 import createTextDirectionEffect from './locale/createTextDirectionEffect';
 
+import createThemePrimitive from './theme/createThemePrimitive';
+import useTheme from './theme/useTheme';
+import ThemeStylesheet from './theme/ThemeStylesheet';
+
 export {
   createLocalStoragePrimitive,
   useLocalStorage,
@@ -36,5 +40,9 @@ export {
   DateEndianness,
   FirstDayOfWeek,
   TextDirection,
-  useLocale
+  useLocale,
+
+  createThemePrimitive,
+  ThemeStylesheet,
+  useTheme
 }
