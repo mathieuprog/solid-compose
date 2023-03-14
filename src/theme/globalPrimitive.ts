@@ -2,7 +2,7 @@ import type { Accessor } from 'solid-js';
 
 export type Setter<T> =
   ((value: T) => void)
-  & ((callback: ((prevValue: T | null) => T)) => void);
+  & ((callback: ((prevValue: T) => T)) => void);
 
 export type ThemePrimitive = [Accessor<string>, Setter<string>];
 

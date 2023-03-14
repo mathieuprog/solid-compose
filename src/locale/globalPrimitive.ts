@@ -28,7 +28,7 @@ type Setters = {
 
 export type Setter<T> =
   ((value: T) => void)
-  & ((callback: ((prevValue: T | null) => T)) => void);
+  & ((callback: ((prevValue: T) => T)) => void);
 
 let primitive: LocalePrimitive;
 
