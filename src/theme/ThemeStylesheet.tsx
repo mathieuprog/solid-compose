@@ -3,7 +3,7 @@ import { Portal } from 'solid-js/web';
 import { getThemePath } from './themes';
 import useTheme from './useTheme';
 
-const ColorSchemeStylesheet: VoidComponent = () => {
+const ThemeStylesheet: VoidComponent = () => {
   const [theme] = useTheme();
   const themePath = getThemePath(theme());
 
@@ -17,4 +17,4 @@ const ColorSchemeStylesheet: VoidComponent = () => {
   );
 };
 
-export default ColorSchemeStylesheet;
+export default ThemeStylesheet;
