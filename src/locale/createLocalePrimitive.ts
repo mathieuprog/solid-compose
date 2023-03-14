@@ -19,6 +19,7 @@ import getTextDirection from './getTextDirection';
 import isPartOfLanguageTag from './isPartOfLanguageTag';
 
 interface Config {
+  defaultLanguageTag?: string;
   initialValues?: {
     languageTag?: string,
     timeZone?: string,
@@ -33,6 +34,10 @@ interface Config {
 export default function createLocalePrimitive(config: Config) {
   if (!config.supportedLanguageTags || config.supportedLanguageTags.length === 0) {
     throw new Error('no supported language tags provided');
+  }
+
+  if (config.defaultLanguageTag && !config.supportedLanguageTags.includes(config.defaultLanguageTag)) {
+    throw new Error(`${config.defaultLanguageTag} not found in supported language tags`);
   }
 
   if (config.initialValues?.languageTag && !config.supportedLanguageTags.includes(config.initialValues?.languageTag)) {
@@ -55,6 +60,7 @@ export default function createLocalePrimitive(config: Config) {
   const languageTag =
     preferredSupportedLanguageTag
       ?? config?.initialValues?.languageTag
+      ?? config.defaultLanguageTag
       ?? config.supportedLanguageTags.find((languageTag) => languageTag.startsWith('en'))
       ?? config.supportedLanguageTags[0];
 

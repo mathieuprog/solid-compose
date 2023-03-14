@@ -48,8 +48,20 @@ test('get default language tag', () => {
   expect(locale.languageTag).toBe('xx');
 });
 
-test('get default language tag when default given', () => {
+test('get default language tag when given', () => {
   createLocalePrimitive({
+    defaultLanguageTag: 'yy',
+    supportedLanguageTags: ['xx', 'yy', 'zz']
+  });
+
+  const [locale] = useLocale();
+
+  expect(locale.languageTag).toBe('yy');
+});
+
+test('get initial language tag when default given', () => {
+  createLocalePrimitive({
+    defaultLanguageTag: 'zz',
     initialValues: {
       languageTag: 'yy'
     },
@@ -82,6 +94,17 @@ test('get default language tag when no default and no english is present', () =>
 });
 
 test('default language tag not supported should throw error', () => {
+  expect(
+    () => {
+      createLocalePrimitive({
+        defaultLanguageTag: 'nl',
+        supportedLanguageTags: ['es', 'en', 'fr']
+      });
+    }
+  ).toThrow(/nl not found in supported language tags/);
+});
+
+test('initial language tag not supported should throw error', () => {
   expect(
     () => {
       createLocalePrimitive({
