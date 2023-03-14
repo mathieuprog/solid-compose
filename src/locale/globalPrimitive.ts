@@ -23,6 +23,7 @@ type Setters = {
   setFirstDayOfWeek: Setter<FirstDayOfWeek>;
   setColorScheme: Setter<ColorScheme>;
   setLocale: (props: SettableLocaleProps) => void;
+  __setTextDirection: Setter<TextDirection>;
 };
 
 export type Setter<T> =

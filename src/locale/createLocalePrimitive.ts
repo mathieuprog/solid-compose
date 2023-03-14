@@ -17,6 +17,7 @@ import { setPrimitive } from './globalPrimitive';
 import type { Setter } from './globalPrimitive';
 import getTextDirection from './getTextDirection';
 import isPartOfLanguageTag from './isPartOfLanguageTag';
+import TextDirection from './TextDirection';
 
 interface Config {
   defaultLanguageTag?: string;
@@ -87,6 +88,7 @@ export default function createLocalePrimitive(config: Config) {
   const setTimeFormat_ = (timeFormat: TimeFormat) => setLocale({ timeFormat });
   const setFirstDayOfWeek_ = (firstDayOfWeek: FirstDayOfWeek) => setLocale({ firstDayOfWeek });
   const setColorScheme_ = (colorScheme: ColorScheme) => setLocale({ colorScheme });
+  const setTextDirection_ = (textDirection: TextDirection) => setLocale({ textDirection });
 
   const setLanguageTag: Setter<string> = (arg) => (typeof arg === 'function') ? setLanguageTag_(arg(locale.languageTag)) : setLanguageTag_(arg);
   const setTimeZone: Setter<string> = (arg) => (typeof arg === 'function') ? setTimeZone_(arg(locale.timeZone)) : setTimeZone_(arg);
@@ -94,6 +96,7 @@ export default function createLocalePrimitive(config: Config) {
   const setTimeFormat: Setter<TimeFormat> = (arg) => (typeof arg === 'function') ? setTimeFormat_(arg(locale.timeFormat)) : setTimeFormat_(arg);
   const setFirstDayOfWeek: Setter<FirstDayOfWeek> = (arg) => (typeof arg === 'function') ? setFirstDayOfWeek_(arg(locale.firstDayOfWeek)) : setFirstDayOfWeek_(arg);
   const setColorScheme: Setter<ColorScheme> = (arg) => (typeof arg === 'function') ? setColorScheme_(arg(locale.colorScheme)) : setColorScheme_(arg);
+  const setTextDirection: Setter<TextDirection> = (arg) => (typeof arg === 'function') ? setTextDirection_(arg(locale.textDirection)) : setTextDirection_(arg);
 
   const setLocale_ = (props: SettableLocaleProps) => {
     batch(() => {
@@ -130,7 +133,9 @@ export default function createLocalePrimitive(config: Config) {
     setTimeFormat,
     setFirstDayOfWeek,
     setColorScheme,
-    setLocale: setLocale_
+    setLocale: setLocale_,
+    // Provided only for testing purposes. The text direction is normally set by the language.
+    __setTextDirection: setTextDirection
   }]);
 }
 
