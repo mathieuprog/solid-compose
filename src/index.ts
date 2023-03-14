@@ -22,7 +22,7 @@ import createThemePrimitive from './theme/createThemePrimitive';
 import useTheme from './theme/useTheme';
 import ThemeStylesheet from './theme/ThemeStylesheet';
 
-import { setTestingHotkeys } from './developer';
+import { addLocaleHotkeyListener } from './developer';
 
 export {
   createLocalStoragePrimitive,
@@ -48,5 +48,5 @@ export {
   ThemeStylesheet,
   useTheme,
 
-  setTestingHotkeys
+  addLocaleHotkeyListener
 }
