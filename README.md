@@ -13,6 +13,7 @@ Currently, it includes
   * [time zone](#time-zone)
   * [first day of the week](#first-day-of-the-week)
   * [text direction](#text-direction)
+* [theming](#theming)
 
 ## Internationalization (i18n)
 
@@ -229,6 +230,27 @@ createLocalePrimitive({
 });
 ```
 
+When you have information about the user's preferences, you can use it to initialize the locale data:
+
+```typescript
+import { createLocalePrimitive } from 'solid-compose';
+
+createLocalePrimitive({
+  supportedLanguageTags: ['en', 'de', 'fr'],
+  defaultLanguageTag: 'de',
+  initialValues: {
+    languageTag: user.languageTag,
+    timeZone: user.timeZone,
+    dateFormat: user.dateFormat,
+    timeFormat: user.timeFormat,
+    firstDayOfWeek: user.firstDayOfWeek,
+    colorScheme: user.colorScheme
+  }
+});
+```
+
+Every field in `initialValues` is optional and if not provided, the value is inferred from the user's browser and system parameters.
+
 The `supportedLanguageTags` configuration field is mandatory and specifies which language tags are supported by your application.
 
 When first initializing the locale primitive, the library looks for a language tag that is both supported by your application and listed in the user's browser as one of their preferred language tags.
@@ -242,13 +264,13 @@ import { useLocale } from 'solid-compose';
 
 const [locale] = useLocale();
 
-console.log(locale.colorScheme);
 console.log(locale.languageTag);
 console.log(locale.textDirection);
+console.log(locale.timeZone);
 console.log(locale.dateFormat);
 console.log(locale.timeFormat);
-console.log(locale.timeZone);
 console.log(locale.firstDayOfWeek);
+console.log(locale.colorScheme);
 ```
 
 All those parameters are reactive.
@@ -259,7 +281,7 @@ Solid Compose provides color scheme toggling (light vs dark mode).
 
 You may then add the `ColorSchemeStylesheet` component in your app which will pick the right stylesheet according to the current color scheme.
 
-```typescript
+```jsx
 import { ColorSchemeStylesheet } from 'solid-compose';
 
 const App: VoidComponent = () => {
@@ -269,6 +291,7 @@ const App: VoidComponent = () => {
         dark="./css/themes/dark-theme.css"
         light="./css/themes/light-theme.css"
       />
+
       <div>…</div>
     </>
   );
@@ -283,21 +306,9 @@ import { useLocale } from 'solid-compose';
 const [locale, { setColorScheme }] = useLocale();
 ```
 
-The initial color scheme is taken from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme).
+The initial color scheme is derived from the [system or user agent](https://developer.mozilla.org/docs/Web/CSS/@media/prefers-color-scheme), unless the `initialValues` include a `colorScheme` property.
 
-This may be overridden by a default color scheme passed to `createLocalePrimitive` configuration:
-
-```typescript
-import {
-  ColorScheme,
-  createLocalePrimitive
-} from 'solid-compose';
-
-createLocalePrimitive({
-  defaultColorScheme: ColorScheme.Dark,
-  supportedLanguageTags: ['en']
-});
-```
+If you intend to incorporate additional themes beyond just the dark and light modes, refer to the [Theming](#theming).
 
 ### Language tag
 
@@ -311,22 +322,22 @@ const [locale, { setLanguageTag }] = useLocale();
 
 ### Date format
 
-`setDateEndianness` and `setDateSeparator` allow to change the date format:
+`setDateFormat` allow to change the date format:
 
 ```typescript
 import { useLocale } from 'solid-compose';
 
-const [locale, { setDateEndianness, setDateSeparator }] = useLocale();
+const [locale, { setDateFormat }] = useLocale();
 ```
 
 ### Time format
 
-`set24HourClock` and `setTimeSeparator` allow to change the time format:
+`setTimeFormat` allow to change the time format:
 
 ```typescript
 import { useLocale } from 'solid-compose';
 
-const [locale, { set24HourClock, setTimeSeparator }] = useLocale();
+const [locale, { setTimeFormat }] = useLocale();
 ```
 
 ### Time zone
@@ -357,6 +368,63 @@ const [locale, { setFirstDayOfWeek }] = useLocale();
 import { createTextDirectionEffect } from 'solid-compose';
 
 createTextDirectionEffect();
+```
+
+## Theming
+
+Solid Compose provides theming support.
+
+First, initialize and configure the locale (in order to fetch the user's preferred color scheme) and theme primitives:
+
+```typescript
+createLocalePrimitive({ supportedLanguageTags: ['en'] });
+
+createThemePrimitive({
+  themes: {
+    'fooTheme': 'https://example.com',
+    'barTheme': 'https://example.com',
+    'bazTheme': 'https://example.com'
+  },
+  defaultDarkTheme: 'fooTheme',
+  defaultLightTheme: 'barTheme'
+});
+```
+
+When you know the user's preferred theme:
+
+```typescript
+createThemePrimitive({
+  themes: {
+    'fooTheme': 'https://example.com',
+    'barTheme': 'https://example.com',
+    'bazTheme': 'https://example.com'
+  },
+  initialTheme: 'fooTheme'
+});
+```
+
+You may then add the `ThemeStylesheet` component in your app which will pick the right stylesheet according to the selected theme.
+
+```jsx
+import { ThemeStylesheet } from 'solid-compose';
+
+const App: VoidComponent = () => {
+  return (
+    <>
+      <ThemeStylesheet />
+
+      <div>…</div>
+    </>
+  );
+};
+```
+
+`setTheme` allows to switch the theme:
+
+```typescript
+import { useTheme } from 'solid-compose';
+
+const [theme, setTheme] = useTheme();
 ```
 
 ## Install
