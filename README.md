@@ -14,6 +14,7 @@ Currently, it includes
   * [first day of the week](#first-day-of-the-week)
   * [text direction](#text-direction)
 * [theming](#theming)
+* [developer utilities](#developer-utilities)
 
 ## Internationalization (i18n)
 
@@ -425,6 +426,26 @@ const App: VoidComponent = () => {
 import { useTheme } from 'solid-compose';
 
 const [theme, setTheme] = useTheme();
+```
+
+## Developer utilities
+
+`addLocaleHotkeyListener()` simplifies testing of web interfaces with multiple locale settings by enabling developers to quickly switch between different locales using hotkeys.
+
+Current available hotkeys:
+* `Ctrl-q` switches the color schemes
+* `Ctrl-w` switches the theme
+* `Ctrl-a` switches the language
+* `Ctrl-s` switches the text direction
+* `Ctrl-z` switches the time zone
+* `Ctrl-x` switches the date format
+* `Ctrl-c` switches the time hour format
+* `Ctrl-v` switches the first day of week
+
+```typescript
+import { addLocaleHotkeyListener } from 'solid-compose';
+
+addLocaleHotkeyListener();
 ```
 
 ## Install
