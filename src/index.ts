@@ -22,6 +22,8 @@ import createThemePrimitive from './theme/createThemePrimitive';
 import useTheme from './theme/useTheme';
 import ThemeStylesheet from './theme/ThemeStylesheet';
 
+import { setTestingHotkeys } from './developer';
+
 export {
   createLocalStoragePrimitive,
   useLocalStorage,
@@ -44,5 +46,7 @@ export {
 
   createThemePrimitive,
   ThemeStylesheet,
-  useTheme
+  useTheme,
+
+  setTestingHotkeys
 }

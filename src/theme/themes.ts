@@ -9,3 +9,7 @@ export function setThemes(themes_: Themes) {
 export function getThemePath(themeName: string): string {
   return themes[themeName];
 }
+
+export function getThemes() {
+  return themes;
+}
