@@ -8,7 +8,7 @@ interface Config {
   timeZones?: string[];
 }
 
-export function addLocaleHotkeyListener(config: Config) {
+export function addLocaleHotkeyListener(config: Config = {}) {
   document.addEventListener('keyup', function(event) {
     const [locale, {
       setColorScheme,
