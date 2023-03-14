@@ -5,12 +5,12 @@ import useTheme from './useTheme';
 
 const ThemeStylesheet: VoidComponent = () => {
   const [theme] = useTheme();
-  const themePath = getThemePath(theme());
+  const themePath = () => getThemePath(theme());
 
   return (
     <>
       <Portal mount={document.head}>
-        <link rel="stylesheet" href={themePath} />
+        <link rel="stylesheet" href={themePath()} />
       </Portal>
       <div data-testid={`stylesheet-${theme()}`} />
     </>
