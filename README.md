@@ -440,14 +440,14 @@ import { createViewportPrimitive } from 'solid-compose';
 
 createViewportPrimitive({
   widthSizeSwitchpoints: {
-    small: {
+    small: { // width < 768
       maxWidth: 768
     },
-    medium: {
+    medium: { // 768 <= width < 1280
       minWidth: 768,
       maxWidth: 1280
     },
-    large: {
+    large: { // 1280 <= width
       minWidth: 1280
     },
   }
@@ -461,13 +461,44 @@ The keys in each object represent the custom name for the size, while the values
 You may then get the current viewport size and orientation and listen for changes:
 
 ```typescript
-import { useViewport } from 'solid-compose';
+import { useViewport, ViewportOrientation } from 'solid-compose';
 
 const viewport = useViewport();
 
-console.log(viewport.width);
-console.log(viewport.height);
-console.log(viewport.orientation);
+console.log(viewport.width); // "large"
+console.log(viewport.height); // undefined (height switchpoint names not defined in the config object)
+console.log(viewport.orientation === ViewportOrientation.LANDSCAPE);
+```
+
+You may define your custom switchpoints names with TypeScript enums in order to catch errors when comparing width and height values:
+
+```typescript
+export enum Viewport {
+  SmallWidth =  'SMALL_WIDTH',
+  MediumWidth = 'MEDIUM_WIDTH',
+  LargeWidth = 'LARGE_WIDTH'
+}
+
+createViewportPrimitive({
+  widthSizeSwitchpoints: {
+    [Viewport.SmallWidth]: {
+      maxWidth: 768
+    },
+    [Viewport.MediumWidth]: {
+      minWidth: 768,
+      maxWidth: 1280
+    },
+    [Viewport.LargeWidth]: {
+      minWidth: 1280
+    },
+  }
+});
+
+const viewport = useViewport();
+
+if (viewport.width === Viewport.SmallWidth) {
+  // ...
+}
 ```
 
 ## Developer utilities
