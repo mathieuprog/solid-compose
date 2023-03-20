@@ -14,6 +14,7 @@ Currently, it includes
   * [first day of the week](#first-day-of-the-week)
   * [text direction](#text-direction)
 * [theming](#theming)
+* [viewport](#viewport)
 * [developer utilities](#developer-utilities)
 
 ## Internationalization (i18n)
@@ -426,6 +427,47 @@ const App: VoidComponent = () => {
 import { useTheme } from 'solid-compose';
 
 const [theme, setTheme] = useTheme();
+```
+
+## Viewport
+
+Solid Compose allows to listen for changes to the viewport dimension and orientation.
+
+First, initialize and configure the viewport primitive:
+
+```typescript
+import { createViewportPrimitive } from 'solid-compose';
+
+createViewportPrimitive({
+  widthSizeSwitchpoints: {
+    small: {
+      maxWidth: 768
+    },
+    medium: {
+      minWidth: 768,
+      maxWidth: 1280
+    },
+    large: {
+      minWidth: 1280
+    },
+  }
+});
+```
+
+`createViewportPrimitive()` allows you to configure two properties: `widthSizeSwitchpoints` and `heightSizeSwitchpoints`. Both of these properties are objects that let you define custom size names and corresponding size ranges for the viewport dimensions.
+
+The keys in each object represent the custom name for the size, while the values are sub-objects containing either `minWidth` and `maxWidth` or `minHeight` and `maxHeight` properties, depending on whether you're configuring the switchpoints for the width or the height.
+
+You may then get the current viewport size and orientation and listen for changes:
+
+```typescript
+import { useViewport } from 'solid-compose';
+
+const viewport = useViewport();
+
+console.log(viewport.width);
+console.log(viewport.height);
+console.log(viewport.orientation);
 ```
 
 ## Developer utilities
