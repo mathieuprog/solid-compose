@@ -20,7 +20,7 @@ import createTextDirectionEffect from './locale/createTextDirectionEffect';
 
 import createViewportPrimitive from './viewport/createViewportPrimitive';
 import useViewport from './viewport/useViewport';
-import Orientation from './viewport/Orientation';
+import ViewportOrientation from './viewport/Orientation';
 
 import createThemePrimitive from './theme/createThemePrimitive';
 import useTheme from './theme/useTheme';
@@ -49,7 +49,7 @@ export {
   useLocale,
 
   createViewportPrimitive,
-  Orientation,
+  ViewportOrientation,
   useViewport,
 
   createThemePrimitive,
