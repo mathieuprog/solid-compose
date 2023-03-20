@@ -467,7 +467,7 @@ const viewport = useViewport();
 
 console.log(viewport.width); // "large"
 console.log(viewport.height); // undefined (height switchpoint names not defined in the config object)
-console.log(viewport.orientation === ViewportOrientation.LANDSCAPE);
+console.log(viewport.orientation === ViewportOrientation.Landscape);
 ```
 
 You may define your custom switchpoints names with TypeScript enums in order to catch errors when comparing width and height values:
