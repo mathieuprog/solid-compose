@@ -7,14 +7,14 @@ import type { ViewportPrimitive } from './globalPrimitive';
 interface Config {
   heightSizeSwitchpoints?: {
     [key: string]: {
-      minHeight?: number;
-      maxHeight?: number;
+      min?: number;
+      max?: number;
     }
   };
   widthSizeSwitchpoints?: {
     [key: string]: {
-      minWidth?: number;
-      maxWidth?: number;
+      min?: number;
+      max?: number;
     }
   };
 }
@@ -24,15 +24,15 @@ export default function createViewportPrimitive(config: Config) {
 
   batch(() => {
     for (const [sizeName, range] of Object.entries(config.heightSizeSwitchpoints || {})) {
-      const { minHeight, maxHeight } = range;
+      const { min, max } = range;
 
       let mediaQuery;
-      if (minHeight && maxHeight) {
-        mediaQuery = `(${minHeight}px <= height < ${maxHeight}px)`;
-      } else if (minHeight) {
-        mediaQuery = `(${minHeight}px <= height)`;
-      } else if (maxHeight) {
-        mediaQuery = `(height < ${maxHeight}px)`;
+      if (min && max) {
+        mediaQuery = `(${min}px <= height < ${max}px)`;
+      } else if (min) {
+        mediaQuery = `(${min}px <= height)`;
+      } else if (max) {
+        mediaQuery = `(height < ${max}px)`;
       } else {
         throw new Error();
       }
@@ -51,15 +51,15 @@ export default function createViewportPrimitive(config: Config) {
     }
 
     for (const [sizeName, range] of Object.entries(config.widthSizeSwitchpoints || {})) {
-      const { minWidth, maxWidth } = range;
+      const { min, max } = range;
 
       let mediaQuery;
-      if (minWidth && maxWidth) {
-        mediaQuery = `(${minWidth}px <= width < ${maxWidth}px)`;
-      } else if (minWidth) {
-        mediaQuery = `(${minWidth}px <= width)`;
-      } else if (maxWidth) {
-        mediaQuery = `(width < ${maxWidth}px)`;
+      if (min && max) {
+        mediaQuery = `(${min}px <= width < ${max}px)`;
+      } else if (min) {
+        mediaQuery = `(${min}px <= width)`;
+      } else if (max) {
+        mediaQuery = `(width < ${max}px)`;
       } else {
         throw new Error();
       }

@@ -17,14 +17,14 @@ test('set language tag', () => {
   createViewportPrimitive({
     widthSizeSwitchpoints: {
       small: {
-        maxWidth: 768
+        max: 768
       },
       medium: {
-        minWidth: 768,
-        maxWidth: 1280
+        min: 768,
+        max: 1280
       },
       large: {
-        minWidth: 1280
+        min: 1280
       },
     }
   });
