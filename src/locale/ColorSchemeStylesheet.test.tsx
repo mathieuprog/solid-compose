@@ -28,6 +28,7 @@ test('default to dark', () => {
 
   expect(meta.content).toBe('dark light');
   expect(document.documentElement.style.colorScheme).toBe('dark light');
+  expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
 });
 
 test('default to light', () => {
@@ -49,6 +50,7 @@ test('default to light', () => {
 
   expect(meta.content).toBe('only light');
   expect(document.documentElement.style.colorScheme).toBe('only light');
+  expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
 });
 
 test('switch color scheme', () => {
@@ -70,6 +72,7 @@ test('switch color scheme', () => {
 
   expect(meta.content).toBe('only light');
   expect(document.documentElement.style.colorScheme).toBe('only light');
+  expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
 
   const [locale, { setColorScheme }] = useLocale();
 
@@ -79,4 +82,5 @@ test('switch color scheme', () => {
 
   expect(meta.content).toBe('dark light');
   expect(document.documentElement.style.colorScheme).toBe('dark light');
+  expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
 });

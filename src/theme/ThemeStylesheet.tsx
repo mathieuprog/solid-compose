@@ -13,6 +13,8 @@ const ThemeStylesheet: VoidComponent = () => {
     const colorSchemePropertyValue = getColorSchemePropertyValue(themeDetails().colorScheme);
 
     document.documentElement.style.setProperty('color-scheme', colorSchemePropertyValue);
+    document.documentElement.setAttribute('data-color-scheme', themeDetails().colorScheme.toLowerCase());
+    document.documentElement.setAttribute('data-theme', themeDetails().name);
 
     let meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
     if (meta) {

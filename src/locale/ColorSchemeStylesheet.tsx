@@ -17,6 +17,7 @@ const ColorSchemeStylesheet: VoidComponent<Props> = (props) => {
     const colorSchemePropertyValue = getColorSchemePropertyValue(locale.colorScheme);
 
     document.documentElement.style.setProperty('color-scheme', colorSchemePropertyValue);
+    document.documentElement.setAttribute('data-color-scheme', locale.colorScheme.toLowerCase());
 
     let meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
     if (meta) {

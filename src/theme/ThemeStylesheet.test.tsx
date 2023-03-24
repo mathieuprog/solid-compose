@@ -52,6 +52,8 @@ test('pick the right theme', () => {
 
   expect(meta.content).toBe('dark light');
   expect(document.documentElement.style.colorScheme).toBe('dark light');
+  expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
+  expect(document.documentElement.getAttribute('data-theme')).toBe('darkTheme');
 
   setTheme('fooTheme');
 
@@ -59,4 +61,6 @@ test('pick the right theme', () => {
 
   expect(meta.content).toBe('only light');
   expect(document.documentElement.style.colorScheme).toBe('only light');
+  expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
+  expect(document.documentElement.getAttribute('data-theme')).toBe('fooTheme');
 });
