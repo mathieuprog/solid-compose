@@ -14,16 +14,19 @@ const ColorSchemeStylesheet: VoidComponent<Props> = (props) => {
   const [locale] = useLocale();
 
   createEffect(() => {
-    const colorSchemePropertyValue = getColorSchemePropertyValue(locale.colorScheme)
+    const colorSchemePropertyValue = getColorSchemePropertyValue(locale.colorScheme);
 
     document.documentElement.style.setProperty('color-scheme', colorSchemePropertyValue);
 
     let meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
-    if (!meta) {
+    if (meta) {
+      meta.content = colorSchemePropertyValue;
+    } else {
       meta = document.createElement('meta');
       meta.name = 'color-scheme';
+      meta.content = colorSchemePropertyValue;
+      document.head.appendChild(meta);
     }
-    meta.content = colorSchemePropertyValue;
   });
 
   return (
