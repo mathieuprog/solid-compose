@@ -1,44 +1,26 @@
 import { createSignal } from 'solid-js';
 import { ColorScheme } from 'user-locale';
+import { isEmptyArray } from 'object-array-utils';
 import { setPrimitive } from './globalPrimitive';
 import type { Setter } from './globalPrimitive';
 import useLocale from '../locale/useLocale';
-import { isEmptyObjectLiteral } from 'object-array-utils';
 import { setThemes } from './themes';
 
-export interface Themes {
-  [key: string]: string;
+export interface Theme {
+  name: string;
+  path: string;
+  colorScheme: ColorScheme;
+  default?: boolean;
 }
 
-interface ConfigWithRequiredInitialTheme {
-  initialTheme: string;
-  themes: Themes;
-}
-
-interface ConfigWithOptionalInitialTheme {
+interface Config {
   initialTheme?: string;
-  defaultDarkTheme: string;
-  defaultLightTheme: string;
-  themes: Themes;
+  themes: Theme[];
 }
-
-type Config = ConfigWithRequiredInitialTheme | ConfigWithOptionalInitialTheme;
 
 export default function createThemePrimitive(config: Config) {
-  if (isEmptyObjectLiteral(config.themes)) {
+  if (isEmptyArray(config.themes)) {
     throw new Error(`no stylesheets provided`);
-  }
-
-  if (config.initialTheme && !config.themes[config.initialTheme]) {
-    throw new Error(`stylesheet for theme ${config.initialTheme} not provided`);
-  }
-
-  if ('defaultDarkTheme' in config && !config.themes[config.defaultDarkTheme]) {
-    throw new Error(`stylesheet for theme ${config.defaultDarkTheme} not provided`);
-  }
-
-  if ('defaultLightTheme' in config && !config.themes[config.defaultLightTheme]) {
-    throw new Error(`stylesheet for theme ${config.defaultLightTheme} not provided`);
   }
 
   const [theme, setTheme] = createSignal(getDefaultTheme(config));
@@ -46,7 +28,7 @@ export default function createThemePrimitive(config: Config) {
   const setTheme_: Setter<string> = (arg) => {
     const newTheme = (typeof arg === 'function') ? arg(theme()) : arg;
 
-    if (!config.themes[newTheme]) {
+    if (!config.themes.find((theme) => theme.name === newTheme)) {
       throw new Error(`stylesheet for theme ${newTheme} not provided`);
     }
 
@@ -60,18 +42,34 @@ export default function createThemePrimitive(config: Config) {
 
 function getDefaultTheme(config: Config) {
   if (config.initialTheme) {
+    if (!config.themes.some((theme) => theme.name === config.initialTheme)) {
+      throw new Error(`stylesheet for theme ${config.initialTheme} not provided`);
+    }
+
     return config.initialTheme;
   }
 
-  if ('defaultDarkTheme' in config) {
-    const [locale] = useLocale();
-
-    if (locale.colorScheme === ColorScheme.Dark) {
-      return config.defaultDarkTheme;
-    }
-
-    return config.defaultLightTheme;
+  const defaultDarkThemes = config.themes.filter((theme) => theme.default && theme.colorScheme === ColorScheme.Dark);
+  if (defaultDarkThemes.length < 1) {
+    throw new Error('no default dark theme specified');
   }
-  
-  throw new Error();
+  if (defaultDarkThemes.length > 1) {
+    throw new Error('specify only one default dark theme');
+  }
+
+  const defaultLightThemes = config.themes.filter((theme) => theme.default && theme.colorScheme === ColorScheme.Light);
+  if (defaultLightThemes.length < 1) {
+    throw new Error('no default light theme specified');
+  }
+  if (defaultLightThemes.length > 1) {
+    throw new Error('specify only one default light theme');
+  }
+
+  const [locale] = useLocale();
+
+  if (locale.colorScheme === ColorScheme.Dark) {
+    return defaultDarkThemes[0].name;
+  }
+
+  return defaultLightThemes[0].name;
 }

@@ -12,11 +12,23 @@ test('missing global state should throw error', () => {
 
 test('initial theme', () => {
   createThemePrimitive({
-    themes: {
-      'fooTheme': 'https://example.com',
-      'lightTheme': 'https://example.com',
-      'darkTheme': 'https://example.com'
-    },
+    themes: [
+      {
+        name: 'fooTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Light
+      },
+      {
+        name: 'lightTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Light
+      },
+      {
+        name: 'darkTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Dark
+      }
+    ],
     initialTheme: 'fooTheme'
   });
 
@@ -33,13 +45,25 @@ test('default theme', () => {
   createLocalePrimitive({ supportedLanguageTags: ['en'] });
 
   createThemePrimitive({
-    themes: {
-      'fooTheme': 'https://example.com',
-      'lightTheme': 'https://example.com',
-      'darkTheme': 'https://example.com'
-    },
-    defaultDarkTheme: 'darkTheme',
-    defaultLightTheme: 'lightTheme'
+    themes: [
+      {
+        name: 'fooTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Light
+      },
+      {
+        name: 'lightTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Light,
+        default: true
+      },
+      {
+        name: 'darkTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Dark,
+        default: true
+      }
+    ]
   });
 
   const [locale] = useLocale();
@@ -59,9 +83,7 @@ test('default theme', () => {
 test('no themes provided throws error', () => {
   expect(() =>
     createThemePrimitive({
-      themes: {},
-      defaultDarkTheme: 'lightTheme',
-      defaultLightTheme: 'darkTheme'
+      themes: []
     })
   ).toThrow(/no stylesheets/);
 });

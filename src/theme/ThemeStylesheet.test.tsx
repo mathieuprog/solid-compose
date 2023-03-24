@@ -18,13 +18,25 @@ test('pick the right theme', () => {
   });
 
   createThemePrimitive({
-    themes: {
-      'fooTheme': 'https://example.com',
-      'lightTheme': 'https://example.com',
-      'darkTheme': 'https://example.com'
-    },
-    defaultDarkTheme: 'darkTheme',
-    defaultLightTheme: 'lightTheme'
+    themes: [
+      {
+        name: 'fooTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Light
+      },
+      {
+        name: 'lightTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Light,
+        default: true
+      },
+      {
+        name: 'darkTheme',
+        path: 'https://example.com',
+        colorScheme: ColorScheme.Dark,
+        default: true
+      }
+    ]
   });
 
   render(() =>
