@@ -300,6 +300,8 @@ const App: VoidComponent = () => {
 };
 ```
 
+In addition to adding the necessary stylesheets, it also includes the `color-scheme` meta tag and CSS property.
+
 `setColorScheme` allows to switch the color scheme:
 
 ```typescript
@@ -452,6 +454,8 @@ const App: VoidComponent = () => {
   );
 };
 ```
+
+In addition to adding the necessary stylesheets, it also includes the `color-scheme` meta tag and CSS property.
 
 `setTheme` allows to switch the theme:
 
