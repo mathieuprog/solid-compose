@@ -300,7 +300,15 @@ const App: VoidComponent = () => {
 };
 ```
 
-In addition to adding the necessary stylesheets, it also includes the `color-scheme` meta tag and CSS property.
+In addition to adding the necessary stylesheets, it also includes the `color-scheme` meta tag, the CSS styling property `color-scheme` on the html tag, as well as a data attribute `"data-color-scheme"` on the html tag.
+
+The data attribute enables the selection of CSS selectors based on the color scheme, allowing you to set CSS variables for the current color scheme:
+```css
+html[data-color-scheme='dark'] {
+  --default-primary-text-color: var(--default-grey-200);
+  --default-secondary-text-color: var(--default-grey-500);
+}
+```
 
 `setColorScheme` allows to switch the color scheme:
 
@@ -455,7 +463,15 @@ const App: VoidComponent = () => {
 };
 ```
 
-In addition to adding the necessary stylesheets, it also includes the `color-scheme` meta tag and CSS property.
+In addition to adding the necessary stylesheets, it also includes the `color-scheme` meta tag, the CSS styling property `color-scheme` on the html tag, as well as the data attributes `"data-color-scheme"` and `"data-theme"` on the html tag.
+
+The data attributes enables the selection of CSS selectors based on the color scheme, allowing you to set CSS variables for the current theme:
+```css
+html[data-theme='my-theme'] {
+  --default-primary-text-color: var(--default-grey-200);
+  --default-secondary-text-color: var(--default-grey-500);
+}
+```
 
 `setTheme` allows to switch the theme:
 
