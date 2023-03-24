@@ -376,31 +376,63 @@ createTextDirectionEffect();
 
 Solid Compose provides theming support.
 
-First, initialize and configure the locale (in order to fetch the user's preferred color scheme) and theme primitives:
+First, initialize and configure the locale primitive (in order to fetch the user's preferred color scheme):
 
 ```typescript
 createLocalePrimitive({ supportedLanguageTags: ['en'] });
-
-createThemePrimitive({
-  themes: {
-    'fooTheme': 'https://example.com',
-    'barTheme': 'https://example.com',
-    'bazTheme': 'https://example.com'
-  },
-  defaultDarkTheme: 'fooTheme',
-  defaultLightTheme: 'barTheme'
-});
 ```
 
-When you know the user's preferred theme:
+Then, initialize and configure the theme primitive:
 
 ```typescript
 createThemePrimitive({
-  themes: {
-    'fooTheme': 'https://example.com',
-    'barTheme': 'https://example.com',
-    'bazTheme': 'https://example.com'
-  },
+  themes: [
+    {
+      name: 'fooTheme',
+      path: 'https://example.com',
+      colorScheme: ColorScheme.Dark,
+      default: true
+    },
+    {
+      name: 'barTheme',
+      path: 'https://example.com',
+      colorScheme: ColorScheme.Light,
+      default: true
+    },
+    {
+      name: 'bazTheme',
+      path: 'https://example.com',
+      colorScheme: ColorScheme.Dark
+    }
+  ]
+});
+```
+
+The initial theme is selected according to the user's preferred color scheme. You therefore need to specify one default dark theme and one default light theme.
+
+In cases where the theme is based on a color that is not distinctly dark or light, it is still needed to specify a default color scheme in case of missing styles.
+
+When you know the user's preferred theme, you don't need to specify any defaults and instead you may set the user's theme via the `initialTheme` config:
+
+```typescript
+createThemePrimitive({
+  themes: [
+    {
+      name: 'fooTheme',
+      path: 'https://example.com',
+      colorScheme: ColorScheme.Dark
+    },
+    {
+      name: 'barTheme',
+      path: 'https://example.com',
+      colorScheme: ColorScheme.Light
+    },
+    {
+      name: 'bazTheme',
+      path: 'https://example.com',
+      colorScheme: ColorScheme.Dark
+    }
+  ],
   initialTheme: 'fooTheme'
 });
 ```
