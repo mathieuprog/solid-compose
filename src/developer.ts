@@ -31,8 +31,7 @@ export function addLocaleHotkeyListener(config: Config = {}) {
 
     if ((event.metaKey || event.ctrlKey) && event.key === 'w') {
       setTheme((prev) => {
-        const themes = Object.keys(getThemes());
-        return getNextValueInArray(themes, prev);
+        return getNextValueInArray(getThemes().map((theme) => theme.name), prev);
       });
       return;
     }
