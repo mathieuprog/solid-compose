@@ -4,7 +4,8 @@ import {
   ColorScheme,
   createLocalePrimitive,
   createThemePrimitive,
-  ThemeStylesheet
+  ThemeStylesheet,
+  useTheme
 } from '..';
 
 afterEach(cleanup);
@@ -43,7 +44,25 @@ test('pick the right theme', () => {
     <ThemeStylesheet />
   );
 
+  const [theme, setTheme] = useTheme();
+
+  expect(theme()).toBe('darkTheme');
+
+  let meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
+
+  expect(meta.content).toBe('dark light');
+  expect(document.documentElement.style.colorScheme).toBe('dark light');
   expect(screen.queryByTestId('stylesheet-fooTheme')).toBeNull();
   expect(screen.queryByTestId('stylesheet-lightTheme')).toBeNull();
   expect(screen.queryByTestId('stylesheet-darkTheme')).toBeInstanceOf(HTMLElement);
+
+  setTheme('fooTheme');
+
+  meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
+
+  expect(meta.content).toBe('only light');
+  expect(document.documentElement.style.colorScheme).toBe('only light');
+  expect(screen.queryByTestId('stylesheet-fooTheme')).toBeInstanceOf(HTMLElement);
+  expect(screen.queryByTestId('stylesheet-lightTheme')).toBeNull();
+  expect(screen.queryByTestId('stylesheet-darkTheme')).toBeNull();
 });
