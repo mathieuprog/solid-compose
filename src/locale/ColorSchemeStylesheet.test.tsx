@@ -28,8 +28,6 @@ test('default to dark', () => {
 
   expect(meta.content).toBe('dark light');
   expect(document.documentElement.style.colorScheme).toBe('dark light');
-  expect(screen.queryByTestId('stylesheet-LIGHT')).toBeNull();
-  expect(screen.queryByTestId('stylesheet-DARK')).toBeInstanceOf(HTMLElement);
 });
 
 test('default to light', () => {
@@ -51,8 +49,6 @@ test('default to light', () => {
 
   expect(meta.content).toBe('only light');
   expect(document.documentElement.style.colorScheme).toBe('only light');
-  expect(screen.queryByTestId('stylesheet-DARK')).toBeNull();
-  expect(screen.queryByTestId('stylesheet-LIGHT')).toBeInstanceOf(HTMLElement);
 });
 
 test('switch color scheme', () => {
@@ -74,8 +70,6 @@ test('switch color scheme', () => {
 
   expect(meta.content).toBe('only light');
   expect(document.documentElement.style.colorScheme).toBe('only light');
-  expect(screen.queryByTestId('stylesheet-DARK')).toBeNull();
-  expect(screen.queryByTestId('stylesheet-LIGHT')).toBeInstanceOf(HTMLElement);
 
   const [locale, { setColorScheme }] = useLocale();
 
@@ -85,6 +79,4 @@ test('switch color scheme', () => {
 
   expect(meta.content).toBe('dark light');
   expect(document.documentElement.style.colorScheme).toBe('dark light');
-  expect(screen.queryByTestId('stylesheet-LIGHT')).toBeNull();
-  expect(screen.queryByTestId('stylesheet-DARK')).toBeInstanceOf(HTMLElement);
 });

@@ -30,7 +30,6 @@ const ThemeStylesheet: VoidComponent = () => {
       <Portal mount={document.head}>
         <link rel="stylesheet" href={themeDetails().path} />
       </Portal>
-      <div data-testid={`stylesheet-${theme()}`} />
     </>
   );
 };

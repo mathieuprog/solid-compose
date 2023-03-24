@@ -39,7 +39,6 @@ const ColorSchemeStylesheet: VoidComponent<Props> = (props) => {
           <link rel="stylesheet" href={props.dark} />
         </Show>
       </Portal>
-      <div data-testid={`stylesheet-${locale.colorScheme}`} />
     </>
   );
 };
