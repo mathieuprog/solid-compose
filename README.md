@@ -305,8 +305,8 @@ In addition to adding the necessary stylesheets, it also includes the `color-sch
 The data attribute enables the selection of CSS selectors based on the color scheme, allowing you to set CSS variables for the current color scheme:
 ```css
 html[data-color-scheme='dark'] {
-  --default-primary-text-color: var(--default-grey-200);
-  --default-secondary-text-color: var(--default-grey-500);
+  --primary-text-color: var(--grey-200);
+  --secondary-text-color: var(--grey-500);
 }
 ```
 
@@ -468,8 +468,8 @@ In addition to adding the necessary stylesheets, it also includes the `color-sch
 The data attributes enables the selection of CSS selectors based on the color scheme, allowing you to set CSS variables for the current theme:
 ```css
 html[data-theme='my-theme'] {
-  --default-primary-text-color: var(--default-grey-200);
-  --default-secondary-text-color: var(--default-grey-500);
+  --primary-text-color: var(--grey-200);
+  --secondary-text-color: var(--grey-500);
 }
 ```
 
