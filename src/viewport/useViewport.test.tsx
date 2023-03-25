@@ -15,7 +15,7 @@ test('missing global state should throw error', () => {
 
 test('set language tag', () => {
   createViewportPrimitive({
-    widthSizeSwitchpoints: {
+    widthSwitchpoints: {
       small: {
         max: 768
       },

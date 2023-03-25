@@ -5,13 +5,13 @@ import { setPrimitive } from './globalPrimitive';
 import type { ViewportPrimitive } from './globalPrimitive';
 
 interface Config {
-  heightSizeSwitchpoints?: {
+  heightSwitchpoints?: {
     [key: string]: {
       min?: number;
       max?: number;
     }
   };
-  widthSizeSwitchpoints?: {
+  widthSwitchpoints?: {
     [key: string]: {
       min?: number;
       max?: number;
@@ -23,7 +23,7 @@ export default function createViewportPrimitive(config: Config) {
   let orientation, height, width;
 
   batch(() => {
-    for (const [sizeName, range] of Object.entries(config.heightSizeSwitchpoints || {})) {
+    for (const [sizeName, range] of Object.entries(config.heightSwitchpoints || {})) {
       const { min, max } = range;
 
       let mediaQuery;
@@ -50,7 +50,7 @@ export default function createViewportPrimitive(config: Config) {
       });
     }
 
-    for (const [sizeName, range] of Object.entries(config.widthSizeSwitchpoints || {})) {
+    for (const [sizeName, range] of Object.entries(config.widthSwitchpoints || {})) {
       const { min, max } = range;
 
       let mediaQuery;

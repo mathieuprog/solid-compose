@@ -491,7 +491,7 @@ First, initialize and configure the viewport primitive:
 import { createViewportPrimitive } from 'solid-compose';
 
 createViewportPrimitive({
-  widthSizeSwitchpoints: {
+  widthSwitchpoints: {
     small: { // width < 768
       max: 768
     },
@@ -506,7 +506,7 @@ createViewportPrimitive({
 });
 ```
 
-`createViewportPrimitive()` allows you to configure two properties: `widthSizeSwitchpoints` and `heightSizeSwitchpoints`. Both of these properties are objects that let you define custom size names and corresponding size ranges for the viewport dimensions.
+`createViewportPrimitive()` allows you to configure two properties: `widthSwitchpoints` and `heightSwitchpoints`. Both of these properties are objects that let you define custom size names and corresponding size ranges for the viewport dimensions.
 
 The keys in each object represent the custom name for the size, while the values are sub-objects containing `min` and/or `max` allowing you to configure the switchpoints for either width or height.
 
@@ -532,7 +532,7 @@ export enum Viewport {
 }
 
 createViewportPrimitive({
-  widthSizeSwitchpoints: {
+  widthSwitchpoints: {
     [Viewport.SmallWidth]: {
       max: 768
     },
