@@ -1,4 +1,4 @@
-export type TranslateFunction = (key: string, params?: Record<string, any>) => string;
+export type TranslateFunction = (key: string, params?: Record<string, any>, languageTag?: string) => string;
 
 let primitive: TranslateFunction;
 

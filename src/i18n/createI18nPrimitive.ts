@@ -60,7 +60,12 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
     return mergeTranslations(locale.languageTag, namespaces);
   };
 
-  return (key, params = {}) => {
+  return (key, params = {}, languageTag) => {
+    let translations_ =
+      (languageTag)
+        ? mergeTranslations(languageTag, namespaces)
+        : translations();
+
     let value: string;
 
     if (keySeparator) {
@@ -68,7 +73,7 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
       const firstKey = splitKey.shift() as string;
 
       const translationsObject: Record<string, any> =
-        (translations()[firstKey] && translations())
+        (translations_[firstKey] && translations_)
           ?? (fallbackTranslations_()[firstKey] && fallbackTranslations_())
           ?? (fallbackTranslations[firstKey] && fallbackTranslations)
           ?? (() => { throw new Error(`translation for "${firstKey}" not found`) })();
@@ -83,7 +88,7 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
       value = o;
     } else {
       value =
-        translations()[key]
+        translations_[key]
         ?? fallbackTranslations_()[key]
         ?? fallbackTranslations[key]
         ?? (() => { throw new Error(`translation for "${key}" not found`) })();
