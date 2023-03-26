@@ -119,7 +119,13 @@ function Hello() {
 }
 ```
 
-### Multilingual support
+To translate in a given language rather than the current locale, you may pass the locale as a third argument:
+
+```typescript
+translate('hello', { user: { name: 'John' }}, 'fr')
+```
+
+### Pluralization support
 
 Languages have different rules for plurals.
 
