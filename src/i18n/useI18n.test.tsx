@@ -51,8 +51,14 @@ test('translate', async () => {
     const translate = useI18n();
     return <>
       <div data-testid="hello">{translate('hello')}</div>
+      <div data-testid="hello-fr">{translate('hello', {}, 'fr')}</div>
+      <div data-testid="hello-en">{translate('hello', {}, 'en')}</div>
       <div data-testid="world">{translate('world')}</div>
+      <div data-testid="world-fr">{translate('world', {}, 'fr')}</div>
+      <div data-testid="world-en">{translate('world', {}, 'en')}</div>
       <div data-testid="foo">{translate('foo')}</div>
+      <div data-testid="foo-fr">{translate('foo', {}, 'fr')}</div>
+      <div data-testid="foo-en">{translate('foo', {}, 'en')}</div>
       <button data-testid="locale" onClick={() => setLanguageTag('fr-BE')}>
         {locale.languageTag}
       </button>
@@ -63,24 +69,33 @@ test('translate', async () => {
     <Hello/>
   );
 
-  const hello = screen.getByTestId('hello');
-  const world = screen.getByTestId('world');
-  const foo = screen.getByTestId('foo');
-  const locale = screen.getByTestId('locale');
+  expect(screen.getByTestId('hello').textContent).toBe('hello!');
+  expect(screen.getByTestId('world').textContent).toBe('world!');
+  expect(screen.getByTestId('foo').textContent).toBe('bar');
+  expect(screen.getByTestId('locale').textContent).toBe('en');
 
-  expect(hello.textContent).toBe('hello!');
-  expect(world.textContent).toBe('world!');
-  expect(foo.textContent).toBe('bar');
-  expect(locale.textContent).toBe('en');
+  expect(screen.getByTestId('hello-fr').textContent).toBe('bonjour !');
+  expect(screen.getByTestId('hello-en').textContent).toBe('hello!');
+  expect(screen.getByTestId('world-fr').textContent).toBe('monde !');
+  expect(screen.getByTestId('world-en').textContent).toBe('world!');
+  expect(screen.getByTestId('foo-fr').textContent).toBe('bar');
+  expect(screen.getByTestId('foo-en').textContent).toBe('bar');
 
-  fireEvent.click(locale);
+  fireEvent.click(screen.getByTestId('locale'));
   // the event loop takes one Promise to resolve to be finished
   await Promise.resolve();
 
-  expect(locale.textContent).toBe('fr-BE');
-  expect(hello.textContent).toBe('bonjour !');
-  expect(world.textContent).toBe('monde !!');
-  expect(foo.textContent).toBe('bar');
+  expect(screen.getByTestId('locale').textContent).toBe('fr-BE');
+  expect(screen.getByTestId('hello').textContent).toBe('bonjour !');
+  expect(screen.getByTestId('world').textContent).toBe('monde !!');
+  expect(screen.getByTestId('foo').textContent).toBe('bar');
+
+  expect(screen.getByTestId('hello-fr').textContent).toBe('bonjour !');
+  expect(screen.getByTestId('hello-en').textContent).toBe('hello!');
+  expect(screen.getByTestId('world-fr').textContent).toBe('monde !');
+  expect(screen.getByTestId('world-en').textContent).toBe('world!');
+  expect(screen.getByTestId('foo-fr').textContent).toBe('bar');
+  expect(screen.getByTestId('foo-en').textContent).toBe('bar');
 });
 
 test('fallback locale not supported should throw an error', () => {
@@ -123,12 +138,14 @@ test('translate with parameter', () => {
   const translate = useI18n();
 
   expect(translate('hello', { name: 'John' })).toBe('hello John');
+  expect(translate('hello', { name: 'John' }, 'fr')).toBe('bonjour John');
   expect(() => translate('welcome', { age: 25 })).toThrow(/name/);
   expect(() => translate('welcome', { name: 'John', age: 25 })).toThrow(/too many parameters/);
 
   setLanguageTag('fr');
 
   expect(translate('hello', { name: 'John' })).toBe('bonjour John');
+  expect(translate('hello', { name: 'John' }, 'en')).toBe('hello John');
 });
 
 test('translate with parameter being object', () => {
