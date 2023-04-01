@@ -19,7 +19,7 @@ interface Config {
 }
 
 export function addLocaleHotkeyListener(config: Config) {
-  document.addEventListener('keyup', function(event) {
+  document.addEventListener('keydown', function(event) {
     const [locale, {
       setColorScheme,
       setLanguageTag,
