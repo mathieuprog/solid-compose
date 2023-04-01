@@ -579,14 +579,14 @@ import { addLocaleHotkeyListener } from 'solid-compose';
 
 addLocaleHotkeyListener({
   hotkeys: {
-    colorScheme: (e) => e.shiftKey && e.key === 'q',
-    theme: (e) => e.shiftKey && e.key === 'w',
-    languageTag: (e) => e.shiftKey && e.key === 'a',
-    textDirection: (e) => e.shiftKey && e.key === 's',
-    timeZone: (e) => e.shiftKey && e.key === 'z',
-    dateFormat: (e) => e.shiftKey && e.key === 'x',
-    timeFormat: (e) => e.shiftKey && e.key === 'c',
-    firstDayOfWeek: (e) => e.shiftKey && e.key === 'v',
+    colorScheme: (e) => e.shiftKey && e.code === 'KeyQ',
+    theme: (e) => e.shiftKey && e.code === 'KeyW',
+    languageTag: (e) => e.shiftKey && e.code === 'KeyA',
+    textDirection: (e) => e.shiftKey && e.code === 'KeyS',
+    timeZone: (e) => e.shiftKey && e.code === 'KeyZ',
+    dateFormat: (e) => e.shiftKey && e.code === 'KeyX',
+    timeFormat: (e) => e.shiftKey && e.code === 'KeyC',
+    firstDayOfWeek: (e) => e.shiftKey && e.code === 'KeyV',
   },
   timeZones: ['Asia/Bangkok', 'Europe/London']
 });
