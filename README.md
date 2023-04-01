@@ -561,22 +561,35 @@ if (viewport.width === Viewport.SmallWidth) {
 
 ## Developer utilities
 
-`addLocaleHotkeyListener()` simplifies testing of web interfaces with multiple locale settings by enabling developers to quickly switch between different locales using hotkeys.
+`addLocaleHotkeyListener()` simplifies the testing of web interfaces that support multiple locale settings by allowing developers to quickly switch between different locales using customizable hotkeys. This enables you to switch between the following settings with ease:
 
-Current available hotkeys:
-* `Ctrl-q` switches the color schemes
-* `Ctrl-w` switches the theme
-* `Ctrl-a` switches the language
-* `Ctrl-s` switches the text direction
-* `Ctrl-z` switches the time zone
-* `Ctrl-x` switches the date format
-* `Ctrl-c` switches the time hour format
-* `Ctrl-v` switches the first day of week
+* Color schemes
+* Themes
+* Languages
+* Text directions
+* Time zones
+* Date formats
+* Time formats
+* First day of the week
+
+To use addLocaleHotkeyListener(), simply pass in the hotkeys as optional functions, as shown in the code snippet below. Each hotkey is optional, so if you don't need to test a particular locale setting, simply omit it.
 
 ```typescript
 import { addLocaleHotkeyListener } from 'solid-compose';
 
-addLocaleHotkeyListener();
+addLocaleHotkeyListener({
+  hotkeys: {
+    colorScheme: (e) => e.shiftKey && e.key === 'q',
+    theme: (e) => e.shiftKey && e.key === 'w',
+    languageTag: (e) => e.shiftKey && e.key === 'a',
+    textDirection: (e) => e.shiftKey && e.key === 's',
+    timeZone: (e) => e.shiftKey && e.key === 'z',
+    dateFormat: (e) => e.shiftKey && e.key === 'x',
+    timeFormat: (e) => e.shiftKey && e.key === 'c',
+    firstDayOfWeek: (e) => e.shiftKey && e.key === 'v',
+  },
+  timeZones: ['Asia/Bangkok', 'Europe/London']
+});
 ```
 
 ## Install

@@ -5,10 +5,20 @@ import { getThemes } from './theme/themes';
 import useTheme from './theme/useTheme';
 
 interface Config {
+  hotkeys: {
+    colorScheme?: (e: KeyboardEvent) => boolean;
+    theme?: (e: KeyboardEvent) => boolean;
+    languageTag?: (e: KeyboardEvent) => boolean;
+    textDirection?: (e: KeyboardEvent) => boolean;
+    timeZone?: (e: KeyboardEvent) => boolean;
+    dateFormat?: (e: KeyboardEvent) => boolean;
+    timeFormat?: (e: KeyboardEvent) => boolean;
+    firstDayOfWeek?: (e: KeyboardEvent) => boolean;
+  }
   timeZones?: string[];
 }
 
-export function addLocaleHotkeyListener(config: Config = {}) {
+export function addLocaleHotkeyListener(config: Config) {
   document.addEventListener('keyup', function(event) {
     const [locale, {
       setColorScheme,
@@ -22,44 +32,44 @@ export function addLocaleHotkeyListener(config: Config = {}) {
 
     const [_theme, setTheme] = useTheme();
 
-    if ((event.metaKey || event.ctrlKey) && event.key === 'q') {
+    if (config.hotkeys.colorScheme?.(event)) {
       setColorScheme((prev) => {
         return prev === ColorScheme.Dark ? ColorScheme.Light : ColorScheme.Dark;
       });
       return;
     }
 
-    if ((event.metaKey || event.ctrlKey) && event.key === 'w') {
+    if (config.hotkeys.theme?.(event)) {
       setTheme((prev) => {
         return getNextValueInArray(getThemes().map((theme) => theme.name), prev);
       });
       return;
     }
 
-    if ((event.metaKey || event.ctrlKey) && event.key === 'a') {
+    if (config.hotkeys.languageTag?.(event)) {
       setLanguageTag((prev) => {
         return getNextValueInArray(locale.supportedLanguageTags, prev);
       });
       return;
     }
 
-    if ((event.metaKey || event.ctrlKey) && event.key === 's') {
+    if (config.hotkeys.textDirection?.(event)) {
       __setTextDirection((prev) => {
         return prev === TextDirection.LeftToRight ? TextDirection.RightToLeft : TextDirection.LeftToRight;
       });
       return;
     }
 
-    if ((event.metaKey || event.ctrlKey) && event.key === 'z') {
+    if (config.hotkeys.timeZone?.(event)) {
       setTimeZone((prev) => {
         return (config.timeZones !== undefined)
           ? getNextValueInArray(config.timeZones, prev)
-          : prev; 
+          : prev;
       });
       return;
     }
 
-    if ((event.metaKey || event.ctrlKey) && event.key === 'x') {
+    if (config.hotkeys.dateFormat?.(event)) {
       setDateFormat((prev) => {
         switch (prev.endianness) {
           case DateEndianness.LittleEndian:
@@ -75,16 +85,16 @@ export function addLocaleHotkeyListener(config: Config = {}) {
       return;
     }
 
-    if ((event.metaKey || event.ctrlKey) && event.key === 'c') {
+    if (config.hotkeys.timeFormat?.(event)) {
       setTimeFormat((prev) => {
         return prev.is24HourClock
-          ? { is24HourClock: false, separator: prev.separator } 
+          ? { is24HourClock: false, separator: prev.separator }
           : { is24HourClock: true, separator: prev.separator };
       });
       return;
     }
 
-    if ((event.metaKey || event.ctrlKey) && event.key === 'v') {
+    if (config.hotkeys.firstDayOfWeek?.(event)) {
       setFirstDayOfWeek((prev) => {
         const firstDaysOfWeek = [
           FirstDayOfWeek.Friday,
