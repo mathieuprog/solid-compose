@@ -28,11 +28,9 @@ const ThemeStylesheet: VoidComponent = () => {
   });
 
   return (
-    <>
-      <Portal mount={document.head}>
-        <link rel="stylesheet" href={themeDetails().path} />
-      </Portal>
-    </>
+    <Portal mount={document.head}>
+      <link rel="stylesheet" href={themeDetails().path} />
+    </Portal>
   );
 };
 

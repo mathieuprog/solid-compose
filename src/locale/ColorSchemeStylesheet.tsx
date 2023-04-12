@@ -31,16 +31,14 @@ const ColorSchemeStylesheet: VoidComponent<Props> = (props) => {
   });
 
   return (
-    <>
-      <Portal mount={document.head}>
-        <Show
-          when={locale.colorScheme === ColorScheme.Dark}
-          fallback={<link rel="stylesheet" href={props.light} />}
-        >
-          <link rel="stylesheet" href={props.dark} />
-        </Show>
-      </Portal>
-    </>
+    <Portal mount={document.head}>
+      <Show
+        when={locale.colorScheme === ColorScheme.Dark}
+        fallback={<link rel="stylesheet" href={props.light} />}
+      >
+        <link rel="stylesheet" href={props.dark} />
+      </Show>
+    </Portal>
   );
 };
 
