@@ -1,6 +1,12 @@
 import { afterEach, expect, test } from 'vitest';
 import { cleanup } from 'solid-testing-library';
-import { ColorScheme, createLocalePrimitive, createThemePrimitive, useLocale, useTheme } from '..';
+import {
+  ColorScheme,
+  createLocalePrimitive,
+  createThemePrimitive,
+  useLocale,
+  useTheme
+} from '..';
 
 afterEach(cleanup);
 
@@ -11,6 +17,8 @@ test('missing global state should throw error', () => {
 });
 
 test('initial theme', () => {
+  createLocalePrimitive({ supportedLanguageTags: ['en'] });
+
   createThemePrimitive({
     themes: [
       {
@@ -29,16 +37,24 @@ test('initial theme', () => {
         colorScheme: ColorScheme.Dark
       }
     ],
-    initialTheme: 'fooTheme'
+    initialTheme: 'darkTheme'
   });
 
   const [theme, setTheme] = useTheme();
+  const [locale] = useLocale();
+
+  expect(theme()).toBe('darkTheme');
+  expect(locale.colorScheme).toBe(ColorScheme.Dark);
+
+  setTheme('fooTheme');
 
   expect(theme()).toBe('fooTheme');
+  expect(locale.colorScheme).toBe(ColorScheme.Light);
 
   setTheme('lightTheme');
 
   expect(theme()).toBe('lightTheme');
+  expect(locale.colorScheme).toBe(ColorScheme.Light);
 });
 
 test('default theme', () => {

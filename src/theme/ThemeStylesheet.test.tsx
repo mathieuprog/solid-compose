@@ -5,6 +5,7 @@ import {
   createLocalePrimitive,
   createThemePrimitive,
   ThemeStylesheet,
+  useLocale,
   useTheme
 } from '..';
 
@@ -45,8 +46,10 @@ test('pick the right theme', () => {
   );
 
   const [theme, setTheme] = useTheme();
+  const [locale] = useLocale();
 
   expect(theme()).toBe('darkTheme');
+  expect(locale.colorScheme).toBe(ColorScheme.Dark);
 
   let meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
 
@@ -56,6 +59,9 @@ test('pick the right theme', () => {
   expect(document.documentElement.getAttribute('data-theme')).toBe('darkTheme');
 
   setTheme('fooTheme');
+
+  expect(theme()).toBe('fooTheme');
+  expect(locale.colorScheme).toBe(ColorScheme.Light);
 
   meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
 

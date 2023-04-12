@@ -1,9 +1,9 @@
-import { createSignal } from 'solid-js';
+import { batch, createSignal } from 'solid-js';
 import { ColorScheme } from 'user-locale';
 import { isEmptyArray } from 'object-array-utils';
+import useLocale from '../locale/useLocale';
 import { setPrimitive } from './globalPrimitive';
 import type { Setter } from './globalPrimitive';
-import useLocale from '../locale/useLocale';
 import { setThemes } from './themes';
 
 export interface Theme {
@@ -23,16 +23,27 @@ export default function createThemePrimitive(config: Config) {
     throw new Error(`no stylesheets provided`);
   }
 
-  const [theme, setTheme] = createSignal(getDefaultTheme(config));
+  const defaultThemeInfo = getDefaultTheme(config);
+
+  const [theme, setTheme] = createSignal(defaultThemeInfo.name);
+
+  const [_locale, { setColorScheme }] = useLocale();
+
+  setColorScheme(defaultThemeInfo.colorScheme);
 
   const setTheme_: Setter<string> = (arg) => {
     const newTheme = (typeof arg === 'function') ? arg(theme()) : arg;
 
-    if (!config.themes.find((theme) => theme.name === newTheme)) {
+    const newThemeInfo = config.themes.find((theme) => theme.name === newTheme);
+
+    if (!newThemeInfo) {
       throw new Error(`stylesheet for theme ${newTheme} not provided`);
     }
 
-    setTheme(newTheme);
+    batch(() => {
+      setColorScheme(newThemeInfo.colorScheme);
+      setTheme(newTheme);
+    });
   }
 
   setThemes(config.themes);
@@ -40,13 +51,15 @@ export default function createThemePrimitive(config: Config) {
   setPrimitive([theme, setTheme_]);
 }
 
-function getDefaultTheme(config: Config) {
+function getDefaultTheme(config: Config): Theme {
   if (config.initialTheme) {
-    if (!config.themes.some((theme) => theme.name === config.initialTheme)) {
+    const themeInfo = config.themes.find((theme) => theme.name === config.initialTheme);
+
+    if (!themeInfo) {
       throw new Error(`stylesheet for theme ${config.initialTheme} not provided`);
     }
 
-    return config.initialTheme;
+    return themeInfo;
   }
 
   const defaultDarkThemes = config.themes.filter((theme) => theme.default && theme.colorScheme === ColorScheme.Dark);
@@ -68,8 +81,8 @@ function getDefaultTheme(config: Config) {
   const [locale] = useLocale();
 
   if (locale.colorScheme === ColorScheme.Dark) {
-    return defaultDarkThemes[0].name;
+    return defaultDarkThemes[0];
   }
 
-  return defaultLightThemes[0].name;
+  return defaultLightThemes[0];
 }
