@@ -3,8 +3,10 @@ import { cleanup } from 'solid-testing-library';
 import {
   ColorScheme,
   createLocalePrimitive,
+  formatNumber,
   useLocale
 } from '..';
+import { NumberFormat } from 'user-locale';
 
 afterEach(cleanup);
 
@@ -134,3 +136,26 @@ test('set color scheme', () => {
   expect(locale.colorScheme).toBe(ColorScheme.Light);
 });
 
+test('format number', () => {
+  createLocalePrimitive({
+    initialValues: {
+      numberFormat: NumberFormat.CommaPeriod
+    },
+    supportedLanguageTags: ['en']
+  });
+
+  const [locale, { setNumberFormat }] = useLocale();
+  expect(locale.numberFormat).toBe(NumberFormat.CommaPeriod);
+
+  expect(formatNumber(1000.01)).toBe('1,000.01');
+
+  setNumberFormat(NumberFormat.SpaceComma);
+  expect(locale.numberFormat).toBe(NumberFormat.SpaceComma);
+
+  expect(formatNumber(1000.01)).toBe('1\u202F000,01');
+
+  setNumberFormat(NumberFormat.PeriodComma);
+  expect(locale.numberFormat).toBe(NumberFormat.PeriodComma);
+
+  expect(formatNumber(1000.01)).toBe('1.000,01');
+});
