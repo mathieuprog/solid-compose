@@ -347,7 +347,7 @@ const [locale, { setLanguageTag }] = useLocale();
 
 ### Number format
 
-`setNumberFormat` allow to change the number format:
+`setNumberFormat` allows to change the number format:
 
 ```typescript
 import { useLocale } from 'solid-compose';
@@ -357,7 +357,7 @@ const [locale, { setNumberFormat }] = useLocale();
 
 ### Date format
 
-`setDateFormat` allow to change the date format:
+`setDateFormat` allows to change the date format:
 
 ```typescript
 import { useLocale } from 'solid-compose';
@@ -367,7 +367,7 @@ const [locale, { setDateFormat }] = useLocale();
 
 ### Time format
 
-`setTimeFormat` allow to change the time format:
+`setTimeFormat` allows to change the time format:
 
 ```typescript
 import { useLocale } from 'solid-compose';
