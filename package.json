@@ -33,7 +33,7 @@
     "esbuild": "0.17.16",
     "object-array-utils": "^3.0.0",
     "solid-js": "^1.7.3",
-    "user-locale": "^0.7.0"
+    "user-locale": "^0.8.0"
   },
   "bugs": {
     "url": "https://github.com/mathieuprog/solid-compose/issues"
