@@ -355,6 +355,18 @@ import { useLocale } from 'solid-compose';
 const [locale, { setNumberFormat }] = useLocale();
 ```
 
+`formatNumber` allows to format a number according to the current locale's number formatting setting.
+
+```typescript
+import { formatNumber, useLocale } from 'solid-compose';
+
+const [locale, { setNumberFormat }] = useLocale();
+
+setNumberFormat(NumberFormat.SpaceComma);
+
+formatNumber(1000.01) // 1 000,01
+```
+
 ### Date format
 
 `setDateFormat` allows to change the date format:
