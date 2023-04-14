@@ -8,6 +8,7 @@ Currently, it includes
 * [localization (l10n)](#localization-l10n)
   * [color scheme (dark, light mode)](#color-scheme-dark-light-mode)
   * [language tag](#language-tag)
+  * [number format](#number-format)
   * [date format](#date-format)
   * [time format](#time-format)
   * [time zone](#time-zone)
@@ -238,32 +239,7 @@ createLocalePrimitive({
 });
 ```
 
-When you have information about the user's preferences, you can use it to initialize the locale data:
-
-```typescript
-import { createLocalePrimitive } from 'solid-compose';
-
-createLocalePrimitive({
-  supportedLanguageTags: ['en', 'de', 'fr'],
-  defaultLanguageTag: 'de',
-  initialValues: {
-    languageTag: user.languageTag,
-    timeZone: user.timeZone,
-    dateFormat: user.dateFormat,
-    timeFormat: user.timeFormat,
-    firstDayOfWeek: user.firstDayOfWeek,
-    colorScheme: user.colorScheme
-  }
-});
-```
-
-Every field in `initialValues` is optional and if not provided, the value is inferred from the user's browser and system parameters.
-
-The `supportedLanguageTags` configuration field is mandatory and specifies which language tags are supported by your application.
-
-When first initializing the locale primitive, the library looks for a language tag that is both supported by your application and listed in the user's browser as one of their preferred language tags.
-
-If a matching preferred language tag cannot be found, the optional `defaultLanguageTag` configuration is utilized. If not provided, either an English language tag is used or the first language tag in the list of supported language tags.
+The `supportedLanguageTags` configuration field is mandatory and specifies which language tags are supported by your application. The `defaultLanguageTag` field is optional and utilized if the user's preferred language tag is not included in `supportedLanguageTags` field.
 
 You may then access the locale parameters:
 
@@ -274,6 +250,7 @@ const [locale] = useLocale();
 
 console.log(locale.languageTag);
 console.log(locale.textDirection);
+console.log(locale.numberFormat);
 console.log(locale.timeZone);
 console.log(locale.dateFormat);
 console.log(locale.timeFormat);
@@ -281,7 +258,37 @@ console.log(locale.firstDayOfWeek);
 console.log(locale.colorScheme);
 ```
 
-All those parameters are reactive.
+All of those parameters are reactive.
+
+<details>
+  <summary>How is the initial language tag determined ?</summary>
+
+  The library looks for a language tag that is both supported by your application (in `supportedLanguageTags` configuration) and listed in the user's browser as one of their preferred language tags (in `navigator.languages`).
+
+  If a matching language tag cannot be found, the optional `defaultLanguageTag` configuration is utilized. If not provided, either an English language tag is used or the first language tag in the list of supported language tags.
+</details>
+
+When you have information about the user's preferences, you can use it to initialize the locale data:
+
+```typescript
+import { createLocalePrimitive } from 'solid-compose';
+
+createLocalePrimitive({
+  supportedLanguageTags: ['en', 'de', 'fr'],
+  defaultLanguageTag: 'de',
+  initialValues: {
+    languageTag: user.languageTag,
+    numberFormat: user.numberFormat,
+    timeZone: user.timeZone,
+    dateFormat: user.dateFormat,
+    timeFormat: user.timeFormat,
+    firstDayOfWeek: user.firstDayOfWeek,
+    colorScheme: user.colorScheme
+  }
+});
+```
+
+Every field in `initialValues` is optional and if not provided, the value is inferred from the user's browser and system parameters.
 
 ### Color scheme (dark, light mode)
 
@@ -336,6 +343,16 @@ If you intend to incorporate additional themes beyond just the dark and light mo
 import { useLocale } from 'solid-compose';
 
 const [locale, { setLanguageTag }] = useLocale();
+```
+
+### Number format
+
+`setNumberFormat` allow to change the number format:
+
+```typescript
+import { useLocale } from 'solid-compose';
+
+const [locale, { setNumberFormat }] = useLocale();
 ```
 
 ### Date format
@@ -567,6 +584,7 @@ if (viewport.width === Viewport.SmallWidth) {
 * Themes
 * Languages
 * Text directions
+* Number formats
 * Time zones
 * Date formats
 * Time formats
@@ -583,6 +601,7 @@ addLocaleHotkeyListener({
     theme: (e) => e.shiftKey && e.code === 'KeyW',
     languageTag: (e) => e.shiftKey && e.code === 'KeyA',
     textDirection: (e) => e.shiftKey && e.code === 'KeyS',
+    numberFormat: (e) => e.shiftKey && e.code === 'KeyD',
     timeZone: (e) => e.shiftKey && e.code === 'KeyZ',
     dateFormat: (e) => e.shiftKey && e.code === 'KeyX',
     timeFormat: (e) => e.shiftKey && e.code === 'KeyC',
