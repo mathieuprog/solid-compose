@@ -1,4 +1,4 @@
-import { ColorScheme, DateFormat, FirstDayOfWeek, TimeFormat } from 'user-locale';
+import { ColorScheme, DateFormat, FirstDayOfWeek, NumberFormat, TimeFormat } from 'user-locale';
 import { SettableLocaleProps } from './createLocalePrimitive';
 import TextDirection from './TextDirection';
 
@@ -9,6 +9,7 @@ type Getters = {
   languageTag: string;
   textDirection: TextDirection;
   timeZone: string;
+  numberFormat: NumberFormat;
   dateFormat: DateFormat;
   timeFormat: TimeFormat;
   firstDayOfWeek: FirstDayOfWeek;
@@ -18,6 +19,7 @@ type Getters = {
 type Setters = {
   setLanguageTag: Setter<string>;
   setTimeZone: Setter<string>;
+  setNumberFormat: Setter<NumberFormat>;
   setDateFormat: Setter<DateFormat>;
   setTimeFormat: Setter<TimeFormat>;
   setFirstDayOfWeek: Setter<FirstDayOfWeek>;

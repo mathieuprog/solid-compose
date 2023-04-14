@@ -7,9 +7,11 @@ import {
   getColorScheme,
   getDateFormat,
   getFirstDayOfWeek,
+  getNumberFormat,
   getPreferredLanguageTags,
   getTimeFormat,
   getTimeZone,
+  NumberFormat,
   TimeFormat
 } from 'user-locale';
 import findValue from '@mathieuprog/find-value';
@@ -24,6 +26,7 @@ interface Config {
   initialValues?: {
     languageTag?: string,
     timeZone?: string,
+    numberFormat?: NumberFormat,
     dateFormat?: DateFormat,
     timeFormat?: TimeFormat,
     firstDayOfWeek?: FirstDayOfWeek,
@@ -71,6 +74,7 @@ export default function createLocalePrimitive(config: Config) {
       languageTag,
       textDirection: getTextDirection(languageTag),
       timeZone: config?.initialValues?.timeZone ?? getTimeZone(),
+      numberFormat: config?.initialValues?.numberFormat ?? getNumberFormat(),
       dateFormat: config?.initialValues?.dateFormat ?? getDateFormat(),
       timeFormat: config?.initialValues?.timeFormat ?? getTimeFormat(),
       firstDayOfWeek: config?.initialValues?.firstDayOfWeek ?? getFirstDayOfWeek(),
@@ -84,6 +88,7 @@ export default function createLocalePrimitive(config: Config) {
     setLocale({ languageTag, textDirection: getTextDirection(languageTag) });
   };
   const setTimeZone_ = (timeZone: string) => setLocale({ timeZone });
+  const setNumberFormat_ = (numberFormat: NumberFormat) => setLocale({ numberFormat });
   const setDateFormat_ = (dateFormat: DateFormat) => setLocale({ dateFormat });
   const setTimeFormat_ = (timeFormat: TimeFormat) => setLocale({ timeFormat });
   const setFirstDayOfWeek_ = (firstDayOfWeek: FirstDayOfWeek) => setLocale({ firstDayOfWeek });
@@ -92,6 +97,7 @@ export default function createLocalePrimitive(config: Config) {
 
   const setLanguageTag: Setter<string> = (arg) => (typeof arg === 'function') ? setLanguageTag_(arg(locale.languageTag)) : setLanguageTag_(arg);
   const setTimeZone: Setter<string> = (arg) => (typeof arg === 'function') ? setTimeZone_(arg(locale.timeZone)) : setTimeZone_(arg);
+  const setNumberFormat: Setter<NumberFormat> = (arg) => (typeof arg === 'function') ? setNumberFormat_(arg(locale.numberFormat)) : setNumberFormat_(arg);
   const setDateFormat: Setter<DateFormat> = (arg) => (typeof arg === 'function') ? setDateFormat_(arg(locale.dateFormat)) : setDateFormat_(arg);
   const setTimeFormat: Setter<TimeFormat> = (arg) => (typeof arg === 'function') ? setTimeFormat_(arg(locale.timeFormat)) : setTimeFormat_(arg);
   const setFirstDayOfWeek: Setter<FirstDayOfWeek> = (arg) => (typeof arg === 'function') ? setFirstDayOfWeek_(arg(locale.firstDayOfWeek)) : setFirstDayOfWeek_(arg);
@@ -106,6 +112,10 @@ export default function createLocalePrimitive(config: Config) {
 
       if (props.timeZone !== undefined) {
         setTimeZone_(props.timeZone);
+      }
+
+      if (props.numberFormat !== undefined) {
+        setNumberFormat_(props.numberFormat);
       }
 
       if (props.dateFormat !== undefined) {
@@ -129,6 +139,7 @@ export default function createLocalePrimitive(config: Config) {
   setPrimitive([locale, {
     setLanguageTag,
     setTimeZone,
+    setNumberFormat,
     setDateFormat,
     setTimeFormat,
     setFirstDayOfWeek,
@@ -142,6 +153,7 @@ export default function createLocalePrimitive(config: Config) {
 export interface SettableLocaleProps {
   languageTag?: string;
   timeZone?: string;
+  numberFormat?: NumberFormat;
   dateFormat?: DateFormat;
   timeFormat?: TimeFormat;
   firstDayOfWeek?: FirstDayOfWeek;
