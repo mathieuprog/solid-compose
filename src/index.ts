@@ -17,6 +17,7 @@ import useLocale from './locale/useLocale';
 import ColorSchemeStylesheet from './locale/ColorSchemeStylesheet';
 import TextDirection from './locale/TextDirection';
 import createTextDirectionEffect from './locale/createTextDirectionEffect';
+import formatNumber from './locale/formatNumber';
 
 import createViewportPrimitive from './viewport/createViewportPrimitive';
 import useViewport from './viewport/useViewport';
@@ -45,6 +46,7 @@ export {
   createTextDirectionEffect,
   DateEndianness,
   FirstDayOfWeek,
+  formatNumber,
   TextDirection,
   useLocale,
 
