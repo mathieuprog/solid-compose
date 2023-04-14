@@ -1,5 +1,5 @@
 import { createEffect, createRoot } from 'solid-js';
-import { useLocale } from '..';
+import useLocale from './useLocale';
 import TextDirection from './TextDirection';
 
 export default function createTextDirectionEffect() {
