@@ -1,4 +1,4 @@
-import { ColorScheme, DateEndianness, FirstDayOfWeek } from 'user-locale';
+import { ColorScheme, DateEndianness, FirstDayOfWeek, NumberFormat } from 'user-locale';
 import TextDirection from './locale/TextDirection';
 import useLocale from './locale/useLocale';
 import { getThemes } from './theme/themes';
@@ -10,6 +10,7 @@ interface Config {
     theme?: (e: KeyboardEvent) => boolean;
     languageTag?: (e: KeyboardEvent) => boolean;
     textDirection?: (e: KeyboardEvent) => boolean;
+    numberFormat?: (e: KeyboardEvent) => boolean;
     timeZone?: (e: KeyboardEvent) => boolean;
     dateFormat?: (e: KeyboardEvent) => boolean;
     timeFormat?: (e: KeyboardEvent) => boolean;
@@ -23,6 +24,7 @@ export function addLocaleHotkeyListener(config: Config) {
     const [locale, {
       setColorScheme,
       setLanguageTag,
+      setNumberFormat,
       setTimeZone,
       setTimeFormat,
       setDateFormat,
@@ -56,6 +58,17 @@ export function addLocaleHotkeyListener(config: Config) {
     if (config.hotkeys.textDirection?.(event)) {
       __setTextDirection((prev) => {
         return prev === TextDirection.LeftToRight ? TextDirection.RightToLeft : TextDirection.LeftToRight;
+      });
+      return;
+    }
+
+    if (config.hotkeys.numberFormat?.(event)) {
+      setNumberFormat((prev) => {
+        return getNextValueInArray([
+          NumberFormat.CommaPeriod,
+          NumberFormat.PeriodComma,
+          NumberFormat.SpaceComma
+        ], prev);
       });
       return;
     }
