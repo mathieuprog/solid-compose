@@ -349,6 +349,15 @@ test('namespaced translations', async () => {
     </>;
   }
 
+  function Namespaced3() {
+    const translate = useI18n();
+    return <>
+      <div data-testid="global3">{translate('global')}</div>
+      <div data-testid="hello3">{translate('hello')}</div>
+      <div data-testid="world3">{translate('world')}</div>
+    </>;
+  }
+
   function Global() {
     const translate = useI18n();
     return <>
@@ -369,6 +378,12 @@ test('namespaced translations', async () => {
       <I18nProvider namespaces={['baz']}>
         <Namespaced2/>
       </I18nProvider>
+
+      <I18nProvider namespaces={['foo']}>
+        <I18nProvider namespaces={['bar']}>
+          <Namespaced3/>
+        </I18nProvider>
+      </I18nProvider>
     </>
   );
 
@@ -378,6 +393,9 @@ test('namespaced translations', async () => {
   const globalNs2 = screen.getByTestId('global2');
   const helloNs2 = screen.getByTestId('hello2');
   const worldNs2 = screen.getByTestId('world2');
+  const globalNs3 = screen.getByTestId('global3');
+  const helloNs3 = screen.getByTestId('hello3');
+  const worldNs3 = screen.getByTestId('world3');
   const global = screen.getByTestId('global');
   const hello = screen.getByTestId('hello');
   const world = screen.getByTestId('world');
@@ -389,6 +407,9 @@ test('namespaced translations', async () => {
   expect(globalNs2.textContent).toBe('something');
   expect(helloNs2.textContent).toBe('hello.');
   expect(worldNs2.textContent).toBe('world.');
+  expect(globalNs3.textContent).toBe('something');
+  expect(helloNs3.textContent).toBe('hello!');
+  expect(worldNs3.textContent).toBe('world!');
   expect(global.textContent).toBe('something');
   expect(hello.textContent).toBe('hello...');
   expect(world.textContent).toBe('world...');
@@ -404,6 +425,9 @@ test('namespaced translations', async () => {
   expect(globalNs2.textContent).toBe('quelque chose');
   expect(helloNs2.textContent).toBe('bonjour.');
   expect(worldNs2.textContent).toBe('monde.');
+  expect(globalNs3.textContent).toBe('quelque chose');
+  expect(helloNs3.textContent).toBe('bonjour !');
+  expect(worldNs3.textContent).toBe('monde !');
   expect(global.textContent).toBe('quelque chose');
   expect(hello.textContent).toBe('bonjour...');
   expect(world.textContent).toBe('monde...');
