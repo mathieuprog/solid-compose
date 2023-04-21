@@ -22,8 +22,10 @@ export const I18nProvider: ParentComponent<Props> = (props) => {
   const parentContextValue = useContext(I18nContext);
 
   if (parentContextValue) {
-    namespaces = unique([...namespaces, ...parentContextValue.namespaces]);
+    namespaces = [...namespaces, ...parentContextValue.namespaces];
   }
+
+  namespaces = unique(namespaces);
 
   const translate = createTranslateFunction(namespaces);
 
