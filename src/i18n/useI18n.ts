@@ -3,13 +3,13 @@ import type { TranslateFunction } from './globalPrimitive';
 import { useNamespacedI18n } from './context';
 
 export default function useI18n(): TranslateFunction {
-  let primitive = useNamespacedI18n();
+  let contextValue = useNamespacedI18n();
 
-  if (primitive) {
-    return primitive;
+  if (contextValue) {
+    return contextValue.translate;
   }
 
-  primitive = getPrimitive();
+  const primitive = getPrimitive();
 
   if (!primitive) {
     throw new Error('call createI18nPrimitive(config) to create the global state');
