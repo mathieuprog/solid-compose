@@ -1,8 +1,9 @@
 import { afterEach, expect, test } from 'vitest';
-import { cleanup, render, screen } from 'solid-testing-library';
+import { cleanup, render } from 'solid-testing-library';
 import {
   ColorScheme,
   createLocalePrimitive,
+  createThemeEffect,
   createThemePrimitive,
   ThemeStylesheet,
   useLocale,
@@ -23,23 +24,22 @@ test('pick the right theme', () => {
     themes: [
       {
         name: 'fooTheme',
-        path: 'https://example.com',
         colorScheme: ColorScheme.Light
       },
       {
         name: 'lightTheme',
-        path: 'https://example.com',
         colorScheme: ColorScheme.Light,
         default: true
       },
       {
         name: 'darkTheme',
-        path: 'https://example.com',
         colorScheme: ColorScheme.Dark,
         default: true
       }
     ]
   });
+
+  createThemeEffect();
 
   render(() =>
     <ThemeStylesheet />
