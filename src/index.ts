@@ -12,6 +12,7 @@ import useI18n from './i18n/useI18n';
 import { addTranslations, getSupportedLanguageTags } from './i18n/registry';
 import { I18nProvider, useNamespacedI18n } from './i18n/context';
 
+import createColorSchemeEffect from './locale/createColorSchemeEffect';
 import createLocalePrimitive from './locale/createLocalePrimitive';
 import useLocale from './locale/useLocale';
 import ColorSchemeStylesheet from './locale/ColorSchemeStylesheet';
@@ -23,6 +24,7 @@ import createViewportPrimitive from './viewport/createViewportPrimitive';
 import useViewport from './viewport/useViewport';
 import ViewportOrientation from './viewport/Orientation';
 
+import createThemeEffect from './theme/createThemeEffect';
 import createThemePrimitive from './theme/createThemePrimitive';
 import useTheme from './theme/useTheme';
 import ThemeStylesheet from './theme/ThemeStylesheet';
@@ -42,6 +44,7 @@ export {
 
   ColorScheme,
   ColorSchemeStylesheet,
+  createColorSchemeEffect,
   createLocalePrimitive,
   createTextDirectionEffect,
   DateEndianness,
@@ -54,6 +57,7 @@ export {
   ViewportOrientation,
   useViewport,
 
+  createThemeEffect,
   createThemePrimitive,
   ThemeStylesheet,
   useTheme,
