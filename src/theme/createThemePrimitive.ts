@@ -8,7 +8,7 @@ import { setThemes } from './themes';
 
 export interface Theme {
   name: string;
-  path: string;
+  path?: string;
   colorScheme: ColorScheme;
   default?: boolean;
 }
