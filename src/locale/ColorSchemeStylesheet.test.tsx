@@ -1,8 +1,9 @@
 import { afterEach, expect, test } from 'vitest';
-import { cleanup, render, screen } from 'solid-testing-library';
+import { cleanup, render } from 'solid-testing-library';
 import {
   ColorScheme,
   ColorSchemeStylesheet,
+  createColorSchemeEffect,
   createLocalePrimitive,
   useLocale
 } from '..';
@@ -16,6 +17,8 @@ test('default to dark', () => {
     },
     supportedLanguageTags: ['en']
   });
+
+  createColorSchemeEffect();
 
   render(() =>
     <ColorSchemeStylesheet
@@ -39,6 +42,8 @@ test('default to light', () => {
     supportedLanguageTags: ['en']
   });
 
+  createColorSchemeEffect();
+
   render(() =>
     <ColorSchemeStylesheet
       dark="https://example.com"
@@ -61,6 +66,8 @@ test('switch color scheme', () => {
     supportedLanguageTags: ['en']
   });
 
+  createColorSchemeEffect();
+
   render(() =>
     <ColorSchemeStylesheet
       dark="https://example.com"
@@ -74,7 +81,7 @@ test('switch color scheme', () => {
   expect(document.documentElement.style.colorScheme).toBe('only light');
   expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
 
-  const [locale, { setColorScheme }] = useLocale();
+  const [_locale, { setColorScheme }] = useLocale();
 
   setColorScheme(ColorScheme.Dark);
 
