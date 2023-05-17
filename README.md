@@ -294,7 +294,23 @@ Every field in `initialValues` is optional and if not provided, the value is inf
 
 Solid Compose provides color scheme toggling (light vs dark mode).
 
-You may then add the `ColorSchemeStylesheet` component in your app which will pick the right stylesheet according to the current color scheme.
+```jsx
+import { createColorSchemeEffect } from 'solid-compose';
+
+createColorSchemeEffect();
+```
+
+The effect includes the `color-scheme` meta tag, the CSS styling property `color-scheme` on the html tag, as well as a data attribute `"data-color-scheme"` on the html tag.
+
+The data attribute enables the selection of CSS selectors based on the color scheme, allowing you to set CSS variables for the current color scheme:
+```css
+html[data-color-scheme='dark'] {
+  --primary-text-color: var(--grey-200);
+  --secondary-text-color: var(--grey-500);
+}
+```
+
+If you wish to include external files instead of including the theming css in the css bundle, you may also add the `ColorSchemeStylesheet` component in your app which will pick the right stylesheet according to the current color scheme.
 
 ```jsx
 import { ColorSchemeStylesheet } from 'solid-compose';
@@ -313,15 +329,7 @@ const App: VoidComponent = () => {
 };
 ```
 
-In addition to adding the necessary stylesheets, it also includes the `color-scheme` meta tag, the CSS styling property `color-scheme` on the html tag, as well as a data attribute `"data-color-scheme"` on the html tag.
-
-The data attribute enables the selection of CSS selectors based on the color scheme, allowing you to set CSS variables for the current color scheme:
-```css
-html[data-color-scheme='dark'] {
-  --primary-text-color: var(--grey-200);
-  --secondary-text-color: var(--grey-500);
-}
-```
+In addition to adding the necessary stylesheets,
 
 `setColorScheme` allows to switch the color scheme:
 
@@ -434,19 +442,16 @@ createThemePrimitive({
   themes: [
     {
       name: 'fooTheme',
-      path: 'https://example.com',
       colorScheme: ColorScheme.Dark,
       default: true
     },
     {
       name: 'barTheme',
-      path: 'https://example.com',
       colorScheme: ColorScheme.Light,
       default: true
     },
     {
       name: 'bazTheme',
-      path: 'https://example.com',
       colorScheme: ColorScheme.Dark
     }
   ]
@@ -464,17 +469,63 @@ createThemePrimitive({
   themes: [
     {
       name: 'fooTheme',
-      path: 'https://example.com',
       colorScheme: ColorScheme.Dark
     },
     {
       name: 'barTheme',
-      path: 'https://example.com',
       colorScheme: ColorScheme.Light
     },
     {
       name: 'bazTheme',
-      path: 'https://example.com',
+      colorScheme: ColorScheme.Dark
+    }
+  ],
+  initialTheme: 'fooTheme'
+});
+```
+
+You may then call the effect:
+
+```jsx
+import { createThemeEffect } from 'solid-compose';
+
+createThemeEffect();
+```
+
+The effect includes the `color-scheme` meta tag, the CSS styling property `color-scheme` on the html tag, as well as the data attributes `"data-color-scheme"` and `"data-theme"` on the html tag.
+
+The data attributes enable the selection of CSS selectors based on the selected theme or current color scheme, allowing you to set CSS variables for the current theme:
+
+```css
+html[data-theme='my-theme'] {
+  --primary-text-color: var(--grey-200);
+  --secondary-text-color: var(--grey-500);
+}
+
+html[data-color-scheme='dark'] {
+  --primary-text-color: var(--grey-200);
+  --secondary-text-color: var(--grey-500);
+}
+```
+
+If you wish to include external files instead of including the theming css in the css bundle, you may also add the `ThemeStylesheet` component in your app which will pick the right stylesheet according to the selected theme. In this case you have to specify the paths to the css files:
+
+```typescript
+createThemePrimitive({
+  themes: [
+    {
+      name: 'fooTheme',
+      path: 'https://example.com/themes/foo.css',
+      colorScheme: ColorScheme.Dark
+    },
+    {
+      name: 'barTheme',
+      path: 'https://example.com/themes/bar.css',
+      colorScheme: ColorScheme.Light
+    },
+    {
+      name: 'bazTheme',
+      path: 'https://example.com/themes/baz.css',
       colorScheme: ColorScheme.Dark
     }
   ],
@@ -496,16 +547,6 @@ const App: VoidComponent = () => {
     </>
   );
 };
-```
-
-In addition to adding the necessary stylesheets, it also includes the `color-scheme` meta tag, the CSS styling property `color-scheme` on the html tag, as well as the data attributes `"data-color-scheme"` and `"data-theme"` on the html tag.
-
-The data attributes enables the selection of CSS selectors based on the color scheme, allowing you to set CSS variables for the current theme:
-```css
-html[data-theme='my-theme'] {
-  --primary-text-color: var(--grey-200);
-  --secondary-text-color: var(--grey-500);
-}
 ```
 
 `setTheme` allows to switch the theme:
