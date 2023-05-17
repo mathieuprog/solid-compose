@@ -3,7 +3,7 @@ import { ColorScheme } from 'user-locale';
 import { getThemeDetails } from './themes';
 import useTheme from './useTheme';
 
-export default function createColorSchemeEffect() {
+export default function createThemeEffect() {
   const [theme] = useTheme();
   const themeDetails = () => getThemeDetails(theme());
 
