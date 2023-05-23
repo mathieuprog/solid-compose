@@ -10,8 +10,8 @@ interface Props {
 }
 
 interface I18nContextValue {
-  translate: TranslateFunction,
-  namespaces: string[]
+  translate: TranslateFunction;
+  namespaces: string[];
 }
 
 const I18nContext = createContext<I18nContextValue>();
