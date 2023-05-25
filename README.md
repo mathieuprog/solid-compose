@@ -261,7 +261,7 @@ console.log(locale.colorScheme);
 All of those parameters are reactive.
 
 <details>
-  <summary>How is the initial language tag determined ?</summary>
+  <summary>How is the initial language tag determined?</summary>
 
   The library looks for a language tag that is both supported by your application (in `supportedLanguageTags` configuration) and listed in the user's browser as one of their preferred language tags (in `navigator.languages`).
 
