@@ -3,7 +3,7 @@ import type { TranslateFunction } from './globalPrimitive';
 import { useNamespacedI18n } from './context';
 
 export default function useI18n(): TranslateFunction {
-  let contextValue = useNamespacedI18n();
+  const contextValue = useNamespacedI18n();
 
   if (contextValue) {
     return contextValue.translate;
