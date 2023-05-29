@@ -16,6 +16,7 @@ Currently, it includes
   * [text direction](#text-direction)
 * [theming](#theming)
 * [viewport](#viewport)
+* [authentication](#authentication)
 * [developer utilities](#developer-utilities)
 
 ## Internationalization (i18n)
@@ -627,6 +628,36 @@ const viewport = useViewport();
 if (viewport.width === Viewport.SmallWidth) {
   // ...
 }
+```
+
+## Authentication
+
+Solid Compose provides a primitive for making the current user's information accessible across the application.
+
+```jsx
+import { createCurrentUserPrimitive } from 'solid-compose';
+
+const [currentUser] = createResource<CurrentUser>(() => /* ... */);
+
+createCurrentUserPrimitive({
+  getCurrentUserResource: currentUser,
+  isUnauthenticatedError: (error: any) => isUnauthenticatedError(error),
+  isAuthenticated: (data: unknown) => data.__typename === 'User'
+});
+
+const [currentUser, { authenticated, isUnauthenticatedError }] = useCurrentUser<CurrentUser>();
+
+<Switch>
+  <Match when={currentUser.loading}>
+    <Loader />
+  </Match>
+  <Match when={isUnauthenticatedError()}>
+    <Navigate href={'/login'} />
+  </Match>
+  <Match when={authenticated()}>
+    <Outlet />
+  </Match>
+</Switch>
 ```
 
 ## Developer utilities
