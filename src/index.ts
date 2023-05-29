@@ -24,6 +24,9 @@ import createViewportPrimitive from './viewport/createViewportPrimitive';
 import useViewport from './viewport/useViewport';
 import ViewportOrientation from './viewport/Orientation';
 
+import createCurrentUserPrimitive from './current-user/createCurrentUserPrimitive';
+import useCurrentUser from './current-user/useCurrentUser';
+
 import createThemeEffect from './theme/createThemeEffect';
 import createThemePrimitive from './theme/createThemePrimitive';
 import useTheme from './theme/useTheme';
@@ -52,6 +55,9 @@ export {
   formatNumber,
   TextDirection,
   useLocale,
+
+  createCurrentUserPrimitive,
+  useCurrentUser,
 
   createViewportPrimitive,
   ViewportOrientation,
