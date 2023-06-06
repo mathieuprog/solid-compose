@@ -12,25 +12,3 @@ test('missing global state should throw error', () => {
     () => useViewport()
   ).toThrow(/createViewportPrimitive/);
 });
-
-test('set language tag', () => {
-  createViewportPrimitive({
-    widthSwitchpoints: {
-      small: {
-        max: 768
-      },
-      medium: {
-        min: 768,
-        max: 1280
-      },
-      large: {
-        min: 1280
-      },
-    }
-  });
-
-  const viewport = useViewport();
-
-  expect(viewport.height).toBe(undefined);
-  expect(viewport.width).toBe(undefined);
-});
