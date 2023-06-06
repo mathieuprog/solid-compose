@@ -20,7 +20,7 @@ const userResourceReturn = createResource<User>(() => ({ name: 'John' }));
 
 test('use current user primitive', () => {
   createCurrentUserPrimitive({
-    getCurrentUserResource: () => userResourceReturn,
+    createCurrentUserResource: () => userResourceReturn,
     isUnauthenticatedError: () => false,
     isAuthenticated: () => true
   });

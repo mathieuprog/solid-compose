@@ -6,7 +6,7 @@ import AuthenticationStatus from './AuthenticationStatus';
 type Refetch<T> = (info?: unknown) => T | Promise<T | undefined> | null | undefined;
 
 interface Config<T> {
-  getCurrentUserResource: () => [Resource<T>, { refetch: Refetch<T> }];
+  createCurrentUserResource: () => [Resource<T>, { refetch: Refetch<T> }];
   isUnauthenticatedError: (error: any) => boolean;
   isAuthenticated: (data: T) => boolean;
 }
@@ -15,7 +15,7 @@ export default function createCurrentUserPrimitive<T>(config: Config<T>) {
   createRoot(() => {
     const [authenticationStatus, setAuthenticationStatus] = createSignal(AuthenticationStatus.Pending);
 
-    const [currentUser, { refetch }] = config.getCurrentUserResource();
+    const [currentUser, { refetch }] = config.createCurrentUserResource();
 
     createEffect(() => {
       try {
