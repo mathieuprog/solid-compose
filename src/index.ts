@@ -24,6 +24,7 @@ import createViewportPrimitive from './viewport/createViewportPrimitive';
 import useViewport from './viewport/useViewport';
 import ViewportOrientation from './viewport/Orientation';
 
+import AuthenticationStatus from './current-user/AuthenticationStatus';
 import createCurrentUserPrimitive from './current-user/createCurrentUserPrimitive';
 import useCurrentUser from './current-user/useCurrentUser';
 
@@ -56,6 +57,7 @@ export {
   TextDirection,
   useLocale,
 
+  AuthenticationStatus,
   createCurrentUserPrimitive,
   useCurrentUser,
 
