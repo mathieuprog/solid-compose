@@ -1,8 +1,9 @@
 import type { Accessor, Resource } from 'solid-js';
+import AuthenticationStatus from './AuthenticationStatus';
 
 export type CurrentUserPrimitive<T> = [Resource<T>, {
-  authenticated: Accessor<boolean>;
-  isUnauthenticatedError: Accessor<boolean>;
+  authenticationStatus: Accessor<AuthenticationStatus>;
+  refetch: any;
 }];
 
 let primitive: CurrentUserPrimitive<any>;

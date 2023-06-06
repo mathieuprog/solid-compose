@@ -1,32 +1,44 @@
 import { createEffect, createRoot, createSignal } from 'solid-js';
 import type { Resource } from 'solid-js';
 import { setPrimitive } from './globalPrimitive';
+import AuthenticationStatus from './AuthenticationStatus';
+
+type Refetch<T> = (info?: unknown) => T | Promise<T | undefined> | null | undefined;
 
 interface Config<T> {
-  getCurrentUserResource: () => Resource<T>;
+  getCurrentUserResource: () => [Resource<T>, { refetch: Refetch<T> }];
   isUnauthenticatedError: (error: any) => boolean;
   isAuthenticated: (data: T) => boolean;
 }
 
 export default function createCurrentUserPrimitive<T>(config: Config<T>) {
   createRoot(() => {
-    const [authenticated, setAuthenticated] = createSignal(false);
-    const [isUnauthenticatedError, setIsUnauthenticatedError] = createSignal(false);
+    const [authenticationStatus, setAuthenticationStatus] = createSignal(AuthenticationStatus.Pending);
 
-    const currentUser = config.getCurrentUserResource();
+    const [currentUser, { refetch }] = config.getCurrentUserResource();
 
     createEffect(() => {
-      if (currentUser.state === 'errored') {
-        if (config.isUnauthenticatedError(currentUser.error)) {
-          setIsUnauthenticatedError(true);
-        } else {
-          throw currentUser.error;
+      try {
+        if (currentUser.state === 'errored') {
+          if (config.isUnauthenticatedError(currentUser.error)) {
+            setAuthenticationStatus(AuthenticationStatus.Unauthenticated);
+          } else {
+            setAuthenticationStatus(AuthenticationStatus.Errored);
+            throw currentUser.error;
+          }
+        } else if (currentUser.state === 'ready') {
+          if (config.isAuthenticated(currentUser())) {
+            setAuthenticationStatus(AuthenticationStatus.Authenticated);
+          } else {
+            setAuthenticationStatus(AuthenticationStatus.Unauthenticated);
+          }
         }
-      } else if (currentUser.state === 'ready' && config.isAuthenticated(currentUser())) {
-        setAuthenticated(true);
+      } catch (e: any) {
+        setAuthenticationStatus(AuthenticationStatus.Errored);
+        setTimeout(() => { throw e }, 0);
       }
     });
 
-    setPrimitive<T>([currentUser, { authenticated, isUnauthenticatedError }]);
+    setPrimitive<T>([currentUser, { authenticationStatus, refetch }]);
   });
 }
