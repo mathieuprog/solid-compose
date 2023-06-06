@@ -8,7 +8,7 @@ import {
 import { useLocale } from '..';
 import { defaultNamespace } from './registry';
 import { setPrimitive } from './globalPrimitive';
-import type { TranslateFunction } from './globalPrimitive';
+import type { TranslateFunction, TranslateOptions } from './globalPrimitive';
 import registry from './registry';
 
 interface Config {
@@ -56,15 +56,25 @@ export function createTranslateFunction(namespaces: string[]): TranslateFunction
       : {};
   };
 
-  const translations = (): Record<string, any> => {
+  const translations = (namespaces: string[]): Record<string, any> => {
     return mergeTranslations(locale.languageTag, namespaces);
   };
 
-  return (key, params = {}, languageTag) => {
+  return (key: string, params: Record<string, any> = {}, languageTagOrOptions?: string | null | TranslateOptions, namespace?: string) => {
+    params = params || {};
+
+    let languageTag;
+    if (isObjectLiteral(languageTagOrOptions)) {
+      languageTag = languageTagOrOptions.languageTag;
+      namespace = languageTagOrOptions.namespace;
+    } else {
+      languageTag = languageTagOrOptions;
+    }
+
     let translations_ =
       (languageTag)
-        ? mergeTranslations(languageTag, namespaces)
-        : translations();
+        ? mergeTranslations(languageTag, (namespace) ? [defaultNamespace, namespace] : namespaces)
+        : translations((namespace) ? [defaultNamespace, namespace] : namespaces);
 
     let value: string;
 
