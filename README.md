@@ -637,24 +637,24 @@ Solid Compose provides a primitive for making the current user's information acc
 ```jsx
 import { createCurrentUserPrimitive } from 'solid-compose';
 
-const [currentUser] = createResource<CurrentUser>(() => /* ... */);
+const createCurrentUserResource = () => createResource<CurrentUser>(() => /* ... */);
 
 createCurrentUserPrimitive({
-  getCurrentUserResource: currentUser,
+  createCurrentUserResource,
   isUnauthenticatedError: (error: any) => isUnauthenticatedError(error),
   isAuthenticated: (data: unknown) => data.__typename === 'User'
 });
 
-const [currentUser, { authenticated, isUnauthenticatedError }] = useCurrentUser<CurrentUser>();
+const [currentUser, { authenticationStatus }] = useCurrentUser<CurrentUser>();
 
 <Switch>
   <Match when={currentUser.loading}>
     <Loader />
   </Match>
-  <Match when={isUnauthenticatedError()}>
+  <Match when={authenticationStatus() === AuthenticationStatus.Unauthenticated}>
     <Navigate href={'/login'} />
   </Match>
-  <Match when={authenticated()}>
+  <Match when={authenticationStatus() === AuthenticationStatus.Authenticated}>
     <Outlet />
   </Match>
 </Switch>
