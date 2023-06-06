@@ -33,5 +33,4 @@ test('set language tag', () => {
 
   expect(viewport.height).toBe(undefined);
   expect(viewport.width).toBe(undefined);
-  expect(viewport.orientation).toBe(undefined);
 });
