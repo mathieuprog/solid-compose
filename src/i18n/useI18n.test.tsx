@@ -367,6 +367,15 @@ test('namespaced translations', async () => {
     </>;
   }
 
+  function OverrideNamespace() {
+    const translate = useI18n();
+    return <>
+      <div data-testid="global4">{translate('global', {}, null, 'foo')}</div>
+      <div data-testid="hello4">{translate('hello', {}, { namespace: 'foo' })}</div>
+      <div data-testid="world4">{translate('world', {}, { namespace: 'bar' })}</div>
+    </>;
+  }
+
   render(() =>
     <>
       <I18nProvider namespaces={['foo', 'bar']}>
@@ -384,6 +393,8 @@ test('namespaced translations', async () => {
           <Namespaced3/>
         </I18nProvider>
       </I18nProvider>
+
+      <OverrideNamespace/>
     </>
   );
 
@@ -400,6 +411,9 @@ test('namespaced translations', async () => {
   const hello = screen.getByTestId('hello');
   const world = screen.getByTestId('world');
   const locale = screen.getByTestId('locale');
+  const globalNs4 = screen.getByTestId('global4');
+  const helloNs4 = screen.getByTestId('hello4');
+  const worldNs4 = screen.getByTestId('world4');
 
   expect(globalNs1.textContent).toBe('something');
   expect(helloNs1.textContent).toBe('hello!');
@@ -413,6 +427,9 @@ test('namespaced translations', async () => {
   expect(global.textContent).toBe('something');
   expect(hello.textContent).toBe('hello...');
   expect(world.textContent).toBe('world...');
+  expect(globalNs4.textContent).toBe('something');
+  expect(helloNs4.textContent).toBe('hello!');
+  expect(worldNs4.textContent).toBe('world!');
 
   fireEvent.click(locale);
   // the event loop takes one Promise to resolve to be finished
@@ -431,4 +448,7 @@ test('namespaced translations', async () => {
   expect(global.textContent).toBe('quelque chose');
   expect(hello.textContent).toBe('bonjour...');
   expect(world.textContent).toBe('monde...');
+  expect(globalNs4.textContent).toBe('quelque chose');
+  expect(helloNs4.textContent).toBe('bonjour !');
+  expect(worldNs4.textContent).toBe('monde !');
 });
