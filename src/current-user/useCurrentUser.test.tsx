@@ -1,6 +1,7 @@
 import { afterEach, expect, test } from 'vitest';
 import { cleanup } from 'solid-testing-library';
 import {
+  AuthenticationStatus,
   createCurrentUserPrimitive,
   useCurrentUser
 } from '..';
@@ -15,19 +16,18 @@ test('missing global state should throw error', () => {
 });
 
 type User = { name: string };
-const [userResource] = createResource<User>(() => ({ name: 'John' }));
+const userResourceReturn = createResource<User>(() => ({ name: 'John' }));
 
 test('use current user primitive', () => {
   createCurrentUserPrimitive({
-    getCurrentUserResource: () => userResource,
+    getCurrentUserResource: () => userResourceReturn,
     isUnauthenticatedError: () => false,
     isAuthenticated: () => true
   });
 
-  const [currentUser, { authenticated, isUnauthenticatedError }] = useCurrentUser<User>();
+  const [currentUser, { authenticationStatus }] = useCurrentUser<User>();
 
   expect(currentUser.loading).toBe(false);
   expect(currentUser()?.name).toBe('John');
-  expect(authenticated()).toBe(true);
-  expect(isUnauthenticatedError()).toBe(false);
+  expect(authenticationStatus()).toBe(AuthenticationStatus.Authenticated);
 });
