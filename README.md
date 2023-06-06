@@ -211,7 +211,7 @@ Solid Compose makes localStorage values reactive:
 import { useLocalStorage } from 'solid-compose';
 
 const [value, { set: setValue, remove: removeValue }] =
-  useLocalStorage<string>('myKey', 'defaultValue');
+  useLocalStorage('myKey', 'defaultValue');
 ```
 
 `useLocalStorage` accepts as 3rd argument an object containing the functions serializing and deserializing values to be stored and to be retrieved.
