@@ -14,6 +14,7 @@ interface Config<T> {
 export default function createCurrentUserPrimitive<T>(config: Config<T>) {
   createRoot(() => {
     const [authenticationStatus, setAuthenticationStatus] = createSignal(AuthenticationStatus.Pending);
+    const [authenticationError, setAuthenticationError] = createSignal<Error | null>(null);
 
     const [currentUser, { refetch }] = config.createCurrentUserResource();
 
@@ -24,7 +25,7 @@ export default function createCurrentUserPrimitive<T>(config: Config<T>) {
             setAuthenticationStatus(AuthenticationStatus.Unauthenticated);
           } else {
             setAuthenticationStatus(AuthenticationStatus.Errored);
-            throw currentUser.error;
+            setAuthenticationError(currentUser.error);
           }
         } else if (currentUser.state === 'ready') {
           if (config.isAuthenticated(currentUser())) {
@@ -35,10 +36,10 @@ export default function createCurrentUserPrimitive<T>(config: Config<T>) {
         }
       } catch (e: any) {
         setAuthenticationStatus(AuthenticationStatus.Errored);
-        setTimeout(() => { throw e }, 0);
+        setAuthenticationError(e);
       }
     });
 
-    setPrimitive<T>([currentUser, { authenticationStatus, refetch }]);
+    setPrimitive<T>([currentUser, { authenticationStatus, authenticationError, refetch }]);
   });
 }
