@@ -645,7 +645,7 @@ createCurrentUserPrimitive({
   isAuthenticated: (data: unknown) => data.__typename === 'User'
 });
 
-const [currentUser, { authenticationStatus }] = useCurrentUser<CurrentUser>();
+const [currentUser, { authenticationStatus, authenticationError }] = useCurrentUser<CurrentUser>();
 
 <Switch>
   <Match when={currentUser.loading}>
