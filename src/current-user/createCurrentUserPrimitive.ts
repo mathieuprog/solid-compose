@@ -1,4 +1,4 @@
-import { createEffect, createRoot, createSignal } from 'solid-js';
+import { batch, createMemo, createRoot, createSignal } from 'solid-js';
 import type { Resource } from 'solid-js';
 import { setPrimitive } from './globalPrimitive';
 import AuthenticationStatus from './AuthenticationStatus';
@@ -18,14 +18,16 @@ export default function createCurrentUserPrimitive<T>(config: Config<T>) {
 
     const [currentUser, { refetch }] = config.createCurrentUserResource();
 
-    createEffect(() => {
+    createMemo(() => {
       try {
         if (currentUser.state === 'errored') {
           if (config.isUnauthenticatedError(currentUser.error)) {
             setAuthenticationStatus(AuthenticationStatus.Unauthenticated);
           } else {
-            setAuthenticationStatus(AuthenticationStatus.Errored);
-            setAuthenticationError(currentUser.error);
+            batch(() => {
+              setAuthenticationStatus(AuthenticationStatus.Errored);
+              setAuthenticationError(currentUser.error);
+            });
           }
         } else if (currentUser.state === 'ready') {
           if (config.isAuthenticated(currentUser())) {
@@ -35,8 +37,10 @@ export default function createCurrentUserPrimitive<T>(config: Config<T>) {
           }
         }
       } catch (e: any) {
-        setAuthenticationStatus(AuthenticationStatus.Errored);
-        setAuthenticationError(e);
+        batch(() => {
+          setAuthenticationStatus(AuthenticationStatus.Errored);
+          setAuthenticationError(e);
+        });
       }
     });
 
