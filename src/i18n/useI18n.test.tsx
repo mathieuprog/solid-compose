@@ -385,7 +385,11 @@ test('namespaced translations', async () => {
       <Global/>
 
       <I18nProvider namespaces={['baz']}>
-        <Namespaced2/>
+        <I18nProvider namespaces={['baz']}>
+          <I18nProvider namespaces={['baz']}>
+            <Namespaced2/>
+          </I18nProvider>
+        </I18nProvider>
       </I18nProvider>
 
       <I18nProvider namespaces={['foo']}>
