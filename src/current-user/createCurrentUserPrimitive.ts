@@ -44,6 +44,6 @@ export default function createCurrentUserPrimitive<T>(config: Config<T>) {
       }
     });
 
-    setPrimitive<T>([currentUser, { authenticationStatus, authenticationError, refetch }]);
+    setPrimitive<T>([currentUser, { authenticationStatus, authenticationError, refetchCurrentUser: refetch }]);
   });
 }

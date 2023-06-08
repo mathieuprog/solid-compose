@@ -4,7 +4,7 @@ import AuthenticationStatus from './AuthenticationStatus';
 export type CurrentUserPrimitive<T> = [Resource<T>, {
   authenticationStatus: Accessor<AuthenticationStatus>;
   authenticationError: Accessor<Error | null>
-  refetch: any;
+  refetchCurrentUser: any;
 }];
 
 let primitive: CurrentUserPrimitive<any>;
