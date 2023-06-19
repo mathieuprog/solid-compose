@@ -7,8 +7,9 @@ type Refetch<T> = (info?: unknown) => T | Promise<T | undefined> | null | undefi
 
 interface Config<T> {
   createCurrentUserResource: () => [Resource<T>, { refetch: Refetch<T> }];
-  isUnauthenticatedError: (error: any) => boolean;
   isAuthenticated: (data: T) => boolean;
+  isUnauthenticatedError: (error: any) => boolean;
+  meta?: Record<string, any>;
 }
 
 export default function createCurrentUserPrimitive<T>(config: Config<T>) {
@@ -44,6 +45,11 @@ export default function createCurrentUserPrimitive<T>(config: Config<T>) {
       }
     });
 
-    setPrimitive<T>([currentUser, { authenticationStatus, authenticationError, refetchCurrentUser: refetch }]);
+    setPrimitive<T>([currentUser, {
+      authenticationStatus,
+      authenticationError,
+      meta: config.meta || {},
+      refetchCurrentUser: refetch
+    }]);
   });
 }
