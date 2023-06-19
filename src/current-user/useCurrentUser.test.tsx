@@ -22,12 +22,14 @@ test('use current user primitive', () => {
   createCurrentUserPrimitive({
     createCurrentUserResource: () => userResourceReturn,
     isUnauthenticatedError: () => false,
-    isAuthenticated: () => true
+    isAuthenticated: () => true,
+    meta: { foo: 1 }
   });
 
-  const [currentUser, { authenticationStatus }] = useCurrentUser<User>();
+  const [currentUser, { authenticationStatus, meta }] = useCurrentUser<User>();
 
   expect(currentUser.loading).toBe(false);
   expect(currentUser()?.name).toBe('John');
   expect(authenticationStatus()).toBe(AuthenticationStatus.Authenticated);
+  expect(meta.foo).toBe(1);
 });
