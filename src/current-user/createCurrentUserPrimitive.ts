@@ -5,14 +5,14 @@ import AuthenticationStatus from './AuthenticationStatus';
 
 type Refetch<T> = (info?: unknown) => T | Promise<T | undefined> | null | undefined;
 
-interface Config<T> {
+interface Config<T, U = {}> {
   createCurrentUserResource: () => [Resource<T>, { refetch: Refetch<T> }];
   isAuthenticated: (data: T) => boolean;
   isUnauthenticatedError: (error: any) => boolean;
-  meta?: Record<string, any>;
+  meta?: U;
 }
 
-export default function createCurrentUserPrimitive<T>(config: Config<T>) {
+export default function createCurrentUserPrimitive<T, U>(config: Config<T, U>) {
   createRoot(() => {
     const [authenticationStatus, setAuthenticationStatus] = createSignal(AuthenticationStatus.Pending);
     const [authenticationError, setAuthenticationError] = createSignal<Error | null>(null);
@@ -45,10 +45,10 @@ export default function createCurrentUserPrimitive<T>(config: Config<T>) {
       }
     });
 
-    setPrimitive<T>([currentUser, {
+    setPrimitive<T, U>([currentUser, {
       authenticationStatus,
       authenticationError,
-      meta: config.meta || {},
+      meta: config.meta || {} as any,
       refetchCurrentUser: refetch
     }]);
   });

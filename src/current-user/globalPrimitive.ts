@@ -1,19 +1,19 @@
 import type { Accessor, Resource } from 'solid-js';
 import AuthenticationStatus from './AuthenticationStatus';
 
-export type CurrentUserPrimitive<T> = [Resource<T>, {
+export type CurrentUserPrimitive<T, U> = [Resource<T>, {
   authenticationStatus: Accessor<AuthenticationStatus>;
   authenticationError: Accessor<Error | null>;
-  meta: Record<string, any>;
+  meta: U;
   refetchCurrentUser: any;
 }];
 
-let primitive: CurrentUserPrimitive<any>;
+let primitive: CurrentUserPrimitive<any, any>;
 
-export function setPrimitive<T>(primitive_: CurrentUserPrimitive<T>) {
+export function setPrimitive<T, U>(primitive_: CurrentUserPrimitive<T, U>) {
   primitive = primitive_;
 }
 
-export function getPrimitive<T>(): CurrentUserPrimitive<T> {
+export function getPrimitive<T, U>(): CurrentUserPrimitive<T, U> {
   return primitive;
 }
