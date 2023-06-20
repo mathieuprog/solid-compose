@@ -26,7 +26,7 @@ test('use current user primitive', () => {
     meta: { foo: 1 }
   });
 
-  const [currentUser, { authenticationStatus, meta }] = useCurrentUser<User>();
+  const [currentUser, { authenticationStatus, meta }] = useCurrentUser<User, { foo: number }>();
 
   expect(currentUser.loading).toBe(false);
   expect(currentUser()?.name).toBe('John');
