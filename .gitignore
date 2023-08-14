@@ -5,6 +5,8 @@
 /public/build/
 dist
 
+.lh
+
 .DS_Store
 
 .vscode
