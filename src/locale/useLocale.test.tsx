@@ -158,4 +158,6 @@ test('format number', () => {
   expect(locale.numberFormat).toBe(NumberFormat.PeriodComma);
 
   expect(formatNumber(1000.01)).toBe('1.000,01');
+
+  expect(formatNumber(1000.01, { useGrouping: false })).toBe('1000,01');
 });
