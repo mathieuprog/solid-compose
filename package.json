@@ -16,24 +16,24 @@
   "author": "Mathieu Decaffmeyer",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.0.0",
-    "@tsconfig/node18": "^18.2.0",
+    "@testing-library/jest-dom": "^6.1.2",
+    "@tsconfig/node18": "^18.2.1",
     "@types/testing-library__jest-dom": "^5.14.9",
-    "happy-dom": "^10.9.0",
-    "rollup": "^3.28.0",
+    "happy-dom": "^10.11.2",
+    "rollup": "^3.28.1",
     "rollup-preset-solid": "^2.0.1",
     "solid-testing-library": "^0.5.0",
-    "typescript": "^5.1.6",
+    "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-solid": "^2.7.0",
-    "vitest": "^0.34.1"
+    "vitest": "^0.34.3"
   },
   "dependencies": {
     "@mathieuprog/find-value": "^1.0.1",
     "esbuild": "0.19.2",
-    "object-array-utils": "^3.1.0",
+    "object-array-utils": "^3.3.1",
     "solid-js": "^1.7.11",
-    "user-locale": "^0.9.0"
+    "user-locale": "^0.10.0"
   },
   "bugs": {
     "url": "https://github.com/mathieuprog/solid-compose/issues"
