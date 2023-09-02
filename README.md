@@ -386,6 +386,18 @@ import { useLocale } from 'solid-compose';
 const [locale, { setDateFormat }] = useLocale();
 ```
 
+`formatDate` allows to format a date according to the current locale's date formatting setting.
+
+```typescript
+import { formatDate, useLocale } from 'solid-compose';
+
+const [locale, { setDateFormat }] = useLocale();
+
+setDateFormat({ endianness: DateEndianness.MiddleEndian });
+
+formatDate(Temporal.PlainDate.from('2000-12-31')) // 12/31/2000
+```
+
 ### Time format
 
 `setTimeFormat` allows to change the time format:
@@ -394,6 +406,18 @@ const [locale, { setDateFormat }] = useLocale();
 import { useLocale } from 'solid-compose';
 
 const [locale, { setTimeFormat }] = useLocale();
+```
+
+`formatTime` allows to format a time according to the current locale's time formatting setting.
+
+```typescript
+import { formatTime, useLocale } from 'solid-compose';
+
+const [locale, { setTimeFormat }] = useLocale();
+
+setTimeFormat({ is24HourClock: false });
+
+formatTime(Temporal.PlainTime.from('00:30:05'), { precision: 'minute', omitZeroUnits: true }) // 12:30 AM
 ```
 
 ### Time zone
