@@ -1,12 +1,15 @@
 import { afterEach, expect, test } from 'vitest';
+import { Temporal } from '@js-temporal/polyfill';
 import { cleanup } from 'solid-testing-library';
 import {
   ColorScheme,
   createLocalePrimitive,
   formatNumber,
+  formatDate,
+  formatTime,
   useLocale
 } from '..';
-import { NumberFormat } from 'user-locale';
+import { DateEndianness, NumberFormat } from 'user-locale';
 
 afterEach(cleanup);
 
@@ -160,4 +163,42 @@ test('format number', () => {
   expect(formatNumber(1000.01)).toBe('1.000,01');
 
   expect(formatNumber(1000.01, { useGrouping: false })).toBe('1000,01');
+});
+
+test('format date', () => {
+  createLocalePrimitive({
+    initialValues: {
+      dateFormat: { endianness: DateEndianness.LittleEndian }
+    },
+    supportedLanguageTags: ['en']
+  });
+
+  const [locale, { setDateFormat }] = useLocale();
+
+  expect(locale.dateFormat).toEqual({ endianness: DateEndianness.LittleEndian });
+  expect(formatDate(Temporal.PlainDate.from('2000-12-31'))).toBe('31/12/2000');
+
+  setDateFormat({ endianness: DateEndianness.MiddleEndian });
+
+  expect(locale.dateFormat).toEqual({ endianness: DateEndianness.MiddleEndian });
+  expect(formatDate(Temporal.PlainDate.from('2000-12-31'))).toBe('12/31/2000');
+});
+
+test('format time', () => {
+  createLocalePrimitive({
+    initialValues: {
+      timeFormat: { is24HourClock: true }
+    },
+    supportedLanguageTags: ['en']
+  });
+
+  const [locale, { setTimeFormat }] = useLocale();
+
+  expect(locale.timeFormat).toEqual({ is24HourClock: true });
+  expect(formatTime(Temporal.PlainTime.from('00:00:05'), { precision: 'minute', omitZeroUnits: true })).toBe('00:00');
+
+  setTimeFormat({ is24HourClock: false });
+
+  expect(locale.timeFormat).toEqual({ is24HourClock: false });
+  expect(formatTime(Temporal.PlainTime.from('00:00:05'), { precision: 'minute', omitZeroUnits: true })).toBe('12 AM');
 });
