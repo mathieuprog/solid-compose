@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@mathieuprog/find-value": "^1.0.1",
+    "@js-temporal/polyfill": "^0.4.4",
     "esbuild": "0.19.2",
     "object-array-utils": "^3.3.1",
     "solid-js": "^1.7.11",
