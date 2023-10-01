@@ -654,6 +654,16 @@ if (viewport.width === Viewport.SmallWidth) {
 }
 ```
 
+You may call the effect:
+
+```jsx
+import { createViewportEffect } from 'solid-compose';
+
+createViewportEffect();
+```
+
+The effect sets the data attributes `"data-viewport-width-switchpoint"`, `"data-viewport-height-switchpoint"` and `"data-viewport-orientation"` on the html tag.
+
 ## Authentication
 
 Solid Compose provides a primitive for making the current user's information accessible across the application.
