@@ -6,6 +6,7 @@
 dist
 
 .lh
+.history
 
 .DS_Store
 
