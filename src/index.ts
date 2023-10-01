@@ -24,6 +24,7 @@ import formatTime from './locale/formatTime';
 
 import createViewportPrimitive from './viewport/createViewportPrimitive';
 import useViewport from './viewport/useViewport';
+import createViewportEffect from './viewport/createViewportEffect';
 import ViewportOrientation from './viewport/Orientation';
 
 import AuthenticationStatus from './current-user/AuthenticationStatus';
@@ -66,6 +67,7 @@ export {
   useCurrentUser,
 
   createViewportPrimitive,
+  createViewportEffect,
   ViewportOrientation,
   useViewport,
 
