@@ -1,9 +1,6 @@
 import { afterEach, expect, test } from 'vitest';
 import { cleanup } from 'solid-testing-library';
-import {
-  createViewportPrimitive,
-  useViewport
-} from '..';
+import { useViewport } from '..';
 
 afterEach(cleanup);
 
