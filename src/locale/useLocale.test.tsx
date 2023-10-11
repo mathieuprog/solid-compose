@@ -4,6 +4,7 @@ import { cleanup } from 'solid-testing-library';
 import {
   ColorScheme,
   createLocalePrimitive,
+  parseNumber,
   formatNumber,
   formatDate,
   formatTime,
@@ -163,6 +164,33 @@ test('format number', () => {
   expect(formatNumber(1000.01)).toBe('1.000,01');
 
   expect(formatNumber(1000.01, { useGrouping: false })).toBe('1000,01');
+});
+
+test('parse number', () => {
+  createLocalePrimitive({
+    initialValues: {
+      numberFormat: NumberFormat.CommaPeriod
+    },
+    supportedLanguageTags: ['en']
+  });
+
+  const [locale, { setNumberFormat }] = useLocale();
+  expect(locale.numberFormat).toBe(NumberFormat.CommaPeriod);
+
+  expect(parseNumber('1000.01')).toBe(1000.01);
+  expect(parseNumber('1,000.01', { allowThousandSeparator: true })).toBe(1000.01);
+
+  setNumberFormat(NumberFormat.SpaceComma);
+  expect(locale.numberFormat).toBe(NumberFormat.SpaceComma);
+
+  expect(parseNumber('1000,01')).toBe(1000.01);
+  expect(parseNumber('1 000,01', { allowThousandSeparator: true })).toBe(1000.01);
+
+  setNumberFormat(NumberFormat.PeriodComma);
+  expect(locale.numberFormat).toBe(NumberFormat.PeriodComma);
+
+  expect(parseNumber('1000,01')).toBe(1000.01);
+  expect(parseNumber('1.000,01', { allowThousandSeparator: true })).toBe(1000.01);
 });
 
 test('format date', () => {
