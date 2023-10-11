@@ -37,17 +37,19 @@ export default function createViewportPrimitive(config: Config) {
         throw new Error();
       }
 
-      const mql = window.matchMedia(mediaQuery);
+      const mql = typeof window.matchMedia === 'function' && window.matchMedia(mediaQuery);
 
-      if (mql.matches) {
-        height = sizeName;
-      }
-
-      mql.addEventListener('change', (event) => {
-        if (event.matches) {
-          setViewport({ height: sizeName });
+      if (mql) {
+        if (mql.matches) {
+          height = sizeName;
         }
-      });
+
+        mql.addEventListener('change', (event) => {
+          if (event.matches) {
+            setViewport({ height: sizeName });
+          }
+        });
+      }
     }
 
     for (const [sizeName, range] of Object.entries(config.widthSwitchpoints || {})) {
@@ -64,42 +66,48 @@ export default function createViewportPrimitive(config: Config) {
         throw new Error();
       }
 
-      const mql = window.matchMedia(mediaQuery);
+      const mql = typeof window.matchMedia === 'function' && window.matchMedia(mediaQuery);
 
-      if (mql.matches) {
-        width = sizeName;
+      if (mql) {
+        if (mql.matches) {
+          width = sizeName;
+        }
+
+        mql.addEventListener('change', (event) => {
+          if (event.matches) {
+            setViewport({ width: sizeName });
+          }
+        });
+      }
+    }
+
+    const mqlLandscapeOrientation = typeof window.matchMedia === 'function' && window.matchMedia('(orientation: landscape)');
+
+    if (mqlLandscapeOrientation) {
+      if (mqlLandscapeOrientation.matches) {
+        orientation = Orientation.Landscape;
       }
 
-      mql.addEventListener('change', (event) => {
+      mqlLandscapeOrientation.addEventListener('change', (event) => {
         if (event.matches) {
-          setViewport({ width: sizeName });
+          setViewport({ orientation: Orientation.Landscape });
         }
       });
     }
 
-    const mqlLandscapeOrientation = window.matchMedia('(orientation: landscape)');
+    const mqlPortraitOrientation = typeof window.matchMedia === 'function' && window.matchMedia('(orientation: portrait)');
 
-    if (mqlLandscapeOrientation.matches) {
-      orientation = Orientation.Landscape;
-    }
-
-    mqlLandscapeOrientation.addEventListener('change', (event) => {
-      if (event.matches) {
-        setViewport({ orientation: Orientation.Landscape });
+    if (mqlPortraitOrientation) {
+      if (mqlPortraitOrientation.matches) {
+        orientation = Orientation.Portrait;
       }
-    });
 
-    const mqlPortraitOrientation = window.matchMedia('(orientation: portrait)');
-
-    if (mqlPortraitOrientation.matches) {
-      orientation = Orientation.Portrait;
+      mqlPortraitOrientation.addEventListener('change', (event) => {
+        if (event.matches) {
+          setViewport({ orientation: Orientation.Portrait });
+        }
+      });
     }
-
-    mqlPortraitOrientation.addEventListener('change', (event) => {
-      if (event.matches) {
-        setViewport({ orientation: Orientation.Portrait });
-      }
-    });
   });
 
   const [viewport, setViewport] =
