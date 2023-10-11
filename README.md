@@ -376,6 +376,18 @@ setNumberFormat(NumberFormat.SpaceComma);
 formatNumber(1000.01) // 1 000,01
 ```
 
+`parseNumber` allows to parse a localized number string according to the current locale's number formatting setting.
+
+```typescript
+import { parseNumber, useLocale } from 'solid-compose';
+
+const [locale, { setNumberFormat }] = useLocale();
+
+setNumberFormat(NumberFormat.SpaceComma);
+
+parseNumber('1 000,01') // 1000.01
+```
+
 ### Date format
 
 `setDateFormat` allows to change the date format:
