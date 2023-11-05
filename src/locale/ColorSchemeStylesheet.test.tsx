@@ -1,5 +1,5 @@
-import { afterEach, expect, test } from 'vitest';
 import { cleanup, render } from 'solid-testing-library';
+import { afterEach, expect, test } from 'vitest';
 import {
   ColorScheme,
   ColorSchemeStylesheet,
@@ -29,8 +29,8 @@ test('default to dark', () => {
 
   const meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
 
-  expect(meta.content).toBe('dark light');
-  expect(document.documentElement.style.colorScheme).toBe('dark light');
+  expect(meta.content).toBe('dark');
+  expect(document.documentElement.style.colorScheme).toBe('dark');
   expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
 });
 
@@ -53,8 +53,8 @@ test('default to light', () => {
 
   const meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
 
-  expect(meta.content).toBe('only light');
-  expect(document.documentElement.style.colorScheme).toBe('only light');
+  expect(meta.content).toBe('light');
+  expect(document.documentElement.style.colorScheme).toBe('light');
   expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
 });
 
@@ -77,8 +77,8 @@ test('switch color scheme', () => {
 
   let meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
 
-  expect(meta.content).toBe('only light');
-  expect(document.documentElement.style.colorScheme).toBe('only light');
+  expect(meta.content).toBe('light');
+  expect(document.documentElement.style.colorScheme).toBe('light');
   expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
 
   const [_locale, { setColorScheme }] = useLocale();
@@ -87,7 +87,7 @@ test('switch color scheme', () => {
 
   meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
 
-  expect(meta.content).toBe('dark light');
-  expect(document.documentElement.style.colorScheme).toBe('dark light');
+  expect(meta.content).toBe('dark');
+  expect(document.documentElement.style.colorScheme).toBe('dark');
   expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
 });

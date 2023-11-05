@@ -31,10 +31,10 @@ export default function createThemeEffect() {
 function getColorSchemePropertyValue(colorScheme: ColorScheme) {
   switch (colorScheme) {
     case ColorScheme.Light:
-      return 'only light';
+      return 'light';
 
     case ColorScheme.Dark:
-      return 'dark light';
+      return 'dark';
 
     default:
       throw new Error();

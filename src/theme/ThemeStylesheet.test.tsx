@@ -1,13 +1,13 @@
-import { afterEach, expect, test } from 'vitest';
 import { cleanup, render } from 'solid-testing-library';
+import { afterEach, expect, test } from 'vitest';
 import {
-  ColorScheme,
-  createLocalePrimitive,
-  createThemeEffect,
-  createThemePrimitive,
-  ThemeStylesheet,
-  useLocale,
-  useTheme
+    ColorScheme,
+    ThemeStylesheet,
+    createLocalePrimitive,
+    createThemeEffect,
+    createThemePrimitive,
+    useLocale,
+    useTheme
 } from '..';
 
 afterEach(cleanup);
@@ -53,8 +53,8 @@ test('pick the right theme', () => {
 
   let meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
 
-  expect(meta.content).toBe('dark light');
-  expect(document.documentElement.style.colorScheme).toBe('dark light');
+  expect(meta.content).toBe('dark');
+  expect(document.documentElement.style.colorScheme).toBe('dark');
   expect(document.documentElement.getAttribute('data-color-scheme')).toBe('dark');
   expect(document.documentElement.getAttribute('data-theme')).toBe('darkTheme');
 
@@ -65,8 +65,8 @@ test('pick the right theme', () => {
 
   meta = document.head.querySelector('meta[name="color-scheme"]') as HTMLMetaElement;
 
-  expect(meta.content).toBe('only light');
-  expect(document.documentElement.style.colorScheme).toBe('only light');
+  expect(meta.content).toBe('light');
+  expect(document.documentElement.style.colorScheme).toBe('light');
   expect(document.documentElement.getAttribute('data-color-scheme')).toBe('light');
   expect(document.documentElement.getAttribute('data-theme')).toBe('fooTheme');
 });
