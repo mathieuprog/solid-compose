@@ -354,6 +354,17 @@ import { useLocale } from 'solid-compose';
 const [locale, { setLanguageTag }] = useLocale();
 ```
 
+`getClosestSupportedLanguageTag` allows to find the best language supported by your app:
+
+```typescript
+import { getClosestSupportedLanguageTag } from 'solid-compose';
+
+createLocalePrimitive({ supportedLanguageTags: ['en-US', 'fr'] });
+getClosestSupportedLanguageTag('en') // 'en-US'
+getClosestSupportedLanguageTag('fr-BE') // 'fr'
+getClosestSupportedLanguageTag('es') // 'en-US'
+```
+
 ### Number format
 
 `setNumberFormat` allows to change the number format:
