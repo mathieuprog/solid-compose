@@ -1,16 +1,16 @@
-import { afterEach, expect, test } from 'vitest';
 import { Temporal } from '@js-temporal/polyfill';
 import { cleanup } from 'solid-testing-library';
+import { DateEndianness, NumberFormat } from 'user-locale';
+import { afterEach, expect, test } from 'vitest';
 import {
   ColorScheme,
   createLocalePrimitive,
-  parseNumber,
-  formatNumber,
   formatDate,
+  formatNumber,
   formatTime,
+  parseNumber,
   useLocale
 } from '..';
-import { DateEndianness, NumberFormat } from 'user-locale';
 
 afterEach(cleanup);
 
@@ -191,6 +191,8 @@ test('parse number', () => {
 
   expect(parseNumber('1000,01')).toBe(1000.01);
   expect(parseNumber('1.000,01', { allowThousandSeparator: true })).toBe(1000.01);
+
+  expect(parseNumber('a')).toBe(null);
 });
 
 test('format date', () => {
